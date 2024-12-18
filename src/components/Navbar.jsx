@@ -177,15 +177,33 @@ export function SecondaryNavbar() {
         <div className="flex justify-center items-center w-full gap-80">
           {/* Left Section */}
           <div className="flex items-center gap-1">
-            <Bars3Icon className="h-6 w-6 text-black cursor-pointer hover:text-blue-500" />
-            <Typography
-              as="a"
-              href="#all"
-              variant="small"
-              className="font-medium text-black cursor-pointer hover:text-blue-500"
-            >
-              All
-            </Typography>
+            <Menu>
+          <MenuHandler>
+            <div className="flex items-center gap-1 cursor-pointer">
+              <Bars3Icon className="h-6 w-6 text-black hover:text-blue-500" />
+              <Typography
+                as="a"
+                href="#all"
+                variant="small"
+                className="font-medium text-black hover:text-blue-500"
+              >
+                All
+              </Typography>
+            </div>
+          </MenuHandler>
+          <MenuList className="bg-[#f6f6f6] border border-gray-200 shadow-lg rounded-md">
+            <MenuItem>Mobiles & Tablets</MenuItem>
+            <MenuItem>Wearables & Smart Watches</MenuItem>
+            <MenuItem>TV & Audio</MenuItem>
+            <MenuItem>Appliances</MenuItem>
+            <MenuItem>Personal Care</MenuItem>
+            <MenuItem>Computing</MenuItem>
+            <MenuItem>Routers</MenuItem>
+            <MenuItem>Photography</MenuItem>
+            <MenuItem>Gaming</MenuItem>
+            <MenuItem>Accessories</MenuItem>
+          </MenuList>
+        </Menu>
           </div>
 
           {/* Center Section */}
