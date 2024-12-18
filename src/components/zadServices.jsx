@@ -11,7 +11,7 @@ const ZadServices = () => {
         <h2 className="text-2xl font-bold text-center mb-6 mt-5">ZAD ALAMIL SERVICES</h2>
     
     <div className="flex justify-center items-center p-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-20">
         {images.map((image, index) => (
           <div
             className="border-2 border-black p-4 flex justify-center items-center "

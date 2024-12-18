@@ -1,6 +1,7 @@
 
 import Banner from '../components/Banner';
 import BestSellers from '../components/bestTele';
+import BrandsHome from '../components/Brands';
 import CategorySection from '../components/CategorySection';
 import MobileBestSellers from '../components/mobileBest';
 import MobileSection from '../components/MobileSection';
@@ -24,6 +25,7 @@ const Home = () => {
         <MobileSection />
         <MobileBestSellers />
         <ZadServices />
+        <BrandsHome />
         
       
     </div>
