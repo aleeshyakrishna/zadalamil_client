@@ -19,7 +19,7 @@ const categories = [
 const CategorySection = () => {
   return (
     <section className="py-1 ">
-      <h2 className="text-3xl font-bold text-center mb-6">Shop By Category</h2>
+      <h2 className="text-3xl font-bold text-center mb-14">Shop By Category</h2>
       <div className="flex justify-center gap-28 flex-wrap mb-20">
         {categories.map((category, index) => (
           <div key={index} className="flex flex-col items-center cursor-pointer">

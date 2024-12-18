@@ -31,7 +31,7 @@ const serviceData = [
   
   const ServicesSection = () => {
     return (
-      <section className="w-full py-8 bg-gradient-to-r from-[#1D0F0F] to-[#972323] bg-center rounded-md mb-10">
+      <section className="w-full py-8 bg-gradient-to-r from-[#1D0F0F] to-[#972323] bg-center mb-10">
         <div className="container mx-auto bg-white p-6 rounded-lg shadow-md w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {serviceData.map((service, index) => (
