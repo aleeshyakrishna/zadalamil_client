@@ -173,7 +173,7 @@ function NavList() {
 
 export function SecondaryNavbar() {
     return (
-      <Navbar className="hidden lg:flex fixed bg-black-100 py-2 px-6 max-w-none rounded-none">
+      <Navbar className="hidden lg:flex bg-[#f6f6f6] py-2 px-6 max-w-none rounded-none fixed top-32 z-40">
         <div className="flex justify-center items-center w-full gap-80">
           {/* Left Section */}
           <div className="flex items-center gap-1">
@@ -226,7 +226,7 @@ export function ComplexNavbar() {
  
   return (
     <>
-    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] sticky">
+    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] fixed">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 
         {/* Logo */}
@@ -306,7 +306,7 @@ export function ComplexNavbar() {
         <NavList />
       </MobileNav>
     </Navbar>
-    <SecondaryNavbar />
+    <SecondaryNavbar/>
     </>
   );
 }
