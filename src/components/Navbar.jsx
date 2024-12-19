@@ -34,6 +34,8 @@ import Img3 from '../assets/images/brand13.png';
 import Img4 from '../assets/images/brand14.png';
 import Img5 from '../assets/images/brand15.png';
 import Img6 from '../assets/images/brand16.png';
+
+import { Link } from 'react-router-dom';
  
 // profile menu component
 const profileMenuItems = [
@@ -204,7 +206,7 @@ export function SecondaryNavbar() {
             </div>
           </MenuHandler>
           <MenuList className="bg-[#f6f6f6] border border-gray-200 shadow-lg rounded-md">
-            <MenuItem>Mobiles & Tablets</MenuItem>
+            <Link to='/mobiles&tabs'><MenuItem>Mobiles & Tablets</MenuItem></Link>
             <MenuItem>Wearables & Smart Watches</MenuItem>
             <MenuItem>TV & Audio</MenuItem>
             <MenuItem>Appliances</MenuItem>
