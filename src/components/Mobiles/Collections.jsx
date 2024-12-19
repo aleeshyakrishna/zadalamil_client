@@ -7,8 +7,16 @@ import Img5 from '../../assets/images/mob3.png';
 import Img6 from '../../assets/images/mob3.png';
 import Img7 from '../../assets/images/mob3.png';
 import Img8 from '../../assets/images/mob3.png';
+import Img9 from '../../assets/images/mob1.png';
+import Img10 from '../../assets/images/mob2.png';
+import Img11 from '../../assets/images/mob3.png';
+import Img12 from '../../assets/images/mob3.png';
+import Img13 from '../../assets/images/mob3.png';
+import Img14 from '../../assets/images/mob3.png';
+import Img15 from '../../assets/images/mob3.png';
+import Img16 from '../../assets/images/mob3.png';
 import { Filters } from './Filters';
-
+import { useState } from 'react';
 
 const collectionData =  [
     { id: 1, image: Img1, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
@@ -19,6 +27,14 @@ const collectionData =  [
     { id: 6, image: Img6, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
     { id: 7, image: Img7, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
     { id: 8, image: Img8, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 9, image: Img9, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 10, image: Img10, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 11, image: Img11, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 12, image: Img12, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 13, image: Img13, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 14, image: Img14, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 15, image: Img15, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
+    { id: 16, image: Img16, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
 ]
 
 const ProductCard = ({ product }) => {
@@ -60,13 +76,13 @@ ProductCard.propTypes = {
   }).isRequired,
 };
 
-
 const Collections = () => {
+    const [showAll, setShowAll] = useState(false);
+  const productsToShow = showAll ? collectionData : collectionData.slice(0, 8);
   return (
     <section className="py-1 m-10">
       <h2 className="text-3xl font-bold text-center mb-14">Mobiles & Tablets</h2>
 
-      {/* Layout Container */}
       <div className="w-full mx-auto px-4 flex">
         {/* Filters Section */}
         <aside className="w-1/4 pr-4 border-2">
@@ -74,45 +90,30 @@ const Collections = () => {
             <h3 className="font-bold text-xl">Filters</h3>
             <h3 className="font-light text-base cursor-pointer">Clear All Filters</h3>
         </div>
-
-          {/* <div className="space-y-6">
-            <div>
-              <button className="w-full text-left font-semibold">Categories</button>
-              <ul className="mt-2 space-y-2 text-sm">
-                <li>Phones</li>
-                <li>Tablets</li>
-              </ul>
-            </div>
-            <div>
-              <button className="w-full text-left font-semibold">Price Range</button>
-              <ul className="mt-2 space-y-2 text-sm">
-                <li>$0 - $500</li>
-                <li>$500 - $1000</li>
-              </ul>
-            </div>
-            <div>
-              <button className="w-full text-left font-semibold">RAM</button>
-              <ul className="mt-2 space-y-2 text-sm">
-                <li>4GB</li>
-                <li>8GB</li>
-              </ul>
-            </div>
-          </div> */}
           <Filters />
         </aside>
 
         {/* Products Section */}
         <main className="w-full py-10 px-5 bg-gray-50">
-          <div className=" mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {collectionData.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-                </div>
+            <div className=" mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {productsToShow.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
+            {collectionData.length > 8 && (
+              <div className="text-center mt-6">
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  className="bg-[#1D0F0F] mt-3 text-white font-semibold py-4 px-5 rounded-md hover:bg-[#6f1b1b]"
+                >
+                  {showAll ? 'Show Less' : 'Show More'}
+                </button>
+              </div>
+            )}
+          </div>
         </main>
       </div>
-
     </section>
   )
 }

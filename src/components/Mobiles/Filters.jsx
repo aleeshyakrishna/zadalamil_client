@@ -39,7 +39,7 @@ export const Filters = () => {
       <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
         <AccordionHeader className="text-blue-gray-200 text-lg" onClick={() => handleOpen(1)}>Categories</AccordionHeader>
         <AccordionBody>
-          <ul className="space-y-2 text-base ml-4 cursor-pointer text-gray-500">
+          <ul className="space-y-2 text-base ml-4 cursor-pointer text-blue-gray-200">
             <li>Android</li>
             <li>iPhone</li>
             <li>Flagships</li>
@@ -56,7 +56,7 @@ export const Filters = () => {
         <AccordionBody>
           <div className="flex justify-between mb-4">
             <h3><InputCustomStyles /></h3>
-            <h3 className="font-light mt-3">To</h3>
+            <h3 className="font-light mt-3 ml-3 text-blue-gray-200">To</h3>
             <h3 className="mr-2"><InputCustomStyles /></h3>
             <h3 className="mr-3 mt-1"><ButtonSizesMob /></h3>
         </div>
@@ -71,7 +71,7 @@ export const Filters = () => {
       <Accordion open={open === 4} icon={<Icon id={4} open={open} />}>
         <AccordionHeader className="text-blue-gray-200 text-lg" onClick={() => handleOpen(4)}>SIM</AccordionHeader>
         <AccordionBody>
-          <ul className="space-y-2 text-base ml-4 cursor-pointer text-gray-500">
+          <ul className="space-y-2 text-base ml-4 cursor-pointer text-blue-gray-200">
             <li>Micro SIM</li>
             <li>Nano SIM</li>
             <li>Hybrid Dual SIM</li>

@@ -2,7 +2,7 @@ import { Input } from "@material-tailwind/react";
  
 export function InputCustomStyles() {
   return (
-    <div className="w-36 ml-4">
+    <div className="ml-4">
       <Input
         type="number"
         placeholder="Eg:289"

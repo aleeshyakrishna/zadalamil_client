@@ -5,7 +5,7 @@ export function RadioCustomIcon() {
     <>
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">2GB</span>}
+        label={<span className="text-blue-gray-200 text-base">2GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ export function RadioCustomIcon() {
       />
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">4GB</span>}
+        label={<span className="text-blue-gray-200 text-base">4GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@ export function RadioCustomIcon() {
       />
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">6GB</span>}
+        label={<span className="text-blue-gray-200 text-base">6GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ export function RadioCustomIcon() {
       />
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">8GB</span>}
+        label={<span className="text-blue-gray-200 text-base">8GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@ export function RadioCustomIcon() {
       />
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">12GB</span>}
+        label={<span className="text-blue-gray-200 text-base">12GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ export function RadioCustomIcon() {
       />
       <Radio
         name="type"
-        label={<span className="text-gray-500 text-base">16GB</span>}
+        label={<span className="text-blue-gray-200 text-base">16GB</span>}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"
