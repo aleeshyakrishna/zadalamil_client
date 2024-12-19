@@ -290,14 +290,16 @@ export function SecondaryNavbar() {
         </Menu>
 
           {/* Right Section */}
-          <Typography
-            as="a"
-            href="#new-arrivals"
-            variant="small"
-            className="font-medium text-black cursor-pointer hover:text-blue-500"
-          >
-            New Arrivals
-          </Typography>
+          <Link to='/new-arrivals'>
+            <Typography
+              as="a"
+              href="#new-arrivals"
+              variant="small"
+              className="font-medium text-black cursor-pointer hover:text-blue-500"
+            >
+              New Arrivals
+            </Typography>
+          </Link>
         </div>
       </Navbar>
     );

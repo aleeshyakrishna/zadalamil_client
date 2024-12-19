@@ -5,6 +5,7 @@ import Mobiles from './pages/mobiles';
 import ProductDetailsPage from './pages/ProductDetails.jsx';
 import Cart from './pages/Cart.jsx';
 import Wishlist from './pages/Wishlist.jsx';
+import NewArrivals from './pages/NewArrivals.jsx';
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/product-details' element={ <ProductDetailsPage />} />
         <Route path='/cart' element={ <Cart />} />
         <Route path='/wishlist' element={ <Wishlist />} />
+        <Route path='/new-arrivals' element={ <NewArrivals />} />
       </Routes>
     </Router>
   )
