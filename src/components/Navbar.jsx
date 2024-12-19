@@ -27,6 +27,13 @@ import {
 } from "@heroicons/react/24/outline";
 import logo from '../assets/images/logo.png';
 import login from "../assets/images/login.png";
+
+import Img1 from '../assets/images/brand11.png';
+import Img2 from '../assets/images/brand12.png';
+import Img3 from '../assets/images/brand13.png';
+import Img4 from '../assets/images/brand14.png';
+import Img5 from '../assets/images/brand15.png';
+import Img6 from '../assets/images/brand16.png';
  
 // profile menu component
 const profileMenuItems = [
@@ -177,7 +184,12 @@ export function SecondaryNavbar() {
         <div className="flex justify-center items-center w-full gap-80">
           {/* Left Section */}
           <div className="flex items-center gap-1">
-            <Menu>
+            <Menu 
+              dismiss={{
+              itemPress: false,
+              outsidePress: false,
+            }}
+          >
           <MenuHandler>
             <div className="flex items-center gap-1 cursor-pointer">
               <Bars3Icon className="h-6 w-6 text-black hover:text-blue-500" />
@@ -204,17 +216,76 @@ export function SecondaryNavbar() {
             <MenuItem>Accessories</MenuItem>
           </MenuList>
         </Menu>
-          </div>
+        </div>
 
-          {/* Center Section */}
-          <Typography
-            as="a"
-            href="#brands"
-            variant="small"
-            className="font-medium text-black cursor-pointer hover:text-blue-500"
-          >
-            Brands
-          </Typography>
+        {/* centre */}
+        <Menu
+          dismiss={{
+            itemPress: false,
+            outsidePress: false,
+          }}
+        >
+          <MenuHandler>
+            <Typography
+              as="a"
+              href="#brands"
+              variant="small"
+              className="font-medium text-black cursor-pointer hover:text-blue-500"
+            >
+              Brands
+            </Typography>
+          </MenuHandler>
+          <MenuList className="bg-[#f6f6f6] border border-gray-200 shadow-lg rounded-md p-4 w-[900px]">
+            <div className="grid grid-cols-[60%_40%] gap-4">
+              <div className="border-r pr-4">
+                <h3 className="text-lg font-bold mb-3 text-black">Popular Brands</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 ">
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img1} alt="Brand1" />
+                  </div>
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img2} alt="Brand2" />
+                  </div>
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img3} alt="Brand3" />
+                  </div>
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img4} alt="Brand4" />
+                  </div>
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img5} alt="Brand5" />
+                  </div>
+                  <div className="bg-[#f6f6f6] border-2 border-gray-200 p-4 flex justify-center items-center">
+                    <img src={Img6} alt="Brand6" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold mb-3 text-black">All Brands</h3>
+                <Input
+                  type="text"
+                  placeholder="Search Brands"
+                  className="mb-3"
+                />
+                <div className="h-52 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 mt-5 mb-7 text-base">
+                  {["Samsung", "Huawei", "Apple", "Honor", "Vivo", "OnePlus", "Huawei", "Apple", "Honor", "Vivo", "OnePlus"].map(
+                    (brand) => (
+                      <p
+                        key={brand}
+                        className="py-1 px-2 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {brand}
+                      </p>
+                    )
+                  )}
+                </div>
+                <p className="mt-3 text-[#972323] font-bold cursor-pointer hover:underline text-base">
+                  See All Brands &gt;
+                </p>
+              </div>
+            </div>
+          </MenuList>
+        </Menu>
 
           {/* Right Section */}
           <Typography
