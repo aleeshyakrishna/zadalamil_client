@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Mobiles from './pages/mobiles';
 import ProductDetailsPage from './pages/ProductDetails.jsx';
 import Cart from './pages/Cart.jsx';
+import Wishlist from './pages/Wishlist.jsx';
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/mobiles&tabs" element={<Mobiles/>} /> 
         <Route path='/product-details' element={ <ProductDetailsPage />} />
         <Route path='/cart' element={ <Cart />} />
+        <Route path='/wishlist' element={ <Wishlist />} />
       </Routes>
     </Router>
   )

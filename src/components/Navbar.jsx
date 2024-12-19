@@ -370,9 +370,10 @@ export function ComplexNavbar() {
 
         {/* Wishlist and Cart Icons */}
       <div className="flex items-center gap-5">
-        <IconButton variant="text" color="black">
+        <Link to='/wishlist'><IconButton variant="text" color="black">
           <HeartIcon className="h-6 w-6" />
         </IconButton>
+        </Link>
         <Link to='/cart'><IconButton variant="text" color="black" className="mr-4">
           <ShoppingCartIcon className="h-6 w-6 " />
         </IconButton>
