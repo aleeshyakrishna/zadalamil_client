@@ -322,7 +322,7 @@ export function ComplexNavbar() {
 
         {/* Logo */}
         <a href="#" className="mr-4 ml-2 cursor-pointer py-1.5">
-          <img src={logo} alt="company logo" className="h-16 w-auto"/>
+        <Link to='/'><img src={logo} alt="company logo" className="h-16 w-auto"/></Link>
           <h1 className="ml-3 font-semibold">Zad Alamil</h1>
         </a>
 

@@ -2,6 +2,7 @@
 import Home from  './pages/Home.jsx';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Mobiles from './pages/mobiles';
+import ProductDetailsPage from './pages/ProductDetails.jsx';
 
 const App = () => {
 
@@ -14,7 +15,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home/>} /> 
-        <Route path="//mobiles&tabs" element={<Mobiles/>} /> 
+        <Route path="/mobiles&tabs" element={<Mobiles/>} /> 
+        <Route path='/product-details' element={ <ProductDetailsPage />} />
       </Routes>
     </Router>
   )

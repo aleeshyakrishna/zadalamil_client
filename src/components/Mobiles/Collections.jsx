@@ -17,6 +17,7 @@ import Img15 from '../../assets/images/mob3.png';
 import Img16 from '../../assets/images/mob3.png';
 import { Filters } from './Filters';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const collectionData =  [
     { id: 1, image: Img1, title: "Samsung Galaxy Z Fold5 |5G| 12GB RAM | ROM 1 TB", price: 6599, oldPrice: 10999, discount: "28% OFF" },
@@ -49,7 +50,7 @@ const ProductCard = ({ product }) => {
         ♥
       </button>
 
-      <img src={product.image} alt={product.title} className="w-full h-48 object-contain" />
+      <Link to="/product-details"><img src={product.image} alt={product.title} className="w-full h-48 object-contain cursor-pointer" /></Link>
 
       <div className="text-START mt-6">
         <h3 className="text-gray-700 text-sm font-medium">{product.title}</h3>
