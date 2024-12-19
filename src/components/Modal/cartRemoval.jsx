@@ -7,7 +7,8 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function WishlistRemove({ open, setOpen, removeFromWishlist }) {
+
+export function CartRemoval({ open, setOpen, removeFromWishlist }) {
   return (
     <Dialog
       open={open}
@@ -18,22 +19,22 @@ export function WishlistRemove({ open, setOpen, removeFromWishlist }) {
       }}
       className='border-8 border-gray-300'
     >
-      <div className='m-4 border-8 border-dashed border-gray-400'>
+        <div className='m-4 border-8 border-dashed border-gray-400'>
       <DialogHeader>
-      <div className="flex justify-between w-full m-4">
-        <span>Confirm Wishlist Item Removal</span>
-        <Button
-        variant="text"
-        color="black"
-        onClick={() => setOpen(false)}
-        className="p-0 text-sm"
-        >
-        <span className="material-icons">x</span>
-        </Button>
-      </div>
+        <div className="flex justify-between w-full m-4">
+                <span>Confirm Cart Item Removal</span>
+                <Button
+                variant="text"
+                color="black"
+                onClick={() => setOpen(false)}
+                className="p-0 text-sm"
+                >
+                <span className="material-icons">x</span>
+                </Button>
+          </div>
       </DialogHeader>
-      <DialogBody className="border-t-2 border-gray-300">
-        Are you sure you want to remove this item from your wishlist? This
+      <DialogBody>
+        Are you sure you want to remove this item from your cart? This
         action cannot be undone.
       </DialogBody>
       <DialogFooter className='mt-5'>
@@ -54,7 +55,7 @@ export function WishlistRemove({ open, setOpen, removeFromWishlist }) {
   );
 }
 
-WishlistRemove.propTypes = {
+CartRemoval.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   removeFromWishlist: PropTypes.func.isRequired,

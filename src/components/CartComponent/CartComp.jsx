@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProductImage from '../../assets/images/iPhone1.jpg';
 import { Link } from 'react-router-dom';
+import { CartRemoval } from '../Modal/cartRemoval';
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([
@@ -46,6 +47,19 @@ const ShoppingCart = () => {
   const subTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   const total = subTotal - discount;
 
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenCartRemovalModal = (id) => {
+    setSelectedItemId(id);
+    setOpen(true);
+  };
+
+  const removeFromCart = () => {
+    setCartItems((prev) => prev.filter((item) => item.id !== selectedItemId));
+    setOpen(false);
+  };
+
   return (
     <section>
     <div className=" p-6 lg:p-12 ">
@@ -69,7 +83,7 @@ const ShoppingCart = () => {
                   <p className="text-sm text-gray-500">Color: {item.color}</p>
                   <div className="flex items-center gap-4 mt-2">
                     <button className="text-sm text-blue-500">Save</button>
-                    <button className="text-sm text-red-900">Remove</button>
+                    <button onClick={() => handleOpenCartRemovalModal(item.id)} className="text-sm text-red-900">Remove</button>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
@@ -140,6 +154,12 @@ const ShoppingCart = () => {
         </div>
       </div>
     </div>
+
+    <CartRemoval 
+            open={open}
+            setOpen={setOpen}
+            removeFromWishlist={removeFromCart}
+          />
     </section>
   );
 };
