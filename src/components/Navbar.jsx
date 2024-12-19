@@ -373,9 +373,10 @@ export function ComplexNavbar() {
         <IconButton variant="text" color="black">
           <HeartIcon className="h-6 w-6" />
         </IconButton>
-        <IconButton variant="text" color="black" className="mr-4">
+        <Link to='/cart'><IconButton variant="text" color="black" className="mr-4">
           <ShoppingCartIcon className="h-6 w-6 " />
         </IconButton>
+        </Link>
       </div>
 
         <IconButton
