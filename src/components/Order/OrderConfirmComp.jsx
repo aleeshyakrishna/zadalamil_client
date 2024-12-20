@@ -27,9 +27,11 @@ const OrderConfirmComp = () => {
             <p className="text-sm text-gray-600">
               Kurumasseri House, Thrissur, PO, Kerala-680551
             </p>
-            <button className="mt-4 px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
-              ORDER DETAILS
-            </button>
+            <Link to='/order-details'>
+              <button className="mt-4 px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
+                ORDER DETAILS
+              </button>
+            </Link>
           </div>
           <div className="w-24 h-24 md:w-32 md:h-32">
             <img
