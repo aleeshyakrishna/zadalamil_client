@@ -62,8 +62,8 @@ const ShoppingCart = () => {
 
   return (
     <section>
-    <div className=" p-6 lg:p-12 ">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-44 m-10">
+    <div className="p-4 ">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-32 md:mt-32 lg:mt-40">
         {/* Cart Items */}
         <div className="lg:col-span-2">
           <h1 className="text-2xl font-bold mb-6">My Shopping Cart</h1>
