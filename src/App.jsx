@@ -13,6 +13,8 @@ import Profile from './pages/Profile.jsx';
 import MyOrders from './pages/MyOrders.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/sIGNUP.JSX';
+import NumberLogin from './pages/NumberLogin.jsx';
+import OTP from './pages/OTP.jsx';
 
 
 const App = () => {
@@ -38,6 +40,9 @@ const App = () => {
         <Route path='/myOrders' element={ <MyOrders />} />
 
         <Route path='/login' element={ <Login />}/>
+        <Route path='/numberLogin' element={ <NumberLogin />}/>
+        <Route path='/otp-login' element={ <OTP />}/>
+
         <Route path='/signup' element={ <Signup />}/>
       </Routes>
     </Router>

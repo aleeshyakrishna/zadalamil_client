@@ -76,7 +76,7 @@ const LoginComp = () => {
           </form>
 
           <div className="text-center text-sm font-semibold text-blue-900 mt-4">
-            <a href="#" className="hover:text-red-900">
+            <a href="/numberLogin" className="hover:text-red-900">
                 Or Login with Mobile Number
             </a>
           </div>
