@@ -85,6 +85,7 @@ const ProfileComp = () => {
         </div>
         <ul className="mt-8 space-y-4 w-full">
           <li>
+            <Link to='/myOrders'>
             <button
               onClick={() => setActiveTab("MY_ORDERS")}
               className={`flex items-center text-sm ${
@@ -98,6 +99,7 @@ const ProfileComp = () => {
               </span>
               MY ORDERS
             </button>
+            </Link>
           </li>
           <li>
             <Link to='/wishlist'>

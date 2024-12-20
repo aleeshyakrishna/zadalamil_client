@@ -10,6 +10,7 @@ import OrderConfirm from './pages/OrderConfirm.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderDetails from './pages/OrderDetails.jsx';
 import Profile from './pages/Profile.jsx';
+import MyOrders from './pages/MyOrders.jsx';
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/order-confirm' element={ <OrderConfirm />} />
         <Route path='/order-details' element={ <OrderDetails />}/>
         <Route path='/profile' element={ <Profile />} />
+        <Route path='/myOrders' element={ <MyOrders />} />
       </Routes>
     </Router>
   )
