@@ -32,8 +32,8 @@ const ProductDetails = () => {
   };
 
   return (
-    <section>
-      <div className="flex p-16 items-center justify-center py-10 h-[1200px] sm:h-[1400px] md:h-[1600px] lg:h-[1200px]">
+    <section className='p-3'>
+      <div className="flex p-16 items-center justify-center py-10 p-2 mt-32 md:mt-32 lg:mt-40">
         <div className="w-full mx-auto px-6 lg:px-20">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-6">
             {/* Left Column: Thumbnail Images */}

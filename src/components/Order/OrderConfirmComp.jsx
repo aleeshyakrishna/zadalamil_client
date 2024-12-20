@@ -43,13 +43,16 @@ const OrderConfirmComp = () => {
         </div>
 
         <div className="mt-5 p-4 border-t border-gray-200 flex justify-between items-center">
-          <Link to='/'><button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
-            CONTINUE SHOPPING
-          </button>
+          <Link to='/'>
+            <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+              CONTINUE SHOPPING
+            </button>
           </Link>
-          <button className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
-            VIEW ORDERS
-          </button>
+          <Link to='/myOrders'>
+            <button className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
+              VIEW ORDERS
+            </button>
+          </Link>
         </div>
       </div>
     </div>
