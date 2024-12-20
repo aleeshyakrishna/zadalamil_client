@@ -1,24 +1,57 @@
- import Img1 from '../../assets/images/orderTick.png';
+import Img1 from '../../assets/images/orderTick.png';
+import Img2 from '../../assets/images/order.png';
+import { Link } from 'react-router-dom';
 
 const OrderConfirmComp = () => {
-
   return (
-    <section className="bg-gray-100 py-12 p-6 lg:p-52 md:p-44 ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:py-32 border-4 bg-white">
-        <div className='flex flex-col items-center'>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl">
+        <div className="p-6 text-center border-b border-gray-200">
+          <div className="flex justify-center items-center w-24 h-24 md:w-32 md:h-32 mx-auto">
             <img
-                src={Img1}
-                alt="Img"
-                className="w-24 h-24 object-cover rounded-lg mb-4 sm:mb-0 items-center"
+              src={Img1}
+              alt="Order Confirmed Illustration"
+              className="w-full h-full object-contain"
             />
-            <h2 className='font-bold text-green-900 text-3xl mt-4'>ORDER CONFIRMED</h2>
-            <h5 className='font-thin text-black text-small mt-14'>Your order is confirmed. You will receive an order confirmation email/SMS shortly 
-            with the expect delivery date for your items.</h5>
+          </div>
+          <h2 className="text-xl font-bold text-green-900">ORDER CONFIRMED</h2>
+          <p className="text-gray-600 mt-2">
+            Your order is confirmed. You will receive an order confirmation email/SMS shortly with the expected delivery date for your items.
+          </p>
+        </div>
+
+        <div className="p-6 flex flex-col md:flex-row items-center gap-4 mt-5">
+          <div className="flex-grow">
+            <h3 className="text-sm font-medium text-gray-500">Delivering to:</h3>
+            <p className="text-base font-semibold">Akhila Vijayan | +91 8848965432</p>
+            <p className="text-sm text-gray-600">
+              Kurumasseri House, Thrissur, PO, Kerala-680551
+            </p>
+            <button className="mt-4 px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
+              ORDER DETAILS
+            </button>
+          </div>
+          <div className="w-24 h-24 md:w-32 md:h-32">
+            <img
+              src={Img2}
+              alt="Delivery Illustration"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+
+        <div className="mt-5 p-4 border-t border-gray-200 flex justify-between items-center">
+          <Link to='/'><button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+            CONTINUE SHOPPING
+          </button>
+          </Link>
+          <button className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800">
+            VIEW ORDERS
+          </button>
         </div>
       </div>
-      </section>
+    </div>
+  );
+};
 
-  )
-}
-
-export default OrderConfirmComp
+export default OrderConfirmComp;

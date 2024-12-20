@@ -3,6 +3,7 @@ import { AddAddressModal } from "../Modal/addAddressModal";
 import { EditAddressModal } from "../Modal/editAddressModal";
 import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
 import { DeleteAddressModal } from "../Modal/deleteAddressModal";
+import { Link } from "react-router-dom";
 
 const CheckoutComp = () => {
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
@@ -152,7 +153,7 @@ const CheckoutComp = () => {
             <span>AED 2,499.00</span>
           </div>
         </div>
-        <button className="mt-16 w-full px-4 py-2 bg-red-900 text-white rounded-lg">CONTINUE</button>
+        <Link to='/order-confirm'><button className="mt-16 w-full px-4 py-2 bg-red-900 text-white rounded-lg">CONTINUE</button></Link>
       </div>
     </div>
 
