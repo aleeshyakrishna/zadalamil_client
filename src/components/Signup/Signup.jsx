@@ -86,8 +86,8 @@ const SignupComp = () => {
               </div>
             </div>
 
-            <div className="flex justify-between text-sm text-blue-900">
-              <a href="" className="hover:text-red-900"></a>
+            <div className="flex justify-between text-sm text-blue-900 ">
+              <a href="/" className="hover:text-red-900">Back to Home</a>
               <a href="/login" className="hover:text-red-900">
                 Already have account? Login
               </a>
@@ -96,7 +96,7 @@ const SignupComp = () => {
             <Link to='/'>
                 <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#0e0808] to-[#972323] text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition mt-5"
+                className="w-full bg-gradient-to-r from-[#0e0808] to-[#972323] text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
                 >
                 SIGNUP
                 </button>

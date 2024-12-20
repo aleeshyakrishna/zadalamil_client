@@ -181,12 +181,14 @@ const ProfileComp = () => {
             </button>
           </li>
           <li>
-            <button className="flex items-center text-sm text-gray-700 hover:text-red-900">
-              <span className="mr-4 w-5">
-                <ArrowLeftOnRectangleIcon />
-              </span>
-              LOGOUT
-            </button>
+            <Link to='/login'>
+                <button className="flex items-center text-sm text-gray-700 hover:text-red-900">
+                <span className="mr-4 w-5">
+                    <ArrowLeftOnRectangleIcon />
+                </span>
+                LOGOUT
+                </button>
+            </Link>
           </li>
         </ul>
       </aside>
