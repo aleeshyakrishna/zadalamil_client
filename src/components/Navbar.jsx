@@ -285,9 +285,11 @@ export function SecondaryNavbar() {
                     )
                   )}
                 </div>
+                <Link to='/all-brands'>
                 <p className="mt-3 text-[#972323] font-bold cursor-pointer hover:underline text-base">
                   See All Brands &gt;
                 </p>
+                </Link>
               </div>
             </div>
           </MenuList>

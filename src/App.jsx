@@ -18,6 +18,7 @@ import OTP from './pages/OTP.jsx';
 import ForgetPassword from './pages/ForgetPassword.jsx';
 import ForgotOTPNumber from './pages/ForgotOTPNumber.jsx';
 import ChangePassword from './pages/ChangePassword.jsx';
+import AllBrands from './pages/AllBrands.jsx';
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home/>} /> 
         <Route path="/mobiles&tabs" element={<Mobiles/>} /> 
+        <Route path="/all-brands" element={<AllBrands/>} /> 
         <Route path='/product-details' element={ <ProductDetailsPage />} />
         <Route path='/cart' element={ <Cart />} />
         <Route path='/wishlist' element={ <Wishlist />} />
