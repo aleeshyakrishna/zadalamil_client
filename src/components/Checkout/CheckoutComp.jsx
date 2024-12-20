@@ -49,7 +49,7 @@ const CheckoutComp = () => {
 
   return (
     <section>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-36  md:p-36 lg:p-56">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-36  md:p-36 lg:p-56">
       {/* Left Section */}
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -77,14 +77,14 @@ const CheckoutComp = () => {
                     <p className="text-gray-600 text-sm">{addr.address}</p>
                   </div>
                 </label>
-                <div className="space-x-2">
-                <button
-                      className="text-blue-500 hover:underline"
-                      onClick={() => initiateEditAddress(addr)}
+                <div className="space-y-1 md:space-x-2 md:space-y-0 flex flex-col md:flex-row">
+                    <button
+                        className="text-blue-500 hover:underline"
+                        onClick={() => initiateEditAddress(addr)}
                     >
-                      Edit
+                        Edit
                     </button>
-                  <button className="text-red-900 hover:underline">Delete</button>
+                    <button className="text-red-900 hover:underline">Delete</button>
                 </div>
               </div>
             ))}
@@ -149,7 +149,7 @@ const CheckoutComp = () => {
         setOpen={setIsModalOpenAddAddress}
         saveAddress={handleSaveAddress}
     />
-    
+
     <EditAddressModal
         open={isModalOpenEditAddress}
         setOpen={setIsModalOpenEditAddress}
