@@ -1,8 +1,15 @@
 import { useState } from "react";
+import { AddAddressModal } from "../Modal/addAddressModal";
 
 const CheckoutComp = () => {
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
+  const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
+
+  const handleSaveAddress = () => {
+    console.log("Address saved");
+    setIsModalOpenAddAddress(false); 
+  };
 
   return (
     <section>
@@ -42,7 +49,12 @@ const CheckoutComp = () => {
               </div>
             ))}
           </div>
-          <button className="mt-4 px-4 py-2 bg-red-900 text-white rounded-lg">+ ADD ADDRESS</button>
+          <button
+              className="mt-4 px-4 py-2 bg-red-900 text-white rounded-lg"
+              onClick={() => setIsModalOpenAddAddress(true)}
+            >
+              + ADD ADDRESS
+            </button>
         </div>
 
         {/* Payment Options */}
@@ -91,6 +103,13 @@ const CheckoutComp = () => {
         <button className="mt-16 w-full px-4 py-2 bg-red-900 text-white rounded-lg">CONTINUE</button>
       </div>
     </div>
+
+    <AddAddressModal
+        open={isModalOpenAddAddress}
+        setOpen={setIsModalOpenAddAddress}
+        saveAddress={handleSaveAddress}
+      />
+
     </section>
   );
 };
