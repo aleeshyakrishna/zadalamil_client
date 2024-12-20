@@ -15,6 +15,9 @@ import Login from './pages/Login.jsx';
 import Signup from './pages/sIGNUP.JSX';
 import NumberLogin from './pages/NumberLogin.jsx';
 import OTP from './pages/OTP.jsx';
+import ForgetPassword from './pages/ForgetPassword.jsx';
+import ForgotOTPNumber from './pages/ForgotOTPNumber.jsx';
+import ChangePassword from './pages/ChangePassword.jsx';
 
 
 const App = () => {
@@ -44,6 +47,10 @@ const App = () => {
         <Route path='/otp-login' element={ <OTP />}/>
 
         <Route path='/signup' element={ <Signup />}/>
+
+        <Route path='/forgot-password' element={ <ForgetPassword />} />
+        <Route path='/forgot-OTP-number' element={ <ForgotOTPNumber />} />
+        <Route path='/change-password' element={ <ChangePassword />}/>
       </Routes>
     </Router>
   )
