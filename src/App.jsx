@@ -11,6 +11,7 @@ import Checkout from './pages/Checkout.jsx';
 import OrderDetails from './pages/OrderDetails.jsx';
 import Profile from './pages/Profile.jsx';
 import MyOrders from './pages/MyOrders.jsx';
+import Login from './pages/Login.jsx';
 
 
 const App = () => {
@@ -34,6 +35,8 @@ const App = () => {
         <Route path='/order-details' element={ <OrderDetails />}/>
         <Route path='/profile' element={ <Profile />} />
         <Route path='/myOrders' element={ <MyOrders />} />
+
+        <Route path='/login' element={ <Login />}/>
       </Routes>
     </Router>
   )
