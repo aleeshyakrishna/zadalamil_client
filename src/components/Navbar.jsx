@@ -42,6 +42,7 @@ const profileMenuItems = [
   {
     label: "My Profile",
     icon: UserCircleIcon,
+    path: '/profile'
   },
   {
     label: "Sign Out",
@@ -79,11 +80,12 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, path }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
+            <Link key={label} to={path}>
             <MenuItem
-              key={label}
+              // key={label}
               onClick={closeMenu}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
@@ -104,6 +106,7 @@ function ProfileMenu() {
                 {label}
               </Typography>
             </MenuItem>
+            </Link>
           );
         })}
       </MenuList>

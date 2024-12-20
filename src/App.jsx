@@ -9,6 +9,7 @@ import NewArrivals from './pages/NewArrivals.jsx';
 import OrderConfirm from './pages/OrderConfirm.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderDetails from './pages/OrderDetails.jsx';
+import Profile from './pages/Profile.jsx';
 
 
 const App = () => {
@@ -29,8 +30,8 @@ const App = () => {
         <Route path='/new-arrivals' element={ <NewArrivals />} />
         <Route path='/checkout' element={ <Checkout />} />
         <Route path='/order-confirm' element={ <OrderConfirm />} />
-        {/* <Route path='/order-details' element={ <OrderDetails />} /> */}
         <Route path='/order-details' element={ <OrderDetails />}/>
+        <Route path='/profile' element={ <Profile />} />
       </Routes>
     </Router>
   )
