@@ -1,14 +1,50 @@
 import { useState } from "react";
 import { AddAddressModal } from "../Modal/addAddressModal";
+import { EditAddressModal } from "../Modal/editAddressModal";
+import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
 
 const CheckoutComp = () => {
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
   const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
+  const [isModalOpenEditAddress, setIsModalOpenEditAddress] = useState(false);
+  const [isModalOpenConfirmEdit, setIsModalOpenConfirmEdit] = useState(false);
+
+  const [addresses, setAddresses] = useState([
+    {
+      name: "Akhila Vijayan",
+      address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581",
+    },
+    {
+      name: "Sheela Vijayan",
+      address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581",
+    },
+  ]);
+  const [tempEditAddress, setTempEditAddress] = useState(null);
 
   const handleSaveAddress = () => {
     console.log("Address saved");
     setIsModalOpenAddAddress(false); 
+  };
+
+  const handleUpdateAddress = (updatedAddress) => {
+    setAddresses((prevAddresses) =>
+      prevAddresses.map((addr) =>
+        addr.name === tempEditAddress.name ? updatedAddress : addr
+      )
+    );
+    setTempEditAddress(null);
+    setIsModalOpenConfirmEdit(false);
+  };
+
+  const initiateEditAddress = (address) => {
+    setTempEditAddress(address);
+    setIsModalOpenEditAddress(true);
+  };
+
+  const confirmEditAddress = () => {
+    setIsModalOpenEditAddress(false);
+    setIsModalOpenConfirmEdit(true);
   };
 
   return (
@@ -19,15 +55,14 @@ const CheckoutComp = () => {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
           <div className="space-y-4">
-            {[
-              { name: "Akhila Vijayan", address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581" },
-              { name: "Sheela Vijayan", address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581" },
-            ].map((addr, index) => (
-              <div
-                key={index}
-                className={`flex items-center justify-between p-4 border rounded-lg ${
-                  selectedAddress === addr.name ? "border-red-900" : "border-gray-300"
-                }`}
+            {addresses.map((addr, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center justify-between p-4 border rounded-lg ${
+                    selectedAddress === addr.name
+                      ? "border-red-900"
+                      : "border-gray-300"
+                  }`}
               >
                 <label className="flex items-center space-x-2">
                   <input
@@ -43,7 +78,12 @@ const CheckoutComp = () => {
                   </div>
                 </label>
                 <div className="space-x-2">
-                  <button className="text-blue-500 hover:underline">Edit</button>
+                <button
+                      className="text-blue-500 hover:underline"
+                      onClick={() => initiateEditAddress(addr)}
+                    >
+                      Edit
+                    </button>
                   <button className="text-red-900 hover:underline">Delete</button>
                 </div>
               </div>
@@ -108,7 +148,21 @@ const CheckoutComp = () => {
         open={isModalOpenAddAddress}
         setOpen={setIsModalOpenAddAddress}
         saveAddress={handleSaveAddress}
-      />
+    />
+    
+    <EditAddressModal
+        open={isModalOpenEditAddress}
+        setOpen={setIsModalOpenEditAddress}
+        saveAddress={confirmEditAddress}
+    />
+
+    <ConfirmEditAddressModal
+    open={isModalOpenConfirmEdit}
+    setOpen={setIsModalOpenConfirmEdit}
+    saveAddress={() =>
+        handleUpdateAddress({ ...tempEditAddress, address: "Updated Address" })
+    }
+    />
 
     </section>
   );
