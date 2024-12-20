@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Img1 from '../assets/images/camers.png';
 import Img2 from '../assets/images/gaming.png';
 import Img3 from '../assets/images/headphones.png';
@@ -23,6 +24,7 @@ const CategorySection = () => {
       <div className="flex justify-center gap-28 flex-wrap mb-20">
         {categories.map((category, index) => (
           <div key={index} className="flex flex-col items-center cursor-pointer">
+            <Link to='/mobiles&tabs'>
             <div className="w-24 h-24 rounded-full shadow-2xl shadow-black bg-gray-200 flex items-center justify-center">
               <img
                 src={category.image}
@@ -30,6 +32,7 @@ const CategorySection = () => {
                 className="w-12 h-12 object-contain"
               />
             </div>
+            </Link>
             <span className="mt-2 text-lg font-medium">{category.name}</span>
           </div>
         ))}
