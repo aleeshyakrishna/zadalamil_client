@@ -7,6 +7,7 @@ import Cart from './pages/Cart.jsx';
 import Wishlist from './pages/Wishlist.jsx';
 import NewArrivals from './pages/NewArrivals.jsx';
 import OrderConfirm from './pages/OrderConfirm.jsx';
+import Checkout from './pages/Checkout.jsx';
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/wishlist' element={ <Wishlist />} />
         <Route path='/new-arrivals' element={ <NewArrivals />} />
         <Route path='/order-confirm' element={ <OrderConfirm />} />
+        <Route path='/checkout' element={ <Checkout />} />
       </Routes>
     </Router>
   )

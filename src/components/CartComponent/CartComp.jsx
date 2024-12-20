@@ -147,9 +147,11 @@ const ShoppingCart = () => {
                 <p>AED {total.toLocaleString()}</p>
               </div>
             </div>
+            <Link to='/checkout'>
             <button className="bg-red-900 text-white py-2 px-4 w-full rounded-md hover:bg-red-700">
               CHECKOUT
             </button>
+            </Link>
           </div>
         </div>
       </div>
