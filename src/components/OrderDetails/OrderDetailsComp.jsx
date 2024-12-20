@@ -28,7 +28,7 @@ const OrderDetailsComp = () => {
                 </h3>
                 <p className="text-gray-800 font-semibold">Akhila Vijayan</p>
                 <p className="text-gray-600 text-sm">+9718877451252</p>
-                <a href="#" className="text-red-900 text-sm mt-2 block">
+                <a href="/profile" className="text-red-900 text-sm mt-2 block">
                     View Profile
                 </a>
             </div>

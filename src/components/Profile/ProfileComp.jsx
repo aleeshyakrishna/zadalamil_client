@@ -13,6 +13,7 @@ import { AddAddressModal } from "../Modal/addAddressModal";
 import { EditAddressModal } from "../Modal/editAddressModal";
 import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
 import { DeleteAddressModal } from "../Modal/deleteAddressModal";
+import { Link } from "react-router-dom";
 
 const ProfileComp = () => {
   const [activeTab, setActiveTab] = useState("PROFILE_INFORMATION"); 
@@ -99,19 +100,21 @@ const ProfileComp = () => {
             </button>
           </li>
           <li>
-            <button
-              onClick={() => setActiveTab("MY_WISHLIST")}
-              className={`flex items-center text-sm ${
-                activeTab === "MY_WISHLIST"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
-              }`}
-            >
-              <span className="mr-4 w-5">
-                <HeartIcon />
-              </span>
-              MY WISHLIST
-            </button>
+            <Link to='/wishlist'>
+                <button
+                onClick={() => setActiveTab("MY_WISHLIST")}
+                className={`flex items-center text-sm ${
+                    activeTab === "MY_WISHLIST"
+                    ? "text-red-900 font-bold"
+                    : "text-gray-700 hover:text-red-900"
+                }`}
+                >
+                <span className="mr-4 w-5">
+                    <HeartIcon />
+                </span>
+                MY WISHLIST
+                </button>
+            </Link>
           </li>
           <li>
             <button
@@ -144,19 +147,21 @@ const ProfileComp = () => {
             </button>
           </li>
           <li>
-            <button
-              onClick={() => setActiveTab("MY_CART")}
-              className={`flex items-center text-sm ${
-                activeTab === "MY_CART"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
-              }`}
-            >
-              <span className="mr-4 w-5">
-                <ShoppingBagIcon />
-              </span>
-              MY CART
-            </button>
+            <Link to='/cart'>
+                <button
+                onClick={() => setActiveTab("MY_CART")}
+                className={`flex items-center text-sm ${
+                    activeTab === "MY_CART"
+                    ? "text-red-900 font-bold"
+                    : "text-gray-700 hover:text-red-900"
+                }`}
+                >
+                <span className="mr-4 w-5">
+                    <ShoppingBagIcon />
+                </span>
+                MY CART
+                </button>
+            </Link>
           </li>
           <li>
             <button
@@ -293,6 +298,28 @@ const ProfileComp = () => {
         </>
         )}
 
+        {activeTab === "MY_WALLET" && (
+        <>
+            <div className="space-y-4">
+            <div className="flex flex-col items-center justify-center w-11/12 max-w-sm p-16 bg-white rounded-lg shadow-lg">
+                <div className="text-primary mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.25 6.75A3.75 3.75 0 016 3h12a3.75 3.75 0 013.75 3.75v10.5A3.75 3.75 0 0118 21H6a3.75 3.75 0 01-3.75-3.75V6.75zM6 4.5A2.25 2.25 0 003.75 6.75v10.5A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0018 4.5H6z" />
+                        <path d="M18.75 12a.75.75 0 000-1.5h-3a.75.75 0 000 1.5h3z" />
+                    </svg>
+                    </div>
+                    <h1 className="text-2xl font-semibold text-red-900">MY WALLET</h1>
+                    <p className="text-lg text-gray-600 mb-6 mt-10">Total Wallet Amount: <span className="font-semibold text-gray-800">237</span></p>
+                    <Link to='/'>
+                        <button className="px-6 py-3 text-black bg-yellow-800 rounded-lg shadow-md hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-600 transition font-bold">
+                        CONTINUE SHOPPING
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        </>
+        )}
+
         </main>
 
         <AddAddressModal
@@ -318,7 +345,7 @@ const ProfileComp = () => {
             setOpen={setIsModalOpenDeleteAddress}
             saveAddress={handleDeleteAddress}
         />
-        
+
     </div>
   );
 };
