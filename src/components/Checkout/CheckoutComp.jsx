@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AddAddressModal } from "../Modal/addAddressModal";
 import { EditAddressModal } from "../Modal/editAddressModal";
 import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
+import { DeleteAddressModal } from "../Modal/deleteAddressModal";
 
 const CheckoutComp = () => {
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
@@ -9,6 +10,7 @@ const CheckoutComp = () => {
   const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
   const [isModalOpenEditAddress, setIsModalOpenEditAddress] = useState(false);
   const [isModalOpenConfirmEdit, setIsModalOpenConfirmEdit] = useState(false);
+  const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
 
   const [addresses, setAddresses] = useState([
     {
@@ -45,6 +47,11 @@ const CheckoutComp = () => {
   const confirmEditAddress = () => {
     setIsModalOpenEditAddress(false);
     setIsModalOpenConfirmEdit(true);
+  };
+
+  const handleDeleteAddress = () => {
+    console.log("Address deleted");
+    setIsModalOpenDeleteAddress(false); 
   };
 
   return (
@@ -84,7 +91,12 @@ const CheckoutComp = () => {
                     >
                         Edit
                     </button>
-                    <button className="text-red-900 hover:underline">Delete</button>
+                    <button 
+                        className="text-red-900 hover:underline"
+                        onClick={() => setIsModalOpenDeleteAddress(true) }
+                        >
+                        Delete
+                    </button>
                 </div>
               </div>
             ))}
@@ -162,6 +174,12 @@ const CheckoutComp = () => {
     saveAddress={() =>
         handleUpdateAddress({ ...tempEditAddress, address: "Updated Address" })
     }
+    />
+
+    <DeleteAddressModal
+        open={isModalOpenDeleteAddress}
+        setOpen={setIsModalOpenDeleteAddress}
+        saveAddress={handleDeleteAddress}
     />
 
     </section>
