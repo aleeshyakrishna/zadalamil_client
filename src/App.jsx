@@ -12,6 +12,7 @@ import OrderDetails from './pages/OrderDetails.jsx';
 import Profile from './pages/Profile.jsx';
 import MyOrders from './pages/MyOrders.jsx';
 import Login from './pages/Login.jsx';
+import Signup from './pages/sIGNUP.JSX';
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
         <Route path='/myOrders' element={ <MyOrders />} />
 
         <Route path='/login' element={ <Login />}/>
+        <Route path='/signup' element={ <Signup />}/>
       </Routes>
     </Router>
   )
