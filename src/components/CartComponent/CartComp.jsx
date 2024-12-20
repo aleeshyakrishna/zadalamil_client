@@ -148,7 +148,7 @@ const ShoppingCart = () => {
               </div>
             </div>
             <Link to='/checkout'>
-            <button className="bg-red-900 text-white py-2 px-4 w-full rounded-md hover:bg-red-700">
+            <button className="bg-red-900 text-white py-2 px-4 w-full rounded-md hover:bg-red-700 mt-5">
               CHECKOUT
             </button>
             </Link>

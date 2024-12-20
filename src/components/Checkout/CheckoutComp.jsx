@@ -56,8 +56,8 @@ const CheckoutComp = () => {
   };
 
   return (
-    <section>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-36  md:p-36 lg:p-56">
+    <section className="p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2 mt-32 md:mt-32 lg:mt-40">
       {/* Left Section */}
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white p-6 rounded-lg shadow-md">

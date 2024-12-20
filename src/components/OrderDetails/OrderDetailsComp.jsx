@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 
 const OrderDetailsComp = () => {
     return (
-      <div className="min-h-screen bg-gray-100 p-36  flex flex-col items-center lg:p-52 md:p-44 sm:p-44">
+        <section className="p-4">
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center p-2 mt-32 md:mt-32 lg:mt-40">
         <div className="bg-white shadow-lg rounded-lg  max-w-5xl min-w-2xl">
           <div className="p-6 border-b border-gray-200 flex justify-between items-center">
             <div className="flex flex-col">
@@ -14,7 +15,7 @@ const OrderDetailsComp = () => {
             <p className="text-xs font-thin text-gray-800">Details for the Order ID: 675GHG756HG88</p>
             </div>
             
-            <button className="bg-green-900 text-white px-4 py-2 rounded-lg hover:bg-green-800">
+            <button className="bg-green-900 text-white px-4 py-2 rounded-lg hover:bg-green-800 w-44">
               Download Invoice
             </button>
           </div>
@@ -119,6 +120,7 @@ const OrderDetailsComp = () => {
           </div>
         </div>
       </div>
+      </section>
     );
   };
   
