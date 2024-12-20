@@ -10,7 +10,7 @@ export function InputCustomStyles() {
         labelProps={{
           className: "hidden",
         }}
-        containerProps={{ className: "min-w-[100px]" }}
+        containerProps={{ className: "min-w-[50px]" }}
       />
     </div>
   );
