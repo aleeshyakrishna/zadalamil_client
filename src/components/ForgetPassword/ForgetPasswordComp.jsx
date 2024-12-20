@@ -36,7 +36,7 @@ const ForgotPasswordNumberComp = () => {
             </div>
 
             <div className="flex justify-between text-sm text-blue-900">
-              <a href="/signup" className="hover:text-red-900 mt-5">
+              <a href="/" className="hover:text-red-900 mt-5">
                 Back to Home
               </a>
             </div>
