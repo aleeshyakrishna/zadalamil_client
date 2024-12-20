@@ -50,8 +50,8 @@ const WishlistComp = () => {
   };
 
   return (
-    <section className="bg-gray-100 py-12 p-6 lg:p-52 md:p-44">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:py-32">
+    <section className="bg-gray-100 py-12 p-6 ">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:py-32  md:p-44 mt-32 md:mt-32 lg:mt-16">
         <h1 className="text-3xl font-bold mb-8 text-center">MY WISHLIST</h1>
         <div className="space-y-6">
           {wishlist.map((item) => (
