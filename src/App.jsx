@@ -25,6 +25,7 @@ import AdminLogin from './pages/Admin/Login.jsx';
 import Dashboard from './pages/Admin/Dashboard.jsx';
 import ProductManagement from './pages/Admin/ProductManage.jsx';
 import CategoryManagement from './pages/Admin/CategoryManage.jsx';
+import CouponManagement from './pages/Admin/CouponManage.jsx';
 
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
         <Route path='/admin/dashboard' element={ <Dashboard />} />
         <Route path='/admin/product-management' element={ <ProductManagement />} />
         <Route path='/admin/category-management' element={ <CategoryManagement />} />
+        <Route path='/admin/coupon-management' element={ <CouponManagement />} />
       </Routes>
     </Router>
   )

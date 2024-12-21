@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function AddCategoryModal({ open, setOpen, saveCategory }) {
+export function EditCouponModal({ open, setOpen, saveCoupon }) {
   return (
     <Dialog
         open={open}
@@ -21,7 +21,7 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Add Category</span>
+                    <span className="text-xl font-bold">Edit Coupon</span>
                     <Button
                         variant="text"
                         color="black"
@@ -34,16 +34,34 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
             </DialogHeader>
             
             <DialogBody>
-            <form className="items-center">
-                <label className="text-lg font-medium">Category Name</label>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Category Name"
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
-                </div>
-            </form>
+                <form className="items-center">
+                    <label className="text-lg font-medium">Coupon Code</label>
+                    <div className='mb-5'>
+                        <input
+                            type="text"
+                            placeholder="Coupon Code"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                        />
+                    </div>
+
+                    <label className="text-lg font-medium">Discount</label>
+                    <div className='mb-5'>
+                        <input
+                            type="text"
+                            placeholder="Discount"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                        />
+                    </div>
+
+                    <label className="text-lg font-medium">Expiry Date</label>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Expiry Date"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                        />
+                    </div>  
+                </form>
             </DialogBody>
 
             <DialogFooter className='mt-5 flex justify-between'>
@@ -57,7 +75,7 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
-                    onClick={saveCategory}
+                    onClick={saveCoupon}
                 >
                     <span>SAVE</span>
                 </Button>
@@ -67,8 +85,8 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
   );
 }
 
-AddCategoryModal.propTypes = {
+EditCouponModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  saveCategory: PropTypes.func.isRequired,
+  saveCoupon: PropTypes.func.isRequired,
 };

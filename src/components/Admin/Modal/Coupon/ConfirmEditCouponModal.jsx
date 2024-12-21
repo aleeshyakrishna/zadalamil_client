@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function DeleteProductModal({ open, setOpen, saveAddress }) {
+export function ConfirmEditCouponModal({ open, setOpen, saveCoupon }) {
   return (
     <Dialog
         open={open}
@@ -21,20 +21,20 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Confirm Delete Product</span>
+                    <span className="text-xl font-bold">Confirm Update Category</span>
                     <Button
                         variant="text"
                         color="black"
                         onClick={() => setOpen(false)}
                         className="p-0 text-sm"
-                    >
+                        >
                         <span className="material-icons">x</span>
                     </Button>
                 </div>
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the product?</h3>
+                    <h3>Are you sure you want to update the coupon?</h3>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
@@ -44,13 +44,13 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
                     onClick={() => setOpen(false)}
                     className="border-2 border-black px-6 py-2"
                 >
-                    <span>CANCEL</span>
+                    <span>NO</span>
                 </Button>
                 <Button
-                    className='bg-red-900 text-white px-6 py-2'
-                    onClick={saveAddress}
+                    className='bg-green-900 text-white px-6 py-2'
+                    onClick={saveCoupon}
                 >
-                    <span>DELETE</span>
+                    <span>YES</span>
                 </Button>
             </DialogFooter>
         </div>
@@ -58,8 +58,8 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
   );
 }
 
-DeleteProductModal.propTypes = {
+ConfirmEditCouponModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  saveAddress: PropTypes.func.isRequired,
+  saveCoupon: PropTypes.func.isRequired,
 };

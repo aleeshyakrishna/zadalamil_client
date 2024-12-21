@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function DeleteProductModal({ open, setOpen, saveAddress }) {
+export function DeleteCouponModal({ open, setOpen, deleteCoupon }) {
   return (
     <Dialog
         open={open}
@@ -17,7 +17,7 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
             unmount: { scale: 0.0, y: -100 },
         }}
         className='border-2 border-gray-300'
-        >
+    >
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
@@ -34,7 +34,7 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the product?</h3>
+                    <h3>Are you sure you want to delete the coupon?</h3>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
@@ -48,7 +48,7 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
-                    onClick={saveAddress}
+                    onClick={deleteCoupon}
                 >
                     <span>DELETE</span>
                 </Button>
@@ -58,8 +58,8 @@ export function DeleteProductModal({ open, setOpen, saveAddress }) {
   );
 }
 
-DeleteProductModal.propTypes = {
+DeleteCouponModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  saveAddress: PropTypes.func.isRequired,
+  deleteCoupon: PropTypes.func.isRequired,
 };
