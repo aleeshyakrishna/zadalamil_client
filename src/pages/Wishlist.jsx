@@ -1,7 +1,7 @@
-import Footer from "../components/Home/Footer"
-import FooterCopyright from "../components/Home/FooterCopyRight"
-import { ComplexNavbar } from "../components/Home/Navbar"
-import WishlistComp from "../components/Wishlist/WishlistComp"
+import Footer from "../components/User/Home/Footer"
+import FooterCopyright from "../components/User/Home/FooterCopyRight"
+import { ComplexNavbar } from "../components/User/Home/Navbar"
+import WishlistComp from "../components/User/Wishlist/WishlistComp"
 
 const Wishlist = () => {
   return (

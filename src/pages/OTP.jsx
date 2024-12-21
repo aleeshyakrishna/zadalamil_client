@@ -1,4 +1,4 @@
-import OTPComp from "../components/OTP/OTPComp"
+import OTPComp from "../components/User/OTP/OTPComp"
 
 
 const OTP = () => {

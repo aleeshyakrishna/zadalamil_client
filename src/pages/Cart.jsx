@@ -1,7 +1,7 @@
-import ShoppingCart from "../components/CartComponent/CartComp"
-import Footer from "../components/Home/Footer"
-import FooterCopyright from "../components/Home/FooterCopyRight"
-import { ComplexNavbar } from "../components/Home/Navbar"
+import ShoppingCart from "../components/User/CartComponent/CartComp"
+import Footer from "../components/User/Home/Footer"
+import FooterCopyright from "../components/User/Home/FooterCopyRight"
+import { ComplexNavbar } from "../components/User/Home/Navbar"
 
 
 const Cart = () => {

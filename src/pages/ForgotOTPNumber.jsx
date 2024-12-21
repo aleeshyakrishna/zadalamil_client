@@ -1,5 +1,5 @@
 
-import ForgotOTPComp from '../components/ForgetPassword/OTPComp'
+import ForgotOTPComp from '../components/User/ForgetPassword/OTPComp'
 
 const ForgotOTPNumber = () => {
   return (

@@ -1,7 +1,7 @@
-import AllBrandsComp from '../components/AllBrands/AllBrandsComp'
-import Footer from '../components/Home/Footer'
-import FooterCopyright from '../components/Home/FooterCopyRight'
-import { ComplexNavbar } from '../components/Home/Navbar'
+import AllBrandsComp from '../components/User/AllBrands/AllBrandsComp'
+import Footer from '../components/User/Home/Footer'
+import FooterCopyright from '../components/User/Home/FooterCopyRight'
+import { ComplexNavbar } from '../components/User/Home/Navbar'
 
 const AllBrands = () => {
   return (

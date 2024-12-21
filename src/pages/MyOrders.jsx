@@ -1,8 +1,8 @@
 
-import Footer from '../components/Home/Footer'
-import FooterCopyright from '../components/Home/FooterCopyRight'
-import MyOrdersComp from '../components/MyOrders/MyOrdersComp'
-import { ComplexNavbar } from '../components/Home/Navbar'
+import Footer from '../components/User/Home/Footer'
+import FooterCopyright from '../components/User/Home/FooterCopyRight'
+import MyOrdersComp from '../components/User/MyOrders/MyOrdersComp'
+import { ComplexNavbar } from '../components/User/Home/Navbar'
 
 const MyOrders = () => {
   return (

@@ -1,7 +1,7 @@
-import Footer from "../components/Home/Footer"
-import FooterCopyright from "../components/Home/FooterCopyRight"
-import { ComplexNavbar } from "../components/Home/Navbar"
-import ProfileComp from "../components/Profile/ProfileComp"
+import Footer from "../components/User/Home/Footer"
+import FooterCopyright from "../components/User/Home/FooterCopyRight"
+import { ComplexNavbar } from "../components/User/Home/Navbar"
+import ProfileComp from "../components/User/Profile/ProfileComp"
 
 const Profile = () => {
   return (
