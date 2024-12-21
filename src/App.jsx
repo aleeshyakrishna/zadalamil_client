@@ -23,6 +23,7 @@ import AllBrands from './pages/User/AllBrands.jsx';
 
 import AdminLogin from './pages/Admin/Login.jsx';
 import Dashboard from './pages/Admin/Dashboard.jsx';
+import ProductManage from './pages/Admin/ProductManage.jsx'
 
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
         {/* ADMIN */}
         <Route path='/admin/admin-login' element={ <AdminLogin />} />
         <Route path='/admin/dashboard' element={ <Dashboard />} />
+        <Route path='/admin/product-management' element={ <ProductManage />} />
       </Routes>
     </Router>
   )

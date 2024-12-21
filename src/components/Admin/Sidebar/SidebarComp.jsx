@@ -26,6 +26,7 @@ import { TicketIcon } from '@heroicons/react/24/outline';
 import { TruckIcon } from '@heroicons/react/24/outline';
 import { BookmarkIcon } from '@heroicons/react/24/outline';
 import { TagIcon } from '@heroicons/react/24/outline';
+import { Link } from "react-router-dom";
  
 export function SidebarWithBurgerMenu() {
   const [open, setOpen] = React.useState(0);
@@ -65,6 +66,7 @@ export function SidebarWithBurgerMenu() {
           </div>
           <List>
             <Accordion>
+              <Link to='/admin/dashboard'>
               <ListItem className="p-0" selected={open === 1}>
                 <AccordionHeader
                   onClick={() => handleOpen(1)}
@@ -78,7 +80,9 @@ export function SidebarWithBurgerMenu() {
                   </Typography>
                 </AccordionHeader>
               </ListItem>
+              </Link>
 
+              <Link to='/admin/product-management'>
               <ListItem className="p-0" selected={open === 1}>
                 <AccordionHeader
                   onClick={() => handleOpen(1)}
@@ -92,6 +96,7 @@ export function SidebarWithBurgerMenu() {
                   </Typography>
                 </AccordionHeader>
               </ListItem>
+              </Link>
 
               <ListItem className="p-0" selected={open === 1}>
                 <AccordionHeader
