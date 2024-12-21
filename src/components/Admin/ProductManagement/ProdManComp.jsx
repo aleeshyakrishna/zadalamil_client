@@ -3,12 +3,15 @@ import Img1 from '../../../assets/images/mob1.png';
 import { AddProductModal } from '../Modal/AddProductModal';
 import { EditProductModal } from '../Modal/EditProductModal';
 import { ConfirmEditProductModal } from '../Modal/ConfirmEditProductModal';
+import { DeleteProductModal } from '../Modal/DeleteProductModal';
 
 export default function ProductTable() {
 
     const [isModalOpenAddProduct, setIsModalOpenAddProduct] = useState(false);
     const [isModalOpenEditProduct, setIsModalOpenEditProduct] = useState(false);
     const [isModalOpenConfirmEditProduct, setIsModalOpenConfirmEditProduct] = useState(false);
+    const [isModalOpenDeleteProduct, setIsModalOpenDeleteProduct] = useState(false);
+
 
     const handleUpdateProduct = () => {
         setIsModalOpenEditProduct(false);
@@ -19,6 +22,11 @@ export default function ProductTable() {
         console.log("Product updated");
         setIsModalOpenConfirmEditProduct(false); 
     };
+
+    const handleDeleteProduct = () => {
+        console.log("Address deleted");
+        setIsModalOpenDeleteProduct(false); 
+      };
 
     const products = [
         {
@@ -114,7 +122,12 @@ export default function ProductTable() {
                                     </button>
                                 </td>
                                 <td className="py-3 px-4 text-center">
-                                    <button className="bg-red-900 text-white px-4 py-2 rounded">DELETE</button>
+                                    <button 
+                                    onClick={() => setIsModalOpenDeleteProduct(true) }
+                                    className="bg-red-900 text-white px-4 py-2 rounded"
+                                    >
+                                        DELETE
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -139,6 +152,13 @@ export default function ProductTable() {
                 setOpen={setIsModalOpenConfirmEditProduct}
                 saveProduct={handleConfirmUpdateProduct} 
             />
+
+            <DeleteProductModal
+                open={isModalOpenDeleteProduct}
+                setOpen={setIsModalOpenDeleteProduct}
+                saveAddress={handleDeleteProduct}
+            />
+
         </div>
     );
 }
