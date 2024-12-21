@@ -1,4 +1,5 @@
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
 
 const AdminLoginComp = () => {
   return (
@@ -44,12 +45,14 @@ const AdminLoginComp = () => {
                 </a>
             </div>
 
+            <Link to='/admin/dashboard'>
             <button 
                 type="submit" 
                 className="w-full bg-gradient-to-r from-[#1D0F0F] to-[#972323] hover:opacity-90 text-white font-bold py-3 rounded-md transition"
             >
                 LOGIN
             </button>
+            </Link>
             </form>
         </div>
     </div>

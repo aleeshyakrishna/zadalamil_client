@@ -22,6 +22,7 @@ import ChangePassword from './pages/User/ChangePassword.jsx';
 import AllBrands from './pages/User/AllBrands.jsx';
 
 import AdminLogin from './pages/Admin/Login.jsx';
+import Dashboard from './pages/Admin/Dashboard.jsx';
 
 
 const App = () => {
@@ -55,7 +56,8 @@ const App = () => {
         <Route path='/change-password' element={ <ChangePassword />}/>
 
         {/* ADMIN */}
-        <Route path='/admin-login' element={ <AdminLogin />} />
+        <Route path='/admin/admin-login' element={ <AdminLogin />} />
+        <Route path='/admin/dashboard' element={ <Dashboard />} />
       </Routes>
     </Router>
   )
