@@ -29,24 +29,37 @@ import { useState } from "react";
       value: "all",
     },
     {
-      label: "Blocked",
-      value: "blocked",
+      label: "Pending",
+      value: "pending",
     },
     {
-      label: "Unblocked",
-      value: "unblocked",
+      label: "Delivered",
+      value: "delivered",
+    },
+    {
+        label: "Shipped",
+        value: "shipped",
+    },
+    {
+        label: "Cancelled",
+        value: "cancelled",
+    },
+    {
+        label: "Returned",
+        value: "returned",
     },
   ];
    
-  const TABLE_HEAD = ["No", "Customer", "Email", "Status", "Phone Number", "Delete"];
-   
+  const TABLE_HEAD = ["No", "Order ID", "Billing Name", "Email", "Date", "Prize", "Status", "Payment Method", "View Details", "Cancel", "Shipped/Delivered/Returned/Cancelled"];
   const TABLE_ROWS = [
     {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "John Michael",
-      email: "john@creative-tim.com",
-      status: true,
-      phone: "+9715865985256",
+        orderId: "GHJCT1523",
+        billingName: "Akhila Vijayan",
+        email: "john@creative-tim.com",
+        date: "2025-01-14",
+        status: "shipped",
+        paymentMethod: "COD",
+        phone: "+9715865985256",
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
@@ -92,11 +105,11 @@ import { useState } from "react";
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
                         <Typography variant="h5" color="blue-gray">
-                            User Management
+                            Order Management
                         </Typography>
-                        <Typography color="gray" className="mt-1 font-normal">
+                        {/* <Typography color="gray" className="mt-1 font-normal">
                             See information about all customers
-                        </Typography>
+                        </Typography> */}
                     </div>
                 </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">

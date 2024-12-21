@@ -27,6 +27,7 @@ import ProductManagement from './pages/Admin/ProductManage.jsx';
 import CategoryManagement from './pages/Admin/CategoryManage.jsx';
 import CouponManagement from './pages/Admin/CouponManage.jsx';
 import UserManagement from './pages/Admin/UserManage.jsx';
+import BannerManagement from './pages/Admin/Bannermanage.jsx';
 
 
 const App = () => {
@@ -66,6 +67,7 @@ const App = () => {
         <Route path='/admin/category-management' element={ <CategoryManagement />} />
         <Route path='/admin/coupon-management' element={ <CouponManagement />} />
         <Route path='/admin/user-management' element={ <UserManagement />} />
+        <Route path='/admin/banner-management' element={ <BannerManagement />} />
       </Routes>
     </Router>
   )

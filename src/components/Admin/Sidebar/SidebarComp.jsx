@@ -160,6 +160,7 @@ export function SidebarWithBurgerMenu() {
                 </AccordionHeader>
               </ListItem>
 
+              <Link to='/admin/banner-management'>
               <ListItem className="p-0" selected={open === 1}>
                 <AccordionHeader
                   onClick={() => handleOpen(1)}
@@ -173,6 +174,7 @@ export function SidebarWithBurgerMenu() {
                   </Typography>
                 </AccordionHeader>
               </ListItem>
+              </Link>
 
             </Accordion>
             
