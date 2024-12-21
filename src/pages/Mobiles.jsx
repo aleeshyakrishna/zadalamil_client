@@ -1,8 +1,8 @@
-import Footer from "../components/Footer"
-import FooterCopyright from "../components/FooterCopyRight"
+import Footer from "../components/Home/Footer"
+import FooterCopyright from "../components/Home/FooterCopyRight"
 import BannerMob from "../components/Mobiles/BannerMob"
 import Collections from "../components/Mobiles/Collections"
-import { ComplexNavbar } from "../components/Navbar"
+import { ComplexNavbar } from "../components/Home/Navbar"
 
 
 const Mobiles = () => {

@@ -1,4 +1,4 @@
-import banner1 from '../assets/images/banner1.jpg';
+import banner1 from '../../assets/images/banner1.jpg';
 import { ButtonDefault } from './Button';
 
 const Banner = () => {

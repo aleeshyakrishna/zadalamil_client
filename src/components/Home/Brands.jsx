@@ -1,7 +1,7 @@
-import Img1 from '../assets/images/brand1.png';
-import Img2 from '../assets/images/brand2.png';
-import Img3 from '../assets/images/brand3.png';
-import Img4 from '../assets/images/brand4.png';
+import Img1 from '../../assets/images/brand1.png';
+import Img2 from '../../assets/images/brand2.png';
+import Img3 from '../../assets/images/brand3.png';
+import Img4 from '../../assets/images/brand4.png';
 
 const images = [Img1, Img2, Img3, Img4];
 

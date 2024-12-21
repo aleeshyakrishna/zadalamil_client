@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import Img1 from '../assets/images/camers.png';
-import Img2 from '../assets/images/gaming.png';
-import Img3 from '../assets/images/headphones.png';
-import Img4 from '../assets/images/laptops.png';
-import Img5 from '../assets/images/mobiles.png';
-import Img6 from '../assets/images/speakers.png';
-import Img7 from '../assets/images/wearables.png';
+import Img1 from '../../assets/images/camers.png';
+import Img2 from '../../assets/images/gaming.png';
+import Img3 from '../../assets/images/headphones.png';
+import Img4 from '../../assets/images/laptops.png';
+import Img5 from '../../assets/images/mobiles.png';
+import Img6 from '../../assets/images/speakers.png';
+import Img7 from '../../assets/images/wearables.png';
 
 const categories = [
     { name: 'Cameras', image: Img1 },

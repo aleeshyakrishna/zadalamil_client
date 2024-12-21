@@ -1,7 +1,7 @@
 
-import Footer from '../components/Footer';
-import FooterCopyright from '../components/FooterCopyRight';
-import { ComplexNavbar } from '../components/Navbar'
+import Footer from '../components/Home/Footer';
+import FooterCopyright from '../components/Home/FooterCopyRight';
+import { ComplexNavbar } from '../components/Home/Navbar'
 import ProductDetails from './../components/ProductDetails/produtDetails';
 
 const ProductDetailsPage = () => {

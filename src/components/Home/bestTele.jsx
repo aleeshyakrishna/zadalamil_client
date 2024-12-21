@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
-import Img1 from "../assets/images/new arrival.png";
+import Img1 from "../../assets/images/best TV1.png";
+import Img2 from "../../assets/images/best TV2.png";
+import Img3 from "../../assets/images/best TV3.png";
 
-const newArrivalsData = [
+const bestSellersData = [
   { id: 1, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
-  { id: 2, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
-  { id: 3, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+  { id: 2, image: Img2, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+  { id: 3, image: Img3, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
 ];
 
 const ProductCard = ({ product }) => {
@@ -29,7 +31,8 @@ const ProductCard = ({ product }) => {
         <p className="text-black text-lg font-bold">AED {product.price.toLocaleString()}</p>
       </div>
 
-      <button className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white font-semibold px-4 py-2 w-full rounded-md hover:bg-[#6f1b1b] mt-10 mb-10">
+      <button className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white 
+      font-semibold px-4 py-2 w-full rounded-md hover:bg-[#6f1b1b] mt-10 mb-10">
         ADD TO CART
       </button>
     </div>
@@ -46,18 +49,18 @@ ProductCard.propTypes = {
   }).isRequired,
 };
 
-const NewArrivals = () => {
+const BestSellers = () => {
   return (
     <section className="w-full py-10 px-5 bg-gray-50">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-[#972323]">NEW ARRIVALS</h2>
+          <h2 className="text-xl font-bold text-[#972323]">BEST SELLERS</h2>
           <a href="#" className="text-sm font-semibold text-[#972323] hover:underline">
             VIEW ALL &gt;
           </a>
         </div>
         <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {newArrivalsData.map((product) => (
+          {bestSellersData.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -66,4 +69,4 @@ const NewArrivals = () => {
   );
 };
 
-export default NewArrivals;
+export default BestSellers;

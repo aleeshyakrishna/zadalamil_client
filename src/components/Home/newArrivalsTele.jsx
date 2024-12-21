@@ -1,12 +1,10 @@
 import PropTypes from "prop-types";
-import Img1 from "../assets/images/mob1.png";
-import Img2 from "../assets/images/mob2.png";
-import Img3 from "../assets/images/mob3.png";
+import Img1 from "../../assets/images/new arrival.png";
 
-const newArrivalsMobData = [
+const newArrivalsData = [
   { id: 1, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
-  { id: 2, image: Img2, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
-  { id: 3, image: Img3, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+  { id: 2, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+  { id: 3, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
 ];
 
 const ProductCard = ({ product }) => {
@@ -48,7 +46,7 @@ ProductCard.propTypes = {
   }).isRequired,
 };
 
-const MobNewArrivals = () => {
+const NewArrivals = () => {
   return (
     <section className="w-full py-10 px-5 bg-gray-50">
         <div className="flex items-center justify-between mb-6">
@@ -59,7 +57,7 @@ const MobNewArrivals = () => {
         </div>
         <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {newArrivalsMobData.map((product) => (
+          {newArrivalsData.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -68,4 +66,4 @@ const MobNewArrivals = () => {
   );
 };
 
-export default MobNewArrivals;
+export default NewArrivals;

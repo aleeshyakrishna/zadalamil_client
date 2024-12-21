@@ -1,10 +1,10 @@
-import Img1 from "../assets/images/MOBILE2.jpg";
-import Img2 from "../assets/images/MOBILE.png";
+import Img1 from "../../assets/images/tv1.jpg";
+import Img2 from "../../assets/images/tv2.jpg";
 import PropTypes from "prop-types";
 
-const mobileData = [{ image: Img1 }, { image: Img2 }];
+const televisionData = [{ image: Img1 }, { image: Img2 }];
 
-const MobileCard = ({ image }) => {
+const TelevisionCard = ({ image }) => {
   return (
     <div className="flex items-center justify-center">
       <img
@@ -16,18 +16,18 @@ const MobileCard = ({ image }) => {
   );
 };
 
-MobileCard.propTypes = {
+TelevisionCard.propTypes = {
   image: PropTypes.string.isRequired,
 };
 
-const MobileSection = () => {
+const TelevisionSection = () => {
   return (
     <section className="w-full py-10 px-5 bg-gray-100">
-        <div><h1 className="text-[#972323] text-xl font-bold">MOBILES</h1></div>
+        <div><h1 className="text-[#972323] text-xl font-bold">TELEVISIONS</h1></div>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {mobileData.map((item, index) => (
-            <MobileCard key={index} image={item.image} />
+          {televisionData.map((item, index) => (
+            <TelevisionCard key={index} image={item.image} />
           ))}
         </div>
       </div>
@@ -35,4 +35,4 @@ const MobileSection = () => {
   );
 };
 
-export default MobileSection;
+export default TelevisionSection;

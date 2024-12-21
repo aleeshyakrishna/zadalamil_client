@@ -25,15 +25,15 @@ import {
   HeartIcon,
   ShoppingCartIcon
 } from "@heroicons/react/24/outline";
-import logo from '../assets/images/logo.png';
-import login from "../assets/images/login.png";
+import logo from '../../assets/images/logo.png';
+import login from "../../assets/images/login.png";
 
-import Img1 from '../assets/images/brand11.png';
-import Img2 from '../assets/images/brand12.png';
-import Img3 from '../assets/images/brand13.png';
-import Img4 from '../assets/images/brand14.png';
-import Img5 from '../assets/images/brand15.png';
-import Img6 from '../assets/images/brand16.png';
+import Img1 from '../../assets/images/brand11.png';
+import Img2 from '../../assets/images/brand12.png';
+import Img3 from '../../assets/images/brand13.png';
+import Img4 from '../../assets/images/brand14.png';
+import Img5 from '../../assets/images/brand15.png';
+import Img6 from '../../assets/images/brand16.png';
 
 import { Link } from 'react-router-dom';
  

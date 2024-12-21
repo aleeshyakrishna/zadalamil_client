@@ -1,8 +1,8 @@
 import { Typography } from "@material-tailwind/react";
-import Img1 from '../assets/images/24 hours.png';
-import Img2 from '../assets/images/easy return.png';
-import Img3 from '../assets/images/secure payments.png';
-import Img4 from '../assets/images/warranty.png';
+import Img1 from '../../assets/images/24 hours.png';
+import Img2 from '../../assets/images/easy return.png';
+import Img3 from '../../assets/images/secure payments.png';
+import Img4 from '../../assets/images/warranty.png';
 import PropTypes from "prop-types";
 
 

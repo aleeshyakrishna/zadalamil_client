@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
-import Img1 from "../assets/images/mob1.png";
-import Img2 from "../assets/images/mob2.png";
-import Img3 from "../assets/images/mob3.png";
+import Img1 from "../../assets/images/mob1.png";
+import Img2 from "../../assets/images/mob2.png";
+import Img3 from "../../assets/images/mob3.png";
 
-const newArrivalsMobData = [
-  { id: 1, image: Img2, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
-  { id: 2, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+const mobileBestSellersData = [
+  { id: 1, image: Img1, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
+  { id: 2, image: Img2, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
   { id: 3, image: Img3, title: "LG UM670H 43\" UHD 4K Commercial Smart TV", price: 10999, oldPrice: 15499, discount: "28% OFF" },
 ];
 
@@ -48,18 +48,18 @@ ProductCard.propTypes = {
   }).isRequired,
 };
 
-const NewArrivalMob = () => {
+const MobileBestSellers = () => {
   return (
     <section className="w-full py-10 px-5 bg-gray-50">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-[#972323]">NEW ARRIVALS</h2>
+          <h2 className="text-xl font-bold text-[#972323]">BEST SELLERS</h2>
           <a href="#" className="text-sm font-semibold text-[#972323] hover:underline">
             VIEW ALL &gt;
           </a>
         </div>
         <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {newArrivalsMobData.map((product) => (
+          {mobileBestSellersData.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -68,4 +68,4 @@ const NewArrivalMob = () => {
   );
 };
 
-export default NewArrivalMob;
+export default MobileBestSellers;
