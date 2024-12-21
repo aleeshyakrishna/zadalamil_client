@@ -29,7 +29,8 @@ const profileMenuItems = [
   },
   {
     label: "Sign Out",
-    icon: PowerIcon,
+    icon: PowerIcon,  
+    path: '/admin/admin-login'
   },
 ];
  
@@ -62,9 +63,10 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, path }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
+            <Link key={label} to={path}>
             <MenuItem
               key={label}
               onClick={closeMenu}
@@ -87,6 +89,7 @@ function ProfileMenu() {
                 {label}
               </Typography>
             </MenuItem>
+            </Link>
           );
         })}
       </MenuList>

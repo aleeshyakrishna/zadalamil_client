@@ -3,6 +3,8 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
+import { Input } from '@material-tailwind/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 export default function CategoryTable() {
 
@@ -68,6 +70,15 @@ export default function CategoryTable() {
                     className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white px-4 py-2 rounded"
                     onClick={() => setIsModalOpenAddCategory(true)}
                 >+ Add Category</button>
+            </div>
+
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                <div className="w-full md:w-72">
+                    <Input
+                        label="Search"
+                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                    />
+                </div>
             </div>
 
             <div className="overflow-x-auto mt-10">

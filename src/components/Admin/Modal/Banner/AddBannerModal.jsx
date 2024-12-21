@@ -45,11 +45,19 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                 </div>
 
                 <label className="text-lg font-medium">Banner Text</label>
-                <div>
+                <div className='mb-6'>
                     <input
                         type="text"
                         placeholder="Banner Text"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                </div>
+
+                <label className="text-lg font-medium">Banner Image</label>
+                <div>
+                <input
+                    type="file"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
             </form>

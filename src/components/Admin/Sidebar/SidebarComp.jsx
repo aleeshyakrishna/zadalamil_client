@@ -67,83 +67,83 @@ export function SidebarWithBurgerMenu() {
           <List>
             <Accordion>
               <Link to='/admin/dashboard'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <HomeIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                    Dashboard
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <HomeIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                      Dashboard
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
               <Link to='/admin/product-management'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <Square3Stack3DIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                  Product Management
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <Square3Stack3DIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                    Product Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
               <Link to='/admin/category-management'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <TagIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                    Category Management
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <TagIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                      Category Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
               <Link to='/admin/user-management'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <UserCircleIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                  User Management
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <UserCircleIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                    User Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
               <Link to='/admin/coupon-management'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <TicketIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                  Coupon Management
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <TicketIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                    Coupon Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
               <ListItem className="p-0" selected={open === 1}>
@@ -161,19 +161,19 @@ export function SidebarWithBurgerMenu() {
               </ListItem>
 
               <Link to='/admin/banner-management'>
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <BookmarkIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                  Banner Management
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <BookmarkIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                    Banner Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
               </Link>
 
             </Accordion>

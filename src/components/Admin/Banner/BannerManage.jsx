@@ -4,6 +4,8 @@ import { AddBannerModal } from '../Modal/Banner/AddBannerModal';
 import { EditBannerModal } from '../Modal/Banner/EditBannerModal';
 import { ConfirmEditBannerModal } from '../Modal/Banner/ConfirmEditBannerModal';
 import { DeleteBannerModal } from '../Modal/Banner/DeleteBannerModal';
+import { Input } from '@material-tailwind/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 export default function BannerTable() {
 
@@ -74,6 +76,15 @@ export default function BannerTable() {
                     className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white px-4 py-2 rounded"
                     onClick={() => setIsModalOpenAddBanner(true)}
                 >+ Add Banner</button>
+            </div>
+
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                <div className="w-full md:w-72">
+                    <Input
+                        label="Search"
+                        icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                    />
+                </div>
             </div>
 
             <div className="overflow-x-auto mt-10">

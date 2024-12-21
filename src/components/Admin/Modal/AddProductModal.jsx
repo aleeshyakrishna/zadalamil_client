@@ -75,6 +75,13 @@ export function AddProductModal({ open, setOpen, saveProduct }) {
                     type="file"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
+
+                    <label className="text-lg font-medium">6. Color</label>
+                    <input
+                    type="text"
+                    placeholder="Color"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
             </form>
             </DialogBody>
 
