@@ -25,7 +25,7 @@ export default function CategoryTable() {
     const handleDeleteCategory = () => {
         console.log("Category deleted");
         setIsModalOpenDeleteCategory(false); 
-      };
+    };
 
     const categories = [
         {
