@@ -114,6 +114,7 @@ export function SidebarWithBurgerMenu() {
               </ListItem>
               </Link>
 
+              <Link to='/admin/user-management'>
               <ListItem className="p-0" selected={open === 1}>
                 <AccordionHeader
                   onClick={() => handleOpen(1)}
@@ -127,6 +128,7 @@ export function SidebarWithBurgerMenu() {
                   </Typography>
                 </AccordionHeader>
               </ListItem>
+              </Link>
 
               <Link to='/admin/coupon-management'>
               <ListItem className="p-0" selected={open === 1}>
