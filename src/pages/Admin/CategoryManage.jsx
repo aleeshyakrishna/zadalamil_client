@@ -1,19 +1,19 @@
 import { ComplexNavbar } from "../../components/Admin/Navbar/NavbarComp.jsx"
 import { SidebarWithBurgerMenu } from "../../components/Admin/Sidebar/SidebarComp.jsx";
-import ProductTable from "../../components/Admin/ProductManagement/ProdManComp.jsx";
+import CategoryTable from "../../components/Admin/CategoryManagement/CategoryManage.jsx";
 
-const ProductManagement = () => {
+const CategoryManagement = () => {
   return (
     <div>
         <ComplexNavbar />
         <div className="p-3">
             <div className="mt-28 flex">
                 <SidebarWithBurgerMenu />
-                <ProductTable />
+                <CategoryTable />
             </div>
         </div>
     </div>
   )
 }
 
-export default ProductManagement;
+export default CategoryManagement;

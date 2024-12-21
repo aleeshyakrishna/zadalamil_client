@@ -24,7 +24,7 @@ export default function ProductTable() {
     };
 
     const handleDeleteProduct = () => {
-        console.log("Address deleted");
+        console.log("Product deleted");
         setIsModalOpenDeleteProduct(false); 
       };
 
