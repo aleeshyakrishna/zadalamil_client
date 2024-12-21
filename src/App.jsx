@@ -21,17 +21,16 @@ import ForgotOTPNumber from './pages/User/ForgotOTPNumber.jsx';
 import ChangePassword from './pages/User/ChangePassword.jsx';
 import AllBrands from './pages/User/AllBrands.jsx';
 
+import AdminLogin from './pages/Admin/Login.jsx';
+
 
 const App = () => {
 
   return (
-    // <>
-    //   <div>
-    //     <Home />
-    //   </div>
-    // </>
     <Router>
       <Routes>
+
+        {/* USER SIDE */}
         <Route path="/" element={<Home/>} /> 
         <Route path="/mobiles&tabs" element={<Mobiles/>} /> 
         <Route path="/all-brands" element={<AllBrands/>} /> 
@@ -54,6 +53,9 @@ const App = () => {
         <Route path='/forgot-password' element={ <ForgetPassword />} />
         <Route path='/forgot-OTP-number' element={ <ForgotOTPNumber />} />
         <Route path='/change-password' element={ <ChangePassword />}/>
+
+        {/* ADMIN */}
+        <Route path='/admin-login' element={ <AdminLogin />} />
       </Routes>
     </Router>
   )
