@@ -1,4 +1,4 @@
-import LoginNumber from "../components/User/OTP/number"
+import LoginNumber from "../../components/User/OTP/number"
 
 
 const NumberLogin = () => {

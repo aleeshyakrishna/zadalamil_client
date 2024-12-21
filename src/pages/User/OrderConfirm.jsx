@@ -1,4 +1,4 @@
-import OrderConfirmComp from "../components/User/Order/OrderConfirmComp";
+import OrderConfirmComp from "../../components/User/Order/OrderConfirmComp";
 
 const OrderConfirm = () => {
   return (

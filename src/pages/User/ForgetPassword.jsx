@@ -1,4 +1,4 @@
-import ForgotPasswordNumberComp from "../components/User/ForgetPassword/ForgetPasswordComp"
+import ForgotPasswordNumberComp from "../../components/User/ForgetPassword/ForgetPasswordComp"
 
 const ForgetPassword = () => {
   return (

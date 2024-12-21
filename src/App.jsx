@@ -1,24 +1,25 @@
 // import Home from "./pages/HOME.JSX";
-import Home from  './pages/Home.jsx';
+// import Home from  './pages/User/home.jsx';
+import Home from  './pages/User/home.jsx';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Mobiles from './pages/mobiles';
-import ProductDetailsPage from './pages/ProductDetails.jsx';
-import Cart from './pages/Cart.jsx';
-import Wishlist from './pages/Wishlist.jsx';
-import NewArrivals from './pages/NewArrivals.jsx';
-import OrderConfirm from './pages/OrderConfirm.jsx';
-import Checkout from './pages/Checkout.jsx';
-import OrderDetails from './pages/OrderDetails.jsx';
-import Profile from './pages/Profile.jsx';
-import MyOrders from './pages/MyOrders.jsx';
-import Login from './pages/Login.jsx';
-import Signup from './pages/sIGNUP.JSX';
-import NumberLogin from './pages/NumberLogin.jsx';
-import OTP from './pages/OTP.jsx';
-import ForgetPassword from './pages/ForgetPassword.jsx';
-import ForgotOTPNumber from './pages/ForgotOTPNumber.jsx';
-import ChangePassword from './pages/ChangePassword.jsx';
-import AllBrands from './pages/AllBrands.jsx';
+import Mobiles from './pages/User/Mobiles.jsx';
+import ProductDetailsPage from './pages/User/ProductDetails.jsx';
+import Cart from './pages/User/Cart.jsx';
+import Wishlist from './pages/User/Wishlist.jsx';
+import NewArrivals from './pages/User/NewArrivals.jsx';
+import OrderConfirm from './pages/User/OrderConfirm.jsx';
+import Checkout from './pages/User/Checkout.jsx';
+import OrderDetails from './pages/User/OrderDetails.jsx';
+import Profile from './pages/User/Profile.jsx';
+import MyOrders from './pages/User/MyOrders.jsx';
+import Login from './pages/User/Login.jsx';
+import Signup from './pages/User/Signup.jsx';
+import NumberLogin from './pages/User/NumberLogin.jsx';
+import OTP from './pages/User/OTP.jsx';
+import ForgetPassword from './pages/User/ForgetPassword.jsx';
+import ForgotOTPNumber from './pages/User/ForgotOTPNumber.jsx';
+import ChangePassword from './pages/User/ChangePassword.jsx';
+import AllBrands from './pages/User/AllBrands.jsx';
 
 
 const App = () => {
