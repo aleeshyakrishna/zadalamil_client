@@ -2,7 +2,7 @@ import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
   } from "@heroicons/react/24/outline";
-  import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+  import { TrashIcon } from "@heroicons/react/24/solid";
   import {
     Card,
     CardHeader,
@@ -26,16 +26,16 @@ import {
       value: "all",
     },
     {
-      label: "Monitored",
-      value: "monitored",
+      label: "Blocked",
+      value: "blocked",
     },
     {
-      label: "Unmonitored",
-      value: "unmonitored",
+      label: "Unblocked",
+      value: "unblocked",
     },
   ];
    
-  const TABLE_HEAD = ["Customer", "Email", "Status", "Phone Number", "Edit", "Delete"];
+  const TABLE_HEAD = ["Customer", "Email", "Status", "Phone Number", "Delete"];
    
   const TABLE_ROWS = [
     {
@@ -88,14 +88,6 @@ import {
                 See information about all customers
               </Typography>
             </div>
-            {/* <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <Button variant="outlined" size="sm">
-                view all
-              </Button>
-              <Button className="flex items-center gap-3" size="sm">
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add member
-              </Button>
-            </div> */}
           </div>
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <Tabs value="all" className="w-full md:w-max">
@@ -139,91 +131,70 @@ import {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                ({ img, name, email, status, phone }, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
-   
-                  return (
-                    <tr key={name}>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <Avatar src={img} alt={name} size="sm" />
-                          <div className="flex flex-col">
+                {TABLE_ROWS.map(
+                    ({ img, name, email, status, phone }, index) => {
+                    const isLast = index === TABLE_ROWS.length - 1;
+                    const classes = isLast
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50";
+    
+                    return (
+                        <tr key={name}>
+                        <td className={classes}>
+                            <div className="flex items-center gap-3">
+                            <Avatar src={img} alt={name} size="sm" />
+                            <div className="flex flex-col">
+                                <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                                >
+                                {name}
+                                </Typography>
+                            </div>
+                            </div>
+                        </td>
+                        <td className={classes}>
+                            <div className="flex flex-col">
                             <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
                             >
-                              {name}
+                                {email}
                             </Typography>
-                            {/* <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal opacity-70"
-                            >
-                              {email}
-                            </Typography> */}
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
+                            </div>
+                        </td>
+                        <td className={classes}>
+                            <div className="w-max">
+                            <Chip
+                                variant="ghost"
+                                size="sm"
+                                value={status ? "unblocked" : "blocked"}
+                                color={status ? "green" : "blue-gray"}
+                            />
+                            </div>
+                        </td>
+                        <td className={classes}>
+                            <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
-                          >
-                            {email}
-                          </Typography>
-                          {/* <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal opacity-70"
-                          >
-                            {org}
-                          </Typography> */}
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="w-max">
-                          <Chip
-                            variant="ghost"
-                            size="sm"
-                            value={status ? "unblocked" : "blocked"}
-                            color={status ? "green" : "blue-gray"}
-                          />
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {phone}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Tooltip content="Edit User">
-                          <IconButton variant="text">
-                            <PencilIcon className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
-                      </td>
-                      <td className={classes}>
-                        <Tooltip content="Edit User">
-                          <IconButton variant="text">
-                            <TrashIcon className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+                            >
+                            {phone}
+                            </Typography>
+                        </td>
+                        <td className={classes}>
+                            <Tooltip content="Edit User">
+                            <IconButton variant="text">
+                                <TrashIcon className="h-4 w-4" />
+                            </IconButton>
+                            </Tooltip>
+                        </td>
+                        </tr>
+                    );
+                    },
+                )}
             </tbody>
           </table>
         </CardBody>
