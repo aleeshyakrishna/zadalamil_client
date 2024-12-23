@@ -186,7 +186,7 @@ function NavList() {
 
 export function SecondaryNavbar() {
     return (
-      <Navbar className="hidden lg:flex bg-[#f6f6f6] py-2 px-6 max-w-none rounded-none fixed top-32 z-40">
+      <Navbar className="hidden lg:flex bg-[#f6f6f6] py-2 px-6 max-w-none rounded-none fixed top-24 z-40">
         <div className="flex justify-center items-center w-full gap-80">
           {/* Left Section */}
           <div className="flex items-center gap-1">
@@ -325,13 +325,13 @@ export function ComplexNavbar() {
  
   return (
     <>
-    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] fixed">
+    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] h-24 fixed">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 
         {/* Logo */}
         <a href="#" className="mr-4 ml-2 cursor-pointer py-1.5">
-        <Link to='/'><img src={logo} alt="company logo" className="h-16 w-auto"/></Link>
-          <h1 className="ml-3 font-semibold">Zad Alamil</h1>
+        <Link to='/'><img src={logo} alt="company logo" className="h-12 w-auto"/></Link>
+          <h1 className="font-semibold">Zad Alamil</h1>
         </a>
 
           {/* search */}

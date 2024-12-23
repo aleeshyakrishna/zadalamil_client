@@ -62,7 +62,7 @@ const ShoppingCart = () => {
 
   return (
     <section>
-    <div className="p-4 ">
+    <div className="p-4 h-screen">
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-32 md:mt-32 lg:mt-40">
         {/* Cart Items */}
         <div className="lg:col-span-2">
