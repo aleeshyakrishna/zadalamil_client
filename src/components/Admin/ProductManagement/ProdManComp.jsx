@@ -76,12 +76,23 @@ export default function ProductTable() {
     return (
         <div className="p-8 w-full m-20">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">PRODUCT MANAGEMENT</h1>
-                <button 
-                    className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white px-4 py-2 rounded"
-                    onClick={() => setIsModalOpenAddProduct(true)}
-                >+ Add Product</button>
-            </div>
+    <h1 className="text-2xl font-bold">PRODUCT MANAGEMENT</h1>
+    <div className="flex gap-2">
+        <button 
+            className="bg-gradient-to-r from-[#1D0F0F] to-[#972323] text-white px-4 py-2 rounded"
+            onClick={() => setIsModalOpenAddProduct(true)}
+        >
+            + Add Product
+        </button>
+        <button 
+            className="bg-gradient-to-r from-[#1D0F0F] to-[#054421] text-white px-4 py-2 rounded"
+            onClick={() => setIsModalOpenAddProduct(true)}
+        >
+            Import
+        </button>
+    </div>
+</div>
+
             
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                 <div className="w-full md:w-72">
