@@ -325,7 +325,7 @@ export function ComplexNavbar() {
  
   return (
     <>
-    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] fixed">
+    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] h-24 fixed">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 
         {/* Logo */}
