@@ -14,6 +14,8 @@ import { EditAddressModal } from "../Modal/editAddressModal";
 import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
 import { DeleteAddressModal } from "../Modal/deleteAddressModal";
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 
 const ProfileComp = () => {
   const [activeTab, setActiveTab] = useState("PROFILE_INFORMATION"); 
@@ -23,6 +25,13 @@ const ProfileComp = () => {
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
 
+
+  var user = useSelector((state)=>state.user.user)
+  if (!user) {
+    console.log("No user found!");
+  } else {
+    console.log(user, "this is user...>>");
+  }
 
 
   const [addresses, setAddresses] = useState([
@@ -77,10 +86,10 @@ const ProfileComp = () => {
             </span>
           </div>
           <h2 className="text-sm lg:text-lg md:text-lg font-semibold text-gray-800">
-            AKHILA VIJAYAN
+          {user ? user.name : "Guest User"}
           </h2>
           <p className="text-red-900 font-medium text-xs lg:text-sm md:text-sm">
-            CUSTOMER
+          {user ? user.role : "CUSTOMER"}
           </p>
         </div>
         <ul className="mt-8 space-y-4 w-full">
@@ -203,34 +212,41 @@ const ProfileComp = () => {
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Full Name
+                  Name
                 </label>
                 <input
                   type="text"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                   placeholder="Enter your full name"
+                  value={user ? user.name : "Guest User"}
+
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-                  placeholder="Enter your email"
-                />
-              </div>
+  <label className="block text-sm font-medium text-gray-700">
+    Email
+  </label>
+  <input
+    type="email"
+    className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+    placeholder="Enter your email"
+    value={user ? user.email : ""}
+    readOnly
+  />
+</div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Phone No.
+                phone
+
                 </label>
                 <input
                   type="tel"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
-                  placeholder="Enter your phone number"
+                  // placeholder="Enter your phone number"
+                  value={user ? user.phone : "Guest User"}
                 />
               </div>
 
