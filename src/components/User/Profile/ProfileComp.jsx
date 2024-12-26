@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   UserCircleIcon,
   TruckIcon,
@@ -8,43 +8,46 @@ import {
   ShoppingBagIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-
 import { AddAddressModal } from "../Modal/addAddressModal";
 import { EditAddressModal } from "../Modal/editAddressModal";
 import { ConfirmEditAddressModal } from "../Modal/editAddressConfirmModal";
 import { DeleteAddressModal } from "../Modal/deleteAddressModal";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
-
+import axios from "../../../Utils/BaseUrl.js";
+import { Lines } from 'react-preloaders';  // Preloader component
 
 const ProfileComp = () => {
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [userData, setUserData] = useState({});  // Fixed typo (uerData -> userData)
   const [activeTab, setActiveTab] = useState("PROFILE_INFORMATION"); 
   const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
   const [isModalOpenEditAddress, setIsModalOpenEditAddress] = useState(false);
   const [isModalOpenConfirmEdit, setIsModalOpenConfirmEdit] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
-
-
-  var user = useSelector((state)=>state.user.user)
-  if (!user) {
-    console.log("No user found!");
-  } else {
-    console.log(user, "this is user...>>");
-  }
-
-
-  const [addresses, setAddresses] = useState([
-    {
-      name: "Akhila Vijayan",
-      address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581",
-    },
-    {
-      name: "Sheela Vijayan",
-      address: "Kunnathuveettil House, Thomannkuthu PO, Kerala - 685581",
-    },
-  ]);
+  const [addresses, setAddresses] = useState([]);  // Initialize as empty
   const [tempEditAddress, setTempEditAddress] = useState(null);
+
+  var user = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    if (user) {
+      const token = localStorage.getItem('userAccessToken');
+      console.log(token, "toooooooooooooooken.....?????");
+      // Fetch user profile data
+      axios.get('/api/user/profile', { headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => {
+          setUserData(response.data.profile);  // Assuming response.data contains the profile data
+          setIsLoading(false);  // Set loading to false after data is fetched
+        })
+        .catch((error) => {
+          console.error("Error fetching user profile:", error);
+          setIsLoading(false);  // Set loading to false even if there's an error
+        });
+    }
+  }, [user]);
+
   const handleUpdateAddress = (updatedAddress) => {
     setAddresses((prevAddresses) =>
       prevAddresses.map((addr) =>
@@ -77,6 +80,7 @@ const ProfileComp = () => {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 lg:p-72 md:p-52 p-6">
+   
       {/* Sidebar */}
       <aside className="w-full lg:w-64 bg-white shadow-lg p-6 mb-4 lg:mb-0 lg:block flex justify-between items-center mt-28 lg:mt-0 md:mt-0">
         <div className="flex flex-col items-center justify-center text-center">
@@ -86,54 +90,48 @@ const ProfileComp = () => {
             </span>
           </div>
           <h2 className="text-sm lg:text-lg md:text-lg font-semibold text-gray-800">
-          {user ? user.name : "Guest User"}
+            {userData ? userData.name : "Loading..."}
           </h2>
           <p className="text-red-900 font-medium text-xs lg:text-sm md:text-sm">
-          {user ? user.role : "CUSTOMER"}
+            {userData ? userData.role : "Loading..."}
           </p>
         </div>
         <ul className="mt-8 space-y-4 w-full">
           <li>
             <Link to='/myOrders'>
-            <button
-              onClick={() => setActiveTab("MY_ORDERS")}
-              className={`flex items-center text-sm ${
-                activeTab === "MY_ORDERS"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
-              }`}
-            >
-              <span className="mr-4 w-5">
-                <TruckIcon />
-              </span>
-              MY ORDERS
-            </button>
+              <button
+                onClick={() => setActiveTab("MY_ORDERS")}
+                className={`flex items-center text-sm ${
+                  activeTab === "MY_ORDERS" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
+                }`}
+              >
+                <span className="mr-4 w-5">
+                  <TruckIcon />
+                </span>
+                MY ORDERS
+              </button>
             </Link>
           </li>
           <li>
             <Link to='/wishlist'>
-                <button
+              <button
                 onClick={() => setActiveTab("MY_WISHLIST")}
                 className={`flex items-center text-sm ${
-                    activeTab === "MY_WISHLIST"
-                    ? "text-red-900 font-bold"
-                    : "text-gray-700 hover:text-red-900"
+                  activeTab === "MY_WISHLIST" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
                 }`}
-                >
+              >
                 <span className="mr-4 w-5">
-                    <HeartIcon />
+                  <HeartIcon />
                 </span>
                 MY WISHLIST
-                </button>
+              </button>
             </Link>
           </li>
           <li>
             <button
               onClick={() => setActiveTab("PROFILE_INFORMATION")}
               className={`flex items-center text-sm ${
-                activeTab === "PROFILE_INFORMATION"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
+                activeTab === "PROFILE_INFORMATION" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
               }`}
             >
               <span className="mr-4 w-5">
@@ -146,9 +144,7 @@ const ProfileComp = () => {
             <button
               onClick={() => setActiveTab("MANAGE_ADDRESS")}
               className={`flex items-center text-sm ${
-                activeTab === "MANAGE_ADDRESS"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
+                activeTab === "MANAGE_ADDRESS" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
               }`}
             >
               <span className="mr-4 w-5">
@@ -159,28 +155,24 @@ const ProfileComp = () => {
           </li>
           <li>
             <Link to='/cart'>
-                <button
+              <button
                 onClick={() => setActiveTab("MY_CART")}
                 className={`flex items-center text-sm ${
-                    activeTab === "MY_CART"
-                    ? "text-red-900 font-bold"
-                    : "text-gray-700 hover:text-red-900"
+                  activeTab === "MY_CART" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
                 }`}
-                >
+              >
                 <span className="mr-4 w-5">
-                    <ShoppingBagIcon />
+                  <ShoppingBagIcon />
                 </span>
                 MY CART
-                </button>
+              </button>
             </Link>
           </li>
           <li>
             <button
               onClick={() => setActiveTab("MY_WALLET")}
               className={`flex items-center text-sm ${
-                activeTab === "MY_WALLET"
-                  ? "text-red-900 font-bold"
-                  : "text-gray-700 hover:text-red-900"
+                activeTab === "MY_WALLET" ? "text-red-900 font-bold" : "text-gray-700 hover:text-red-900"
               }`}
             >
               <span className="mr-4 w-5">
@@ -191,18 +183,24 @@ const ProfileComp = () => {
           </li>
           <li>
             <Link to='/login'>
-                <button className="flex items-center text-sm text-gray-700 hover:text-red-900">
+              <button className="flex items-center text-sm text-gray-700 hover:text-red-900">
                 <span className="mr-4 w-5">
-                    <ArrowLeftOnRectangleIcon />
+                  <ArrowLeftOnRectangleIcon />
                 </span>
                 LOGOUT
-                </button>
+              </button>
             </Link>
           </li>
         </ul>
       </aside>
 
       {/* Main Content */}
+
+      {isLoading ? (
+      <div className="flex justify-center items-center min-h-screen">
+        <Lines color="#B71C1C" /> {/* Preloader shown when loading */}
+      </div>
+    ) : (
       <main className="flex-1 p-6 bg-white shadow-lg rounded-lg">
         {activeTab === "PROFILE_INFORMATION" && (
           <>
@@ -211,42 +209,35 @@ const ProfileComp = () => {
             </h2>
             <form className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   type="text"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                   placeholder="Enter your full name"
-                  value={user ? user.name : "Guest User"}
-
+                  value={userData ? userData.name : "Loading..."}
+                  readOnly
                 />
               </div>
 
               <div>
-  <label className="block text-sm font-medium text-gray-700">
-    Email
-  </label>
-  <input
-    type="email"
-    className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-    placeholder="Enter your email"
-    value={user ? user.email : ""}
-    readOnly
-  />
-</div>
-
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  placeholder="Enter your email"
+                  value={userData ? userData.email : "Loading..."}
+                  readOnly
+                />
+              </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                phone
-
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Phone</label>
                 <input
                   type="tel"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
-                  // placeholder="Enter your phone number"
-                  value={user ? user.phone : "Guest User"}
+                  placeholder="Enter your phone number"
+                  value={userData ? userData.phone : "Loading..."}
+                  readOnly
                 />
               </div>
 
@@ -269,103 +260,52 @@ const ProfileComp = () => {
         )}
 
         {activeTab === "MANAGE_ADDRESS" && (
-        <>
+          <>
             <div className="space-y-4">
-            <button className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800" onClick={() => setIsModalOpenAddAddress(true)}>
-                + Add Address
-            </button>
-            <div className="space-y-4">
-            {addresses.map((addr, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center justify-between p-4 border rounded-lg ${
-                    selectedAddress === addr.name
-                      ? "border-red-900"
-                      : "border-gray-300"
-                  }`}
+              <button
+                className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
+                onClick={() => setIsModalOpenAddAddress(true)}
               >
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="address"
-                    checked={selectedAddress === addr.name}
-                    onChange={() => setSelectedAddress(addr.name)}
-                    className="h-5 w-5 text-red-900"
-                  />
-                  <div>
-                    <p className="font-medium">{addr.name}</p>
-                    <p className="text-gray-600 text-sm">{addr.address}</p>
-                  </div>
-                </label>
-                <div className="space-y-1 md:space-x-2 md:space-y-0 flex flex-col md:flex-row">
-                    <button
-                        className="text-blue-500 hover:underline"
-                        onClick={() => initiateEditAddress(addr)}
-                    >
-                        Edit
-                    </button>
-                    <button 
-                        className="text-red-900 hover:underline"
-                        onClick={() => setIsModalOpenDeleteAddress(true) }
-                        >
-                        Delete
-                    </button>
-                </div>
-              </div>
-            ))}
-          </div>
-            </div>
-        </>
-        )}
+                + Add Address
+              </button>
 
-        {activeTab === "MY_WALLET" && (
-        <>
-            <div className="space-y-4">
-            <div className="flex flex-col items-center justify-center w-11/12 max-w-sm p-16 bg-white rounded-lg shadow-lg">
-                <div className="text-primary mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2.25 6.75A3.75 3.75 0 016 3h12a3.75 3.75 0 013.75 3.75v10.5A3.75 3.75 0 0118 21H6a3.75 3.75 0 01-3.75-3.75V6.75zM6 4.5A2.25 2.25 0 003.75 6.75v10.5A2.25 2.25 0 006 19.5h12a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0018 4.5H6z" />
-                        <path d="M18.75 12a.75.75 0 000-1.5h-3a.75.75 0 000 1.5h3z" />
-                    </svg>
+              {addresses.length > 0 ? (
+                addresses.map((address, index) => (
+                  <div key={index} className="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
+                    <div>
+                      <h4 className="text-gray-800">{address.name}</h4>
+                      <p className="text-gray-600 text-sm">{address.address}</p>
                     </div>
-                    <h1 className="text-2xl font-semibold text-red-900">MY WALLET</h1>
-                    <p className="text-lg text-gray-600 mb-6 mt-10">Total Wallet Amount: <span className="font-semibold text-gray-800">237</span></p>
-                    <Link to='/'>
-                        <button className="px-6 py-3 text-black bg-yellow-800 rounded-lg shadow-md hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-600 transition font-bold">
-                        CONTINUE SHOPPING
-                        </button>
-                    </Link>
-                </div>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={() => initiateEditAddress(address)}
+                        className="text-gray-800 hover:text-red-900"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => setIsModalOpenDeleteAddress(true)}
+                        className="text-gray-800 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No addresses found</p>
+              )}
             </div>
-        </>
+          </>
         )}
+      </main>
+    )}
 
-        </main>
-
-        <AddAddressModal
-            open={isModalOpenAddAddress}
-            setOpen={setIsModalOpenAddAddress}
-            saveAddress={handleSaveAddress}
-        />
-        <EditAddressModal
-            open={isModalOpenEditAddress}
-            setOpen={setIsModalOpenEditAddress}
-            saveAddress={confirmEditAddress}
-        />
-
-        <ConfirmEditAddressModal
-            open={isModalOpenConfirmEdit}
-            setOpen={setIsModalOpenConfirmEdit}
-            saveAddress={() =>
-                handleUpdateAddress({ ...tempEditAddress, address: "Updated Address" })
-            }
-        />
-        <DeleteAddressModal
-            open={isModalOpenDeleteAddress}
-            setOpen={setIsModalOpenDeleteAddress}
-            saveAddress={handleDeleteAddress}
-        />
-
+      {/* Modals */}
+      <AddAddressModal isOpen={isModalOpenAddAddress} onClose={() => setIsModalOpenAddAddress(false)} />
+      <EditAddressModal isOpen={isModalOpenEditAddress} onClose={() => setIsModalOpenEditAddress(false)} address={tempEditAddress} />
+      <ConfirmEditAddressModal isOpen={isModalOpenConfirmEdit} onClose={() => setIsModalOpenConfirmEdit(false)} onConfirm={handleUpdateAddress} />
+      <DeleteAddressModal isOpen={isModalOpenDeleteAddress} onClose={() => setIsModalOpenDeleteAddress(false)} onDelete={handleDeleteAddress} />
     </div>
   );
 };

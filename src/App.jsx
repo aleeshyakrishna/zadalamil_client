@@ -29,7 +29,6 @@ import CouponManagement from './pages/Admin/CouponManage.jsx';
 import UserManagement from './pages/Admin/UserManage.jsx';
 import BannerManagement from './pages/Admin/Bannermanage.jsx';
 
-
 const App = () => {
 
   return (
