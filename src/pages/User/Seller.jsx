@@ -1,4 +1,5 @@
 import CreateAccount from "../../components/User/Seller/CreateAccount";
+import { FooterWithSocialLinks } from "../../components/User/Seller/Footer";
 import ProductListingSection from "../../components/User/Seller/ProductListingSection";
 import SellerBanner from "../../components/User/Seller/SellerBanner";
 import { NavbarWithMegaMenu } from "../../components/User/Seller/SellerNavbar"
@@ -13,6 +14,7 @@ const SellerPage = () => {
         <WhySellOnZad />
         <CreateAccount />
         <ProductListingSection />
+        <FooterWithSocialLinks />
     </div>
   )
 }
