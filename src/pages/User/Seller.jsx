@@ -1,3 +1,4 @@
+import CreateAccount from "../../components/User/Seller/CreateAccount";
 import SellerBanner from "../../components/User/Seller/SellerBanner";
 import { NavbarWithMegaMenu } from "../../components/User/Seller/SellerNavbar"
 import WhySellOnZad from "../../components/User/Seller/WhySellOnZad";
@@ -9,6 +10,7 @@ const SellerPage = () => {
         <NavbarWithMegaMenu />
         <SellerBanner />
         <WhySellOnZad />
+        <CreateAccount />
     </div>
   )
 }

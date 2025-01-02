@@ -38,4 +38,4 @@ const WhySellOnZad = () => {
   )
 }
 
-export default WhySellOnZad
+export default WhySellOnZad;
