@@ -8,8 +8,13 @@ const ProductManagement = () => {
         <ComplexNavbar />
         <div className="p-3">
             <div className="mt-28 flex">
-                <SidebarWithBurgerMenu />
+                <div className="fixed top-30 left-0 h-screen w-20 p-4  text-white z-50">
+                    <SidebarWithBurgerMenu />
+                </div>
+
+                <div className="ml-16 p-4 w-full mt-10">
                 <ProductTable />
+                </div>
             </div>
         </div>
     </div>

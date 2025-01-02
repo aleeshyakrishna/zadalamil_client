@@ -18,7 +18,6 @@ const COLORS = ['#FF8800', '#1C1010', '#4A11F3', '#D14D86', '#FF27A9', '#84389D'
 export default function CategoryChart() {
   return (
     <div className="bg-white rounded-xl shadow-md p-6 flex flex-col lg:flex-row justify-between items-center">
-      {/* Chart Section */}
       <div className="flex-shrink-0">
         <PieChart width={300} height={300}>
           <Pie
@@ -36,7 +35,6 @@ export default function CategoryChart() {
         </PieChart>
       </div>
 
-      {/* Legend Section */}
       <div className="mt-6 lg:mt-0 lg:ml-10">
         <h2 className="text-lg font-semibold mb-4">Category Sales</h2>
         <ul className="space-y-2">

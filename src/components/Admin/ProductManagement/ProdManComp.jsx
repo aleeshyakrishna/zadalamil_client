@@ -74,7 +74,7 @@ export default function ProductTable() {
     };
 
     return (
-        <div className="p-8 w-full m-20">
+        <div className="p-8 w-full">
             <div className="flex justify-between items-center mb-4">
     <h1 className="text-2xl font-bold">PRODUCT MANAGEMENT</h1>
     <div className="flex gap-2">

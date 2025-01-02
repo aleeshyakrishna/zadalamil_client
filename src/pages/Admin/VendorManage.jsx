@@ -1,8 +1,8 @@
 import { ComplexNavbar } from "../../components/Admin/Navbar/NavbarComp.jsx"
 import { SidebarWithBurgerMenu } from "../../components/Admin/Sidebar/SidebarComp.jsx";
-import Dashboard from '../../components/Admin/Dashboard/Dashboard.jsx';
+import { VendorManage } from "../../components/Admin/VendorManagement/VendorManage.jsx";
 
-const DashboardPage = () => {
+const VendorManagement = () => {
   return (
     <div>
         <ComplexNavbar />
@@ -13,7 +13,7 @@ const DashboardPage = () => {
                 </div>
 
                 <div className="ml-16 p-4 w-full mt-10">
-                <Dashboard />
+                <VendorManage />
                 </div>
             </div>
         </div>
@@ -21,4 +21,4 @@ const DashboardPage = () => {
   )
 }
 
-export default DashboardPage
+export default VendorManagement;
