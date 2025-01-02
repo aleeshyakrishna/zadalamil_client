@@ -16,6 +16,7 @@ import {
   IconButton,
   Tooltip
 } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
  
 const TABS = [
@@ -251,8 +252,9 @@ export function VendorManage() {
                     </td>
 
                     <td className={classes}>
-                      <button 
-                        className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
+                      <Link to='/admin/vendor-details'>
+                       <button className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
+                      </Link>
 
                     </td>
                     <td className={classes}>
