@@ -16,7 +16,10 @@ import {
   IconButton,
   Tooltip
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+
+import {VendorDetailsModal} from '../Modal/Vendor/VendorDetailsModal.jsx';
+import {ConfirmEditVendorDetailsModal} from '../Modal/Vendor/ConfirmUpdateVendorModal.jsx';
 
  
 const TABS = [
@@ -98,6 +101,20 @@ const TABLE_ROWS = [
 ];
  
 export function VendorManage() {
+      const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
+    const [isModalOpenConfirmEditVendorDetails, setIsModalOpenConfirmEditVendorDetails] = useState(false);
+
+
+      const handleUpdateDetails = () => {
+        setIsModalOpenVendorDetails(false);
+        setIsModalOpenConfirmEditVendorDetails(true); 
+    };
+  
+    const handleConfirmUpdateVendorDetails = () => {
+      console.log("Status updated");
+      setIsModalOpenConfirmEditVendorDetails(false); 
+  };
+
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -252,10 +269,10 @@ export function VendorManage() {
                     </td>
 
                     <td className={classes}>
-                      <Link to='/admin/vendor-details'>
-                       <button className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
-                      </Link>
 
+                       <button 
+                       onClick={() => setIsModalOpenVendorDetails(true)}
+                       className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
                     </td>
                     <td className={classes}>
                     <Tooltip content="Delete Vendor">
@@ -266,8 +283,19 @@ export function VendorManage() {
                     </td>
                   </tr>
                 );
-              },
+              }, 
             )}
+            <VendorDetailsModal
+                  open={isModalOpenVendorDetails}
+                  setOpen={setIsModalOpenVendorDetails}
+                  saveDetails={handleUpdateDetails}
+              />
+
+              <ConfirmEditVendorDetailsModal
+                    open={isModalOpenConfirmEditVendorDetails}
+                    setOpen={setIsModalOpenConfirmEditVendorDetails}
+                    saveDetails={handleConfirmUpdateVendorDetails} 
+                />
           </tbody>
         </table>
       </CardBody>
@@ -285,5 +313,7 @@ export function VendorManage() {
         </div>
       </CardFooter>
     </Card>
+
+    
   );
 }
