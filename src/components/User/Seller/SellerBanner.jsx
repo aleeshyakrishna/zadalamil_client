@@ -2,7 +2,7 @@ import ImgBanner from "../../../assets/images/sales.png";
 
 const SellerBanner = () => {
   return (
-    <div className="bg-white min-h-screen  py-16 px-8 flex flex-col lg:flex-row items-center justify-between">
+    <div className="bg-white min-h-[80vh]  py-16 px-8 flex flex-col lg:flex-row items-center justify-between">
       <div className="lg:w-1/2 text-center lg:text-left space-y-6 p-5 mt-28">
         <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
           Start Selling on <span className="text-red-900">Zad Alamil</span> -<br />
