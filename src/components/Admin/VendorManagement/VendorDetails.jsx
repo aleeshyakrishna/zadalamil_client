@@ -1,23 +1,25 @@
 import Img1 from '../../../assets/images/client1.png';
+import { MenuStatus } from './MenuStatus';
 
 const VendorDetails = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
-      <div className="bg-white shadow-md rounded-lg w-[600px]">
-        {/* Header */}
+      <div className="bg-white shadow-md rounded-lg w-[900px] p-8">
         <div className="flex items-center mb-4">
           <img
             src={Img1}
             alt="Profile"
-            className="w-12 h-12 rounded-full"
+            className="w-20 h-20 rounded-full"
           />
           <h1 className="ml-4 text-lg font-bold">Akhila Vijayan</h1>
         </div>
 
-        {/* Content */}
-        <div className="text-sm text-gray-700 space-y-2">
+        <div className="text-sm text-gray-700 space-y-3 mt-10">
+        <p>
+            <span className="font-semibold">Name:</span> ABC
+          </p>
           <p>
-            <span className="font-semibold">Business Name:</span> XYZ
+            <span className="font-semibold">Trade Name:</span> Supplies LLC
           </p>
           <p>
             <span className="font-semibold">Email ID:</span>{" "}
@@ -26,7 +28,7 @@ const VendorDetails = () => {
             </a>
           </p>
           <p>
-            <span className="font-semibold">National ID/Passport No:</span> xya
+            <span className="font-semibold">National ID/Passport No:</span> E00007730
           </p>
           <p>
             <span className="font-semibold">Phone:</span> +9718897654567
@@ -52,17 +54,17 @@ const VendorDetails = () => {
             <span className="font-semibold">Owners Name:</span> Akhila Vijayan
           </p>
           <p>
-            <span className="font-semibold">Trade Name:</span> Supplies LLC
+            <span className="font-semibold ">Status:</span> <MenuStatus />
           </p>
+          
         </div>
 
-        {/* Buttons */}
         <div className="flex justify-between mt-6">
-          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-            Reject
+          <button className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800 text-sm">
+            CANCEL
           </button>
-          <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-            Make as Vendor
+          <button className="px-4 py-2 bg-green-900 text-white rounded-lg hover:bg-green-800 text-sm">
+            SAVE
           </button>
         </div>
       </div>
