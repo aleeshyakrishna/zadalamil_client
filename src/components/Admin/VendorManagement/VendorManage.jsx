@@ -20,7 +20,7 @@ import { useState } from "react";
 
 import {VendorDetailsModal} from '../Modal/Vendor/VendorDetailsModal.jsx';
 import {ConfirmEditVendorDetailsModal} from '../Modal/Vendor/ConfirmUpdateVendorModal.jsx';
-
+import { DeleteVendorModal } from '../Modal/Vendor/DeleteVendorModal.jsx';
  
 const TABS = [
   {
@@ -101,18 +101,23 @@ const TABLE_ROWS = [
 ];
  
 export function VendorManage() {
-      const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
-    const [isModalOpenConfirmEditVendorDetails, setIsModalOpenConfirmEditVendorDetails] = useState(false);
+  const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
+  const [isModalOpenConfirmEditVendorDetails, setIsModalOpenConfirmEditVendorDetails] = useState(false);
+  const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
 
+  const handleUpdateDetails = () => {
+    setIsModalOpenVendorDetails(false);
+    setIsModalOpenConfirmEditVendorDetails(true); 
+  };
 
-      const handleUpdateDetails = () => {
-        setIsModalOpenVendorDetails(false);
-        setIsModalOpenConfirmEditVendorDetails(true); 
-    };
-  
-    const handleConfirmUpdateVendorDetails = () => {
-      console.log("Status updated");
-      setIsModalOpenConfirmEditVendorDetails(false); 
+  const handleConfirmUpdateVendorDetails = () => {
+    console.log("Status updated");
+    setIsModalOpenConfirmEditVendorDetails(false); 
+  };
+
+  const handleDeleteVendor = () => {
+    console.log("Vendor deleted");
+    setIsModalOpenDeleteVendor(false); 
   };
 
   return (
@@ -269,7 +274,6 @@ export function VendorManage() {
                     </td>
 
                     <td className={classes}>
-
                        <button 
                        onClick={() => setIsModalOpenVendorDetails(true)}
                        className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
@@ -277,7 +281,10 @@ export function VendorManage() {
                     <td className={classes}>
                     <Tooltip content="Delete Vendor">
                         <IconButton variant="text">
-                          <TrashIcon className="h-4 w-4 text-red-800" />
+                          <TrashIcon
+                            onClick={() => setIsModalOpenDeleteVendor(true) }
+
+                           className="h-4 w-4 text-red-800" />
                         </IconButton>
                       </Tooltip> 
                     </td>
@@ -285,17 +292,24 @@ export function VendorManage() {
                 );
               }, 
             )}
-            <VendorDetailsModal
-                  open={isModalOpenVendorDetails}
-                  setOpen={setIsModalOpenVendorDetails}
-                  saveDetails={handleUpdateDetails}
-              />
 
-              <ConfirmEditVendorDetailsModal
-                    open={isModalOpenConfirmEditVendorDetails}
-                    setOpen={setIsModalOpenConfirmEditVendorDetails}
-                    saveDetails={handleConfirmUpdateVendorDetails} 
-                />
+            <VendorDetailsModal
+              open={isModalOpenVendorDetails}
+              setOpen={setIsModalOpenVendorDetails}
+              saveDetails={handleUpdateDetails}
+            />
+
+            <ConfirmEditVendorDetailsModal
+              open={isModalOpenConfirmEditVendorDetails}
+              setOpen={setIsModalOpenConfirmEditVendorDetails}
+              saveDetails={handleConfirmUpdateVendorDetails} 
+            />
+
+            <DeleteVendorModal
+              open={isModalOpenDeleteVendor}
+              setOpen={setIsModalOpenDeleteVendor}
+              deleteVendor={handleDeleteVendor}
+            />
           </tbody>
         </table>
       </CardBody>
@@ -313,7 +327,5 @@ export function VendorManage() {
         </div>
       </CardFooter>
     </Card>
-
-    
   );
 }
