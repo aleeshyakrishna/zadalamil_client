@@ -12,7 +12,7 @@ const VendorDetailsPage = () => {
                     <SidebarWithBurgerMenu />
                 </div>
 
-                <div className="ml-16 p-4 w-full -mt-20">
+                <div className="ml-16 p-4 w-full -mt-20 lg:-mt-5">
                 <VendorDetails />
                 </div>
             </div>
