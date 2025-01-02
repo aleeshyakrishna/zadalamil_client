@@ -29,6 +29,7 @@ import CouponManagement from './pages/Admin/CouponManage.jsx';
 import UserManagement from './pages/Admin/UserManage.jsx';
 import BannerManagement from './pages/Admin/Bannermanage.jsx';
 import Vendormanagement from './pages/Admin/VendorManage.jsx';
+import SellerPage from './pages/User/Seller.jsx';
 // import VendorDetailsPage from './pages/Admin/VendorDetails.jsx';
 
 const App = () => {
@@ -70,6 +71,11 @@ const App = () => {
         <Route path='/admin/user-management' element={ <UserManagement />} />
         <Route path='/admin/banner-management' element={ <BannerManagement />} />
         <Route path='/admin/vendor-management' element={ <Vendormanagement />} />
+
+
+        {/* SELLER */}
+        <Route path='/seller' element={ <SellerPage />} />
+
       </Routes>
     </Router>
   )

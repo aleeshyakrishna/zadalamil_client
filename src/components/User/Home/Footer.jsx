@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Logo from '../../../assets/images/logo.png';
 
 const Footer = () => {
@@ -15,6 +16,7 @@ const Footer = () => {
             <li>About Us</li>
             <li>Careers</li>
             <li>Our Services</li>
+            <Link to="/seller"><li>Become a Seller on Zad Alamil</li></Link>
           </ul>
         </div>
 
