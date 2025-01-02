@@ -12,7 +12,7 @@ import {
         <MenuHandler>
           <Button>Pending</Button>
         </MenuHandler>
-        <MenuList>
+        <MenuList >
           <MenuItem>Approved</MenuItem>
           <MenuItem>Ongoing</MenuItem>
           <MenuItem>Rejected</MenuItem>
