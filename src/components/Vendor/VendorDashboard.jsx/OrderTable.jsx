@@ -56,17 +56,16 @@ const TABLE_ROWS = [
 export function OrderTable() {
     return (
         <Card className="h-full w-full">
-        <CardHeader floated={false} shadow={false} className="rounded-none">
-            <div className="mb-8 flex items-center justify-between gap-8">
-            <div>
-                <Typography variant="h5" color="blue-gray">
-                Recent Orders
-                </Typography>
-            </div>
-            </div>
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            </div>
-        </CardHeader>
+            <CardHeader floated={false} shadow={false} className="rounded-none">
+                <div className="mb-8 flex items-center justify-between gap-8">
+                    <div>
+                        <Typography variant="h5" color="blue-gray">
+                        Recent Orders
+                        </Typography>
+                    </div>
+                </div>
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row"></div>
+            </CardHeader>
         <CardBody className="overflow-scroll px-0">
             <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
@@ -128,6 +127,7 @@ export function OrderTable() {
                                 <Chip
                                 variant="ghost"
                                 size="sm"
+                                className="w-24 text-center"
                                 value={fullfillment}
                                 color={
                                     fullfillment === "delivered"
@@ -188,7 +188,7 @@ export function OrderTable() {
             </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Link to='/admin/vendor-management'><h4 className="text-red-900">View All &gt; </h4></Link>
+            <Link to='/vendor/vendor-orderManagement'><h4 className="text-red-900">View All &gt; </h4></Link>
         </CardFooter>
         </Card>
     );
