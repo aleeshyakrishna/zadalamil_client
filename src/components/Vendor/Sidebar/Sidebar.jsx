@@ -64,7 +64,7 @@ export function SidebarWithBurgerMenuVendor() {
             </div>
             <List>
                 <Accordion>
-                <Link to='/admin/dashboard'>
+                <Link to='/vendor/vendor-dashboard'>
                     <ListItem className="p-0" selected={open === 1}>
                     <AccordionHeader
                         onClick={() => handleOpen(1)}

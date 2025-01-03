@@ -12,7 +12,7 @@ export default function ProductTable() {
     const [isModalOpenAddProduct, setIsModalOpenAddProduct] = useState(false);
     const [isModalOpenEditProduct, setIsModalOpenEditProduct] = useState(false);
     const [isModalOpenConfirmEditProduct, setIsModalOpenConfirmEditProduct] = useState(false);
-    const [isModalOpenDeleteProduct, setIsModalOpenDeleteProduct] = useState(false);
+    const [isModalOpenDeleteProduct, setIsModalOpenDeleteProduct] = useState(false);    
 
 
     const handleUpdateProduct = () => {
@@ -28,7 +28,7 @@ export default function ProductTable() {
     const handleDeleteProduct = () => {
         console.log("Product deleted");
         setIsModalOpenDeleteProduct(false); 
-      };
+    };
 
     const products = [
         {

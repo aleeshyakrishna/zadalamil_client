@@ -4,24 +4,31 @@ import {
   } from "@heroicons/react/24/outline";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
-Card,
-CardHeader,
-Input,
-Typography,
-Button,
-CardBody,
-Chip,
-CardFooter,
-Tabs,
-TabsHeader,
-Tab,
-Avatar,
-IconButton,
-Tooltip,
+    Card,
+    CardHeader,
+    Input,
+    Typography,
+    Button,
+    CardBody,
+    Chip,
+    CardFooter,
+    Tabs,
+    TabsHeader,
+    Tab,
+    Avatar,
+    IconButton,
+    Tooltip,
 } from "@material-tailwind/react";
 import Img1 from '../../../assets/images/mob2.png';
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { MdDownload } from "react-icons/md";
+
+import { AddProductVendorModal } from '../Modal/Product/AddProductModalVendor.jsx';
+import { EditProductVendorModal } from '../Modal/Product/EditProductModalVendor.jsx';
+import { ConfirmEditProductVendorModal } from '../Modal/Product/ConfirmEditProductModalVendor.jsx';
+import { DeleteProductVendorModal } from '../Modal/Product/DeleteProductModalVendor.jsx';
+
+import { useState } from "react";
 
 const TABS = [
     {
@@ -79,6 +86,33 @@ const TABLE_ROWS = [
 ];
    
 export function ProductTableVendor() {
+    const [isModalOpenAddVendorProduct, setIsModalOpenAddVendorProduct] = useState(false);
+    const [isModalOpenEditVendorProduct, setIsModalOpenEditVendorProduct] = useState(false);
+    const [isModalOpenConfirmEditVendorProduct, setIsModalOpenConfirmEditVendorProduct] = useState(false);
+    const [isModalOpenDeleteVendorProduct, setIsModalOpenDeleteVendorProduct] = useState(false);
+
+    const handleSaveVendorProduct = () => {
+        console.log("Product saved");
+        setIsModalOpenAddVendorProduct(false); 
+    };
+
+    const handleUpdateVendorProduct = () => {
+        setIsModalOpenEditVendorProduct(false);
+        setIsModalOpenConfirmEditVendorProduct(true); 
+    };
+
+    const handleConfirmUpdateVendorProduct = () => {
+        console.log("Product updated");
+        setIsModalOpenConfirmEditVendorProduct(false); 
+    };
+
+    const handleDeleteVendorProduct = () => {
+        console.log("Product deleted");
+        setIsModalOpenDeleteVendorProduct(false); 
+    };
+
+
+    
     return (
         <Card className="h-full w-full">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -98,7 +132,9 @@ export function ProductTableVendor() {
                         <Button className="bg-red-900" size="sm">
                             Import CSV
                         </Button>
-                        <Button className="flex items-center gap-3" size="sm">
+                        <Button 
+                        onClick={() => setIsModalOpenAddVendorProduct(true)}
+                        className="flex items-center gap-3" size="sm">
                             <MdOutlineProductionQuantityLimits  className="h-4 w-4" /> Add Product
                         </Button>
                     </div>
@@ -208,7 +244,9 @@ export function ProductTableVendor() {
                                 <td className={classes}>
                                     <Tooltip content="Edit Product">
                                         <IconButton variant="text">
-                                            <PencilIcon className="h-4 w-4 text-blue-900" />
+                                            <PencilIcon
+                                                onClick={() => setIsModalOpenEditVendorProduct(true)}
+                                                className="h-4 w-4 text-blue-900" />
                                         </IconButton>
                                     </Tooltip>
                                 </td>
@@ -216,7 +254,9 @@ export function ProductTableVendor() {
                                 <td className={classes}>
                                     <Tooltip content="Delete Product">
                                         <IconButton variant="text">
-                                            <TrashIcon className="h-4 w-4 text-red-900" />
+                                            <TrashIcon
+                                                onClick={() => setIsModalOpenDeleteVendorProduct(true) }
+                                                className="h-4 w-4 text-red-900" />
                                         </IconButton>
                                     </Tooltip>
                                 </td>
@@ -225,6 +265,31 @@ export function ProductTableVendor() {
                         },
                     )}
                     </tbody>
+                    
+                    <AddProductVendorModal
+                        open={isModalOpenAddVendorProduct}
+                        setOpen={setIsModalOpenAddVendorProduct}
+                        saveProduct={handleSaveVendorProduct}
+                    />
+
+                    <EditProductVendorModal
+                        open={isModalOpenEditVendorProduct}
+                        setOpen={setIsModalOpenEditVendorProduct}
+                        saveProduct={handleUpdateVendorProduct}
+                    />
+                
+                    <ConfirmEditProductVendorModal
+                        open={isModalOpenConfirmEditVendorProduct}
+                        setOpen={setIsModalOpenConfirmEditVendorProduct}
+                        saveProduct={handleConfirmUpdateVendorProduct} 
+                    />
+
+                    <DeleteProductVendorModal
+                        open={isModalOpenDeleteVendorProduct}
+                        setOpen={setIsModalOpenDeleteVendorProduct}
+                        saveAddress={handleDeleteVendorProduct}
+                    />
+                    
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
