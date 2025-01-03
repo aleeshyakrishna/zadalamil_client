@@ -31,6 +31,7 @@ import BannerManagement from './pages/Admin/Bannermanage.jsx';
 import Vendormanagement from './pages/Admin/VendorManage.jsx';
 import SellerPage from './pages/User/Seller.jsx';
 import ScrollToTop from './components/ScrollTop/ScrollTop.jsx';
+import SellerFormPage from './pages/User/SellerForm.jsx';
 // import VendorDetailsPage from './pages/Admin/VendorDetails.jsx';
 
 const App = () => {
@@ -77,6 +78,7 @@ const App = () => {
 
         {/* SELLER */}
         <Route path='/seller' element={ <SellerPage />} />
+        <Route path='/seller-form' element={ <SellerFormPage />} />
 
       </Routes>
     </Router>
