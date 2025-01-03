@@ -9,7 +9,7 @@ const SellerSubmit = () => {
                 it has been processed. 
             </p>
             <div className="flex justify-between">
-                <Link to='/seller-submit'>
+                <Link to='/seller-form-view'>
                     <button
                     type="submit"
                     className="m-10 px-6 py-2 bg-green-900 text-white rounded-lg hover:bg-green-700"
