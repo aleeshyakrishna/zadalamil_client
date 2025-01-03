@@ -96,7 +96,7 @@ export function SidebarWithBurgerMenuVendor() {
                     </ListItem>
                 </Link>
 
-                <Link to='/admin/category-management'>
+                <Link to='/vendor/vendor-categoryManagement'>
                     <ListItem className="p-0" selected={open === 1}>
                     <AccordionHeader
                         onClick={() => handleOpen(1)}

@@ -37,6 +37,7 @@ import SellerSubmitPage from './pages/User/SellerSubmitPage.jsx';
 import VendorLoginPage from './pages/Vendor/Login.jsx';
 import VendorDashboardPage from './pages/Vendor/Dashboard.jsx';
 import ProductManagementVendorPage from './pages/Vendor/ProductManagementVendorPage.jsx';
+import CategoryManagementVendorPage from './pages/Vendor/CategoryVendorManage.jsx';
 
 const App = () => {
 
@@ -91,6 +92,7 @@ const App = () => {
         <Route path='/vendor/vendor-dashboard' element={ <VendorDashboardPage />}/>
         <Route path='/vendor/vendor-dashboard' element={ <VendorDashboardPage />}/>
         <Route path='/vendor/vendor-productManagement' element={ <ProductManagementVendorPage />}/>
+        <Route path='/vendor/vendor-categoryManagement' element={ <CategoryManagementVendorPage />}/>
         
 
 
