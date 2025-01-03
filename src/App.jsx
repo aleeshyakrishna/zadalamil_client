@@ -33,6 +33,7 @@ import SellerPage from './pages/User/Seller.jsx';
 import ScrollToTop from './components/ScrollTop/ScrollTop.jsx';
 import SellerFormPage from './pages/User/SellerForm.jsx';
 import SellerFormSubmitPage from './pages/User/SellerViewForm.jsx';
+import SellerSubmitPage from './pages/User/SellerSubmitPage.jsx';
 
 const App = () => {
 
@@ -79,7 +80,7 @@ const App = () => {
         {/* SELLER */}
         <Route path='/seller' element={ <SellerPage />} />
         <Route path='/seller-form' element={ <SellerFormPage />} />
-        <Route path='/seller-submit' element={ <SellerFormSubmitPage />} />
+        <Route path='/seller-submit' element={ <SellerSubmitPage />} />
         <Route path='/seller-form-view' element={ <SellerFormSubmitPage />} />
 
       </Routes>
