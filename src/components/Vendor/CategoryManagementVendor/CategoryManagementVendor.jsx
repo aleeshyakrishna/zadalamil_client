@@ -21,6 +21,9 @@ import {
 import { useState } from "react";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { AddCategoryVendorModal } from '../Modal/Category/AddCategoryModalVendor.jsx';
+import { EditCategoryVendorModal } from '../Modal/Category/EditCategoryModalVendor.jsx';
+import { ConfirmEditCategoryVendorModal } from '../Modal/Category/ConfirmEditCategoryModalVendor.jsx';
+import { DeleteCategoryVendorModal } from '../Modal/Category/DeleteCategoryModalVendor.jsx';
 
 const TABS = [
     {
@@ -64,10 +67,28 @@ const TABLE_ROWS = [
    
 export function CategoryTableVendor() {
     const [isModalOpenAddVendorCategory, setIsModalOpenAddVendorCategory] = useState(false);
+    const [isModalOpenEditVendorCategory, setIsModalOpenEditVendorCategory] = useState(false);
+    const [isModalOpenConfirmEditVendorCategory, setIsModalOpenConfirmEditVendorCategory] = useState(false);
+    const [isModalOpenDeleteVendorCategory, setIsModalOpenDeleteVendorCategory] = useState(false);
 
     const handleSaveVendorCategory = () => {
         console.log("Category saved");
         setIsModalOpenAddVendorCategory(false); 
+    };
+
+    const handleUpdateVendorCategory = () => {
+        setIsModalOpenEditVendorCategory(false);
+        setIsModalOpenConfirmEditVendorCategory(true); 
+    };
+
+    const handleConfirmUpdateVendorCategory = () => {
+        console.log("category updated");
+        setIsModalOpenConfirmEditVendorCategory(false); 
+    };
+
+    const handleDeleteVendorCategory = () => {
+        console.log("Category deleted");
+        setIsModalOpenDeleteVendorCategory(false); 
     };
     
     return (
@@ -170,17 +191,22 @@ export function CategoryTableVendor() {
                                 </td>
 
                                 <td className={classes}>
-                                    <Tooltip content="Edit Product">
+                                    <Tooltip content="Edit Category">
                                         <IconButton variant="text">
-                                            <PencilIcon className="h-4 w-4 text-blue-900" />
+                                            <PencilIcon 
+                                            onClick={() => setIsModalOpenEditVendorCategory(true)}
+
+                                            className="h-4 w-4 text-blue-900" />
                                         </IconButton>
                                     </Tooltip>
                                 </td>
 
                                 <td className={classes}>
-                                    <Tooltip content="Delete Product">
+                                    <Tooltip content="Delete Category">
                                         <IconButton variant="text">
-                                            <TrashIcon className="h-4 w-4 text-red-900" />
+                                            <TrashIcon 
+                                            onClick={() => setIsModalOpenDeleteVendorCategory(true) }
+                                            className="h-4 w-4 text-red-900" />
                                         </IconButton>
                                     </Tooltip>
                                 </td>
@@ -190,10 +216,28 @@ export function CategoryTableVendor() {
                     )}
                     </tbody>
                     <AddCategoryVendorModal
-                                    open={isModalOpenAddVendorCategory}
-                                    setOpen={setIsModalOpenAddVendorCategory}
-                                    saveCategory={handleSaveVendorCategory}
-                                />
+                        open={isModalOpenAddVendorCategory}
+                        setOpen={setIsModalOpenAddVendorCategory}
+                        saveCategory={handleSaveVendorCategory}
+                    />
+
+                    <EditCategoryVendorModal
+                        open={isModalOpenEditVendorCategory}
+                        setOpen={setIsModalOpenEditVendorCategory}
+                        saveCategory={handleUpdateVendorCategory}
+                    />
+                
+                    <ConfirmEditCategoryVendorModal
+                        open={isModalOpenConfirmEditVendorCategory}
+                        setOpen={setIsModalOpenConfirmEditVendorCategory}
+                        saveCategory={handleConfirmUpdateVendorCategory} 
+                    />
+
+                    <DeleteCategoryVendorModal
+                        open={isModalOpenDeleteVendorCategory}
+                        setOpen={setIsModalOpenDeleteVendorCategory}
+                        deleteCategory={handleDeleteVendorCategory}
+                    />
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
