@@ -16,7 +16,7 @@ const Footer = () => {
             <li>About Us</li>
             <li>Careers</li>
             <li>Our Services</li>
-            <Link to="/seller"><li>Become a Seller on Zad Alamil</li></Link>
+            <Link to="/seller"><li className='mt-1'>Become a Seller on Zad Alamil</li></Link>
           </ul>
         </div>
 

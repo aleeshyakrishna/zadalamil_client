@@ -30,12 +30,14 @@ import UserManagement from './pages/Admin/UserManage.jsx';
 import BannerManagement from './pages/Admin/Bannermanage.jsx';
 import Vendormanagement from './pages/Admin/VendorManage.jsx';
 import SellerPage from './pages/User/Seller.jsx';
+import ScrollToTop from './components/ScrollTop/ScrollTop.jsx';
 // import VendorDetailsPage from './pages/Admin/VendorDetails.jsx';
 
 const App = () => {
 
   return (
     <Router>
+        <ScrollToTop />
       <Routes>
 
         {/* USER SIDE */}
