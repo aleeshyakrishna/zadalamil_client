@@ -99,10 +99,10 @@ function ProfileMenu() {
 
 export function ComplexNavbarVendor() {
   return (
-    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] fixed">
+    <Navbar className="max-w-none h-20 rounded-none z-50 bg-[#bbdefb] fixed">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 
-        <a href="#" className="mr-4 ml-2 cursor-pointer py-1.5">
+        <a href="#" className="mr-4 ml-2 cursor-pointer -mt-3">
         <Link to='/vendor/vendor-dashboard'><img src={logo} alt="company logo" className="h-12 w-auto"/></Link>
           <h1 className="font-semibold text-sm">Zad Alamil</h1>
         </a>
