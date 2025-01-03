@@ -39,6 +39,7 @@ import VendorDashboardPage from './pages/Vendor/Dashboard.jsx';
 import ProductManagementVendorPage from './pages/Vendor/ProductManagementVendorPage.jsx';
 import CategoryManagementVendorPage from './pages/Vendor/CategoryVendorManage.jsx';
 import OrderManagementVendorPage from './pages/Vendor/OrderVendorManage.jsx';
+import OrderDetailsVendorPage from './pages/Vendor/OrderDetailsVendorPage.jsx';
 
 const App = () => {
 
@@ -95,6 +96,7 @@ const App = () => {
         <Route path='/vendor/vendor-productManagement' element={ <ProductManagementVendorPage />}/>
         <Route path='/vendor/vendor-categoryManagement' element={ <CategoryManagementVendorPage />}/>
         <Route path='/vendor/vendor-orderManagement' element={ <OrderManagementVendorPage />}/>
+        <Route path='/vendor/vendor-orderDetails' element={ <OrderDetailsVendorPage />}/>
         
 
 

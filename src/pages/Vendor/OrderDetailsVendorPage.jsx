@@ -1,8 +1,8 @@
-import { OrderVendorTable } from "../../components/Vendor/OrderManagementVendor/OrderManagementVendor";
+import OrderDetailsVendor from "../../components/Vendor/OrderManagementVendor/OrderDetailsVendor";
 import { SidebarWithBurgerMenuVendor } from "../../components/Vendor/Sidebar/Sidebar";
 import { ComplexNavbarVendor } from "../../components/Vendor/VendorNavbar/VendorNavbar";
 
-const OrderManagementVendorPage = () => {
+const OrderDetailsVendorPage = () => {
   return (
     <div>
         <ComplexNavbarVendor/>
@@ -13,7 +13,7 @@ const OrderManagementVendorPage = () => {
                 </div>
 
                 <div className="ml-16 p-4 w-full">
-                <OrderVendorTable />
+                <OrderDetailsVendor />
                 </div>
             </div>
         </div>
@@ -21,4 +21,4 @@ const OrderManagementVendorPage = () => {
   )
 }
 
-export default OrderManagementVendorPage;
+export default OrderDetailsVendorPage;
