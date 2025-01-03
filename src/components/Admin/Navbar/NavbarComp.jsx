@@ -99,12 +99,12 @@ function ProfileMenu() {
 
 export function ComplexNavbar() {
   return (
-    <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] fixed">
+    <Navbar className="max-w-none rounded-none h-16 z-50 bg-[#bcb3da] fixed">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         {/* Logo */}
-        <a href="#" className="mr-4 ml-2 cursor-pointer py-1.5">
-        <Link to='/admin/dashboard'><img src={logo} alt="company logo" className="h-12 w-auto"/></Link>
-          <h1 className="font-semibold text-sm">Zad Alamil</h1>
+        <a href="#" className="mr-4 ml-2 cursor-pointer -mt-2">
+        <Link to='/admin/dashboard'><img src={logo} alt="company logo" className="h-8 w-auto"/></Link>
+          <h1 className="font-semibold -ml-2 text-sm">Zad Alamil</h1>
         </a>
         <IconButton
           size="sm"

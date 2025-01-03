@@ -8,11 +8,11 @@ const CategoryManagement = () => {
         <ComplexNavbar />
         <div className="p-3">
             <div className="mt-28 flex">
-                <div className="fixed top-30 left-0 h-screen w-20 p-4  text-white z-50">
+                <div className="fixed top-20 left-0 h-screen w-20 p-4  text-white z-50">
                     <SidebarWithBurgerMenu />
                 </div>
 
-                <div className="ml-16 p-4 w-full mt-10">
+                <div className="ml-16 p-4 w-full ">
                   <CategoryTable />
                 </div>
             </div>
