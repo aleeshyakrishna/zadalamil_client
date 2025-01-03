@@ -18,7 +18,9 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
+import { useState } from "react";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { AddCategoryVendorModal } from '../Modal/Category/AddCategoryModalVendor.jsx';
 
 const TABS = [
     {
@@ -61,6 +63,13 @@ const TABLE_ROWS = [
 ];
    
 export function CategoryTableVendor() {
+    const [isModalOpenAddVendorCategory, setIsModalOpenAddVendorCategory] = useState(false);
+
+    const handleSaveVendorCategory = () => {
+        console.log("Category saved");
+        setIsModalOpenAddVendorCategory(false); 
+    };
+    
     return (
         <Card className="h-full w-full">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -74,7 +83,9 @@ export function CategoryTableVendor() {
                         </Typography>
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                        <Button className="flex items-center gap-3" size="sm">
+                        <Button
+                            onClick={() => setIsModalOpenAddVendorCategory(true)}
+                            className="flex items-center gap-3" size="sm">
                             <MdOutlineProductionQuantityLimits  className="h-4 w-4" /> Add Category
                         </Button>
                     </div>
@@ -178,6 +189,11 @@ export function CategoryTableVendor() {
                         },
                     )}
                     </tbody>
+                    <AddCategoryVendorModal
+                                    open={isModalOpenAddVendorCategory}
+                                    setOpen={setIsModalOpenAddVendorCategory}
+                                    saveCategory={handleSaveVendorCategory}
+                                />
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

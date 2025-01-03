@@ -3,7 +3,6 @@ import { CategoryTableVendor } from "../../components/Vendor/CategoryManagementV
 import { SidebarWithBurgerMenuVendor } from "../../components/Vendor/Sidebar/Sidebar";
 import { ComplexNavbarVendor } from "../../components/Vendor/VendorNavbar/VendorNavbar";
 
-
 const CategoryManagementVendorPage = () => {
     return (
         <div>
