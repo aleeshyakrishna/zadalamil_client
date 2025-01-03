@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const SellerForm = () => {
     const [isCameraActive, setIsCameraActive] = useState(false);
@@ -123,12 +124,14 @@ const SellerForm = () => {
                         >
                         CANCEL
                         </button>
-                        <button
-                        type="submit"
-                        className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                        >
-                        SUBMIT
-                        </button>
+                        <Link to='/seller-submit'>
+                            <button
+                            type="submit"
+                            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                            >
+                            SUBMIT
+                            </button>
+                        </Link>
                     </div>
                 </form>
             </div>
