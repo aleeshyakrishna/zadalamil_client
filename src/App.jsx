@@ -35,6 +35,7 @@ import SellerFormPage from './pages/User/SellerForm.jsx';
 import SellerFormSubmitPage from './pages/User/SellerViewForm.jsx';
 import SellerSubmitPage from './pages/User/SellerSubmitPage.jsx';
 import VendorLoginPage from './pages/Vendor/Login.jsx';
+import VendorDashboardPage from './pages/Vendor/Dashboard.jsx';
 
 const App = () => {
 
@@ -85,7 +86,8 @@ const App = () => {
         <Route path='/seller-form-view' element={ <SellerFormSubmitPage />} />
 
         {/* VENDOR */}
-        <Route path='/vendor-login' element={ <VendorLoginPage />}/>
+        <Route path='/vendor/vendor-login' element={ <VendorLoginPage />}/>
+        <Route path='/vendor/vendor-dashboard' element={ <VendorDashboardPage />}/>
 
 
       </Routes>

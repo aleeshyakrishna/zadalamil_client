@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Img1 from '../../../assets/images/vendorLog.png';
 
 const VendorLogin = () => {
@@ -44,12 +45,14 @@ const VendorLogin = () => {
                                 </span>
                             </div>
                         </div>
+                        <Link to='/vendor/vendor-dashboard'>
                         <button
                             type="submit"
                             className="w-full py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
                         >
                             LOGIN
                         </button>
+                        </Link>
                         <p className="text-center mt-4 text-gray-600">
                             Or Login with Mobile No.
                         </p>
