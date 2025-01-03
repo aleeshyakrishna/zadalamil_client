@@ -2,7 +2,7 @@ import Img1 from '../../../assets/images/vendorLog.png';
 
 const VendorLogin = () => {
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-red-600 to-gray-800">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-red-900 to-gray-800">
             <div className="flex flex-wrap bg-white rounded-lg shadow-lg w-full max-w-4xl">
 
                 <div className="w-full lg:w-1/2 flex justify-center items-center p-8 bg-red-100">
@@ -46,7 +46,7 @@ const VendorLogin = () => {
                         </div>
                         <button
                             type="submit"
-                            className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                            className="w-full py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
                         >
                             LOGIN
                         </button>
