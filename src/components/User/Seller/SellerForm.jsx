@@ -9,23 +9,23 @@ const SellerForm = () => {
 
     const startCamera = async () => {
         try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-        });
-        if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-        }
-        setIsCameraActive(true);
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+            });
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+            setIsCameraActive(true);
         } catch (error) {
-        console.error("Error accessing camera:", error);
+            console.error("Error accessing camera:", error);
         }
     };
 
     const capturePhoto = () => {
         if (videoRef.current && canvasRef.current) {
-        const context = canvasRef.current.getContext("2d");
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-        setPhotoCaptured(true);
+            const context = canvasRef.current.getContext("2d");
+            context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+            setPhotoCaptured(true);
         }
     };
 
@@ -44,74 +44,92 @@ const SellerForm = () => {
                 <form>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {[
-                        'Name',
-                        'Business Name',
-                        "Owner's Name",
-                        'Trade Name',
-                        'National ID/Passport No.',
+                            'Name',
+                            'Business Name',
+                            "Owner's Name",
+                            'Trade Name',
+                            'National ID/Passport No.',
                         ].map((label, index) => (
-                        <div key={index} className="mb-4">
-                            <label className="block text-gray-700 mb-2">{label}:</label>
-                            <input
-                            type="text"
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                            />
-                        </div>
+                            <div key={index} className="mb-4">
+                                <label className="block text-gray-700 mb-2">{label}:</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                                />
+                            </div>
                         ))}
 
                         {[
-                        'License No.',
-                        'Issue Date',
-                        'Expiry Date',
-                        'Email ID',
-                        'Phone No.',
-                        'Description',
+                            'License No.',
+                            'Issue Date',
+                            'Expiry Date',
+                            'Email ID',
+                            'Phone No.',
+                            'Description',
                         ].map((label, index) => (
-                        <div key={index} className="mb-4">
-                            <label className="block text-gray-700 mb-2">{label}:</label>
+                            <div key={index} className="mb-4">
+                                <label className="block text-gray-700 mb-2">{label}:</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                                />
+                            </div>
+                        ))}
+
+                        <div className="mb-4 col-span-2">
+                            <label className="block text-gray-700 mb-2">Upload License Document:</label>
                             <input
-                            type="text"
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                                type="file"
+                                accept=".pdf,.jpg,.png"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                             />
                         </div>
-                        ))}
+
+                        <div className="mb-4 col-span-2">
+                            <label className="block text-gray-700 mb-2">Upload National ID/Passport Document:</label>
+                            <input
+                                type="file"
+                                accept=".pdf,.jpg,.png"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                            />
+                        </div>
 
                         <div className="col-span-2 flex items-center space-x-4 mb-6">
                             <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
                                 {isCameraActive ? (
-                                <>
-                                    <video
-                                    ref={videoRef}
-                                    autoPlay
-                                    className="w-full h-full rounded-full"
-                                    ></video>
-                                    <canvas ref={canvasRef} className="hidden"></canvas>
-                                </>
+                                    <>
+                                        <video
+                                            ref={videoRef}
+                                            autoPlay
+                                            className="w-full h-full rounded-full"
+                                        ></video>
+                                        <canvas ref={canvasRef} className="hidden"></canvas>
+                                    </>
                                 ) : (
-                                <span className="text-gray-500">+</span>
+                                    <span className="text-gray-500">+</span>
                                 )}
                             </div>
                             <div className="flex items-center cursor-pointer">
                                 <button
-                                type="button"
-                                onClick={startCamera}
-                                className="text-gray-700"
+                                    type="button"
+                                    onClick={startCamera}
+                                    className="text-gray-700"
                                 >
-                                {isCameraActive ? "Capture Photo" : "Activate Camera"}
+                                    {isCameraActive ? "Capture Photo" : "Activate Camera"}
                                 </button>
                                 {isCameraActive && !photoCaptured && (
-                                <button
-                                    type="button"
-                                    onClick={capturePhoto}
-                                    className="ml-4 text-gray-700"
-                                >
-                                    Take Photo
-                                </button>
+                                    <button
+                                        type="button"
+                                        onClick={capturePhoto}
+                                        className="ml-4 text-gray-700"
+                                    >
+                                        Take Photo
+                                    </button>
                                 )}
                                 {photoCaptured && (
-                                <div className="mt-2">
-                                    <span className="text-green-600">Photo captured!</span>
-                                </div>
+                                    <div className="mt-2">
+                                        <span className="text-green-600">Photo captured!</span>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -119,17 +137,17 @@ const SellerForm = () => {
 
                     <div className="flex justify-between">
                         <button
-                        type="button"
-                        className="px-6 py-2 border border-gray-400 rounded-lg text-gray-600 hover:bg-gray-200"
+                            type="button"
+                            className="px-6 py-2 border border-gray-400 rounded-lg text-gray-600 hover:bg-gray-200"
                         >
-                        CANCEL
+                            CANCEL
                         </button>
                         <Link to='/seller-submit'>
                             <button
-                            type="submit"
-                            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                type="submit"
+                                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                             >
-                            SUBMIT
+                                SUBMIT
                             </button>
                         </Link>
                     </div>
