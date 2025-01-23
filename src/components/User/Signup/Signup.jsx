@@ -1,13 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import axios from "../../../Utils/BaseUrl.js";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 const SignupComp = () => {
   const navigate = useNavigate();
-
-  // State for form data and errors
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -17,16 +15,13 @@ const SignupComp = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // Update state on input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Clear the error for the field being modified
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  // Validate the form
   const validateForm = () => {
     const newErrors = {};
     if (!formData.fullName.trim()) {
@@ -53,11 +48,9 @@ const SignupComp = () => {
     return newErrors;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form and check for errors
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -77,8 +70,19 @@ const SignupComp = () => {
         navigate("/login");
       }
     } catch (error) {
-      // Handle API error
-      setErrors({ api: "Signup failed. Try again!" });
+      if (error.response) {
+        const errorMessage = error.response.data.message;
+
+        if (errorMessage === "Email is already used.") {
+          setErrors({ api: "This email is already associated with another account." });
+        } else if (errorMessage === "Mobile number is already used.") {
+          setErrors({ api: "This mobile number is already associated with another account." });
+        } else {
+          setErrors({ api: "Signup failed. Please try again!" });
+        }
+      } else {
+        setErrors({ api: "An unexpected error occurred." });
+      }
     }
   };
 
