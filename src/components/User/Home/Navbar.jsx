@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import {
   Navbar,
   MobileNav,
@@ -35,26 +35,44 @@ import Img4 from '../../../assets/images/brand14.png';
 import Img5 from '../../../assets/images/brand15.png';
 import Img6 from '../../../assets/images/brand16.png';
 
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
  
-// profile menu component
-const profileMenuItems = [
-  {
-    label: "My Profile",
-    icon: UserCircleIcon,
-    path: '/profile'
-  },
-  {
-    label: "Sign Out",
-    icon: PowerIcon,
-    path: '/login'
-  },
-];
+import { logoutUser } from "../../../Redux/Reducer/userReducer";
+import { useDispatch } from "react-redux";
+
+import { useSelector } from 'react-redux';
+
+
  
 function ProfileMenu() {
+
+  const dispatch = useDispatch();
+const navigate =  useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
  
   const closeMenu = () => setIsMenuOpen(false);
+
+  var user = useSelector((state) => state.user);
+  useEffect(() => {
+
+    if (user.token==null) {
+      const token = localStorage.getItem('userAccessToken');
+      console.log(user.token,"......??????")
+      console.log(token, "toooooooooooooooken.....?????");
+      
+    }
+  }, [user]);
+
+
+
+const handleLogout = () => {
+  console.log("logoutt")
+  dispatch(logoutUser()); 
+  closeMenu(); 
+  navigate("/login");
+};
+
+
  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -81,36 +99,51 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon, path }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
-          return (
-            <Link key={label} to={path}>
-            <MenuItem
-              // key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
-              >
-                {label}
-              </Typography>
-            </MenuItem>
-            </Link>
-          );
-        })}
-      </MenuList>
+      {user.token ? (
+  <>
+    <Link to="/profile">
+      <MenuItem
+        onClick={() => console.log("My Profile clicked")}
+        className="flex items-center gap-2 rounded"
+      >
+        <UserCircleIcon className="h-4 w-4" strokeWidth={2} />
+        <Typography as="span" variant="small" className="font-normal">
+          My Profile
+        </Typography>
+      </MenuItem>
+    </Link>
+    <MenuItem
+      onClick={() => {
+        console.log("Sign Out clicked");
+        handleLogout();
+      }}
+      className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+    >
+      <PowerIcon className="h-4 w-4 text-red-500" strokeWidth={2} />
+      <Typography
+        as="span"
+        variant="small"
+        className="font-normal"
+        color="red"
+      >
+        Sign Out
+      </Typography>
+    </MenuItem>
+  </>
+) : (
+  <Link to="/login">
+    <MenuItem onClick={closeMenu} className="flex items-center gap-2 rounded">
+      <Typography as="span" variant="small" className="font-normal">
+        Sign In
+      </Typography>
+    </MenuItem>
+  </Link>
+)}
+
+    
+  
+</MenuList>
+
     </Menu>
   );
 }

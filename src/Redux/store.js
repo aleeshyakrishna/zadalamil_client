@@ -7,7 +7,7 @@
 
 
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./reducer/userReducer"; // Adjust path based on your folder structure
+import userReducer from "./Reducer/userReducer"; // Adjust path based on your folder structure
 
 const store = configureStore({
   reducer: {

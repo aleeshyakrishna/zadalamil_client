@@ -4,8 +4,8 @@ import logo from "../../../assets/images/logo.png";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import axios from "../../../Utils/BaseUrl.js";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { setTokens,setUserDetails } from "../../../Redux/reducer/userReducer.js";
+import { toast } from "react-toastify";
+import { setTokens,setUserDetails } from "../../../Redux/Reducer/userReducer.js";
 import { useDispatch } from "react-redux";
 
 

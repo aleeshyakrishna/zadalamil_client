@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from "react";
 import {
   UserCircleIcon,
@@ -15,14 +17,20 @@ import { DeleteAddressModal } from "../Modal/deleteAddressModal";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from "../../../Utils/BaseUrl.js";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const ProfileComp = () => {
+   const [formData, setFormData] = useState({}); 
+  const [isEditable, setIsEditable] = useState(false); 
+const navigate = useNavigate()
   const [userData, setUserData] = useState({});  
   const [activeTab, setActiveTab] = useState("PROFILE_INFORMATION"); 
   const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
   const [isModalOpenEditAddress, setIsModalOpenEditAddress] = useState(false);
   const [isModalOpenConfirmEdit, setIsModalOpenConfirmEdit] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState("Akhila");
+  // const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
   const [addresses, setAddresses] = useState([]); 
   const [tempEditAddress, setTempEditAddress] = useState(null);
@@ -42,6 +50,28 @@ const ProfileComp = () => {
     }
   }, [user]);
 
+
+const token = useSelector((state) => state.user.token);
+
+  useEffect(() => {
+    if (token) {
+      const token = localStorage.getItem("userAccessToken");
+      axios
+        .get("/api/user/profile", { headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => {
+          setUserData(response.data.profile);
+          setFormData(response.data.profile); 
+          // setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user profile:", error);
+          // setIsLoading(false);
+        });
+    } else {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
   const handleUpdateAddress = (updatedAddress) => {
     setAddresses((prevAddresses) =>
       prevAddresses.map((addr) =>
@@ -57,20 +87,58 @@ const ProfileComp = () => {
     setIsModalOpenEditAddress(true);
   };
 
-  const confirmEditAddress = () => {
-    setIsModalOpenEditAddress(false);
-    setIsModalOpenConfirmEdit(true);
+  // const confirmEditAddress = () => {
+  //   setIsModalOpenEditAddress(false);
+  //   setIsModalOpenConfirmEdit(true);
+  // };
+
+  // const handleSaveAddress = () => {
+  //   console.log("Address saved");
+  //   setIsModalOpenAddAddress(false); 
+  // };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSaveAddress = () => {
-    console.log("Address saved");
-    setIsModalOpenAddAddress(false); 
-  };
+
 
   const handleDeleteAddress = () => {
     console.log("Address deleted");
     setIsModalOpenDeleteAddress(false); 
   };
+
+  const handleUpdateProfile = () => {
+    if (isEditable) {
+      const token = localStorage.getItem("userAccessToken");
+      axios
+        .put(
+          "/api/user/update_profile",
+          formData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((response) => {
+          if (response.data.success) {
+           toast.success("Profile updated!");
+            setUserData(formData); 
+            setIsEditable(false); 
+          } else {
+            toast.error("Try again later!");
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating profile:", error);
+        });
+    } else {
+      setIsEditable(true); 
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 lg:p-52 md:p-52 p-6">
@@ -196,54 +264,64 @@ const ProfileComp = () => {
               PROFILE INFORMATION
             </h2>
             <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
-                <input
-                  type="text"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-                  placeholder="Enter your full name"
-                  value={userData ? userData.name : "Loading..."}
-                  readOnly
-                />
-              </div>
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Name</label>
+    <input
+      type="text"
+      name="name"
+      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      placeholder="Enter your full name"
+      value={formData.name || ""}
+      onChange={handleInputChange}
+      readOnly={!isEditable}
+    />
+  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-                  placeholder="Enter your email"
-                  value={userData ? userData.email : "Loading..."}
-                  readOnly
-                />
-              </div>
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Email</label>
+    <input
+      type="email"
+      name="email"
+      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+      value={formData.email || ""}
+      onChange={handleInputChange}
+      readOnly={!isEditable}
+    />
+  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Phone</label>
-                <input
-                  type="tel"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
-                  placeholder="Enter your phone number"
-                  value={userData ? userData.phone : "Loading..."}
-                  readOnly
-                />
-              </div>
+  <div>
+    <label className="block text-sm font-medium text-gray-700">Phone</label>
+    <input
+      type="tel"
+      name="phone"
+      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
+      value={formData.phone || ""}
+      onChange={handleInputChange}
+      readOnly={!isEditable}
+    />
+  </div>
 
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
-                >
-                  Update
-                </button>
-              </div>
-            </form>
+  <div className="flex justify-end space-x-4">
+    <button
+      type="button"
+      className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900"
+      onClick={() => {
+        setIsEditable(false);
+        setFormData(userData); 
+      }}
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
+      onClick={handleUpdateProfile}
+    >
+      {isEditable ? "Update" : "Edit"}
+    </button>
+  </div>
+</form>
+
           </>
         )}
 
