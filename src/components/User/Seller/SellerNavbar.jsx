@@ -320,12 +320,12 @@ export function NavbarWithMegaMenu() {
     }, []);
  
     return (
-        <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] h-24 fixed">
+        <Navbar className="max-w-none rounded-none z-50 bg-[#f6f6f6] h-20 fixed">
             <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
 
                 <a href="#" className="mr-4 ml-2 cursor-pointer py-1.5">
-                    <Link to='/'><img src={logo} alt="company logo" className="h-12 w-auto"/></Link>
-                    <h1 className="font-semibold">Zad Alamil</h1>
+                    <Link to='/'><img src={logo} alt="company logo" className="h-8 w-auto"/></Link>
+                    <h1 className="font-semibold text-sm -ml-2">Zad Alamil</h1>
                 </a>
                 <div className="hidden lg:block">
                     <NavList />
