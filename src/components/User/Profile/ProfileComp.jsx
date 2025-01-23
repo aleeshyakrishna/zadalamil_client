@@ -15,18 +15,16 @@ import { DeleteAddressModal } from "../Modal/deleteAddressModal";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from "../../../Utils/BaseUrl.js";
-import { Lines } from 'react-preloaders';  // Preloader component
 
 const ProfileComp = () => {
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  const [userData, setUserData] = useState({});  // Fixed typo (uerData -> userData)
+  const [userData, setUserData] = useState({});  
   const [activeTab, setActiveTab] = useState("PROFILE_INFORMATION"); 
   const [isModalOpenAddAddress, setIsModalOpenAddAddress] = useState(false);
   const [isModalOpenEditAddress, setIsModalOpenEditAddress] = useState(false);
   const [isModalOpenConfirmEdit, setIsModalOpenConfirmEdit] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("Akhila");
   const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
-  const [addresses, setAddresses] = useState([]);  // Initialize as empty
+  const [addresses, setAddresses] = useState([]); 
   const [tempEditAddress, setTempEditAddress] = useState(null);
 
   var user = useSelector((state) => state.user.user);
@@ -34,16 +32,12 @@ const ProfileComp = () => {
   useEffect(() => {
     if (user) {
       const token = localStorage.getItem('userAccessToken');
-      console.log(token, "toooooooooooooooken.....?????");
-      // Fetch user profile data
       axios.get('/api/user/profile', { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
-          setUserData(response.data.profile);  // Assuming response.data contains the profile data
-          setIsLoading(false);  // Set loading to false after data is fetched
+          setUserData(response.data.profile); 
         })
         .catch((error) => {
           console.error("Error fetching user profile:", error);
-          setIsLoading(false);  // Set loading to false even if there's an error
         });
     }
   }, [user]);
@@ -79,7 +73,7 @@ const ProfileComp = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 lg:p-72 md:p-52 p-6">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 lg:p-52 md:p-52 p-6">
    
       {/* Sidebar */}
       <aside className="w-full lg:w-64 bg-white shadow-lg p-6 mb-4 lg:mb-0 lg:block flex justify-between items-center mt-28 lg:mt-0 md:mt-0">
@@ -194,13 +188,7 @@ const ProfileComp = () => {
         </ul>
       </aside>
 
-      {/* Main Content */}
 
-      {isLoading ? (
-      <div className="flex justify-center items-center min-h-screen">
-        <Lines color="#B71C1C" /> {/* Preloader shown when loading */}
-      </div>
-    ) : (
       <main className="flex-1 p-6 bg-white shadow-lg rounded-lg">
         {activeTab === "PROFILE_INFORMATION" && (
           <>
@@ -299,9 +287,7 @@ const ProfileComp = () => {
           </>
         )}
       </main>
-    )}
 
-      {/* Modals */}
       <AddAddressModal isOpen={isModalOpenAddAddress} onClose={() => setIsModalOpenAddAddress(false)} />
       <EditAddressModal isOpen={isModalOpenEditAddress} onClose={() => setIsModalOpenEditAddress(false)} address={tempEditAddress} />
       <ConfirmEditAddressModal isOpen={isModalOpenConfirmEdit} onClose={() => setIsModalOpenConfirmEdit(false)} onConfirm={handleUpdateAddress} />

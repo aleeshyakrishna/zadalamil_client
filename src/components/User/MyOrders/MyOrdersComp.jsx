@@ -24,7 +24,7 @@ const MyOrdersComp = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 lg:p-16">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8 lg:p-4">
       <div className="max-w-7xl mx-auto mt-32 md:mt-32 lg:mt-40">
         <h1 className="text-xl md:text-2xl font-bold mb-6 text-center">MY ORDERS</h1>
         <div className="flex justify-between items-center mb-4">
