@@ -40,12 +40,16 @@ import ProductManagementVendorPage from './pages/Vendor/ProductManagementVendorP
 import CategoryManagementVendorPage from './pages/Vendor/CategoryVendorManage.jsx';
 import OrderManagementVendorPage from './pages/Vendor/OrderVendorManage.jsx';
 import OrderDetailsVendorPage from './pages/Vendor/OrderDetailsVendorPage.jsx';
+import Loader from './components/Loader/Loader.jsx';
+import { useSelector } from 'react-redux';
 
 const App = () => {
+  const isLoading = useSelector((state) => state.loader.isLoading);
 
   return (
     <Router>
         <ScrollToTop />
+        { isLoading && <Loader /> }
       <Routes>
 
         {/* USER SIDE */}

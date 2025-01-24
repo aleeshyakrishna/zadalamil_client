@@ -18,7 +18,7 @@ import axios from "../../../Utils/BaseUrl.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { escapeHTML } from "../../../Utils/sanitize.js";
-
+import Loader from "../../Loader/Loader.jsx";
 
 const ProfileComp = () => {
    const [formData, setFormData] = useState({}); 
@@ -33,6 +33,7 @@ const navigate = useNavigate()
   const [isModalOpenDeleteAddress, setIsModalOpenDeleteAddress] = useState(false);
   const [addresses, setAddresses] = useState([]); 
   const [tempEditAddress, setTempEditAddress] = useState(null);
+  const [loading, setLoading] = useState([]);
 
   var user = useSelector((state) => state.user.user);
 
@@ -54,17 +55,18 @@ const token = useSelector((state) => state.user.token);
 
   useEffect(() => {
     if (token) {
+      setLoading(true);
       const token = localStorage.getItem("userAccessToken");
       axios
         .get("/api/user/profile", { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           setUserData(response.data.profile);
           setFormData(response.data.profile); 
-          // setIsLoading(false);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching user profile:", error);
-          // setIsLoading(false);
+          setLoading(false);
         });
     } else {
       navigate("/login");
@@ -147,7 +149,10 @@ const token = useSelector((state) => state.user.token);
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 lg:p-52 md:p-52 p-6">
-   
+      {loading ? (
+        <Loader />
+      ): (
+        <>
       {/* Sidebar */}
       <aside className="w-full lg:w-64 bg-white shadow-lg p-6 mb-4 lg:mb-0 lg:block flex justify-between items-center mt-28 lg:mt-0 md:mt-0">
         <div className="flex flex-col items-center justify-center text-center">
@@ -370,6 +375,8 @@ const token = useSelector((state) => state.user.token);
           </>
         )}
       </main>
+      </>
+      )}
 
       <AddAddressModal isOpen={isModalOpenAddAddress} onClose={() => setIsModalOpenAddAddress(false)} />
       <EditAddressModal isOpen={isModalOpenEditAddress} onClose={() => setIsModalOpenEditAddress(false)} address={tempEditAddress} />

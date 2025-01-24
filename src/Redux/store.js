@@ -7,11 +7,13 @@
 
 
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./Reducer/userReducer"; // Adjust path based on your folder structure
+import userReducer from "./reducer/userReducer";
+import loadReducer from './reducer/loaderSlice';
 
 const store = configureStore({
   reducer: {
-    user: userReducer, // If using combineReducers, use `rootReducer` here
+    user: userReducer, 
+    loader: loadReducer,
   },
 });
 
