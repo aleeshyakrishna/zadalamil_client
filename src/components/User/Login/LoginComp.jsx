@@ -5,7 +5,7 @@ import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import axios from "../../../Utils/BaseUrl.js";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { setTokens,setUserDetails } from "../../../Redux/Reducer/userReducer.js";
+import { setTokens,setUserDetails } from "../../../Redux/reducer/userReducer.js";
 import { useDispatch } from "react-redux";
 
 const LoginComp = () => {

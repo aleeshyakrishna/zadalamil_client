@@ -5,14 +5,17 @@ import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryM
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
 import { Input } from '@material-tailwind/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { addCategory } from '../../../Utils/categoryService.js';
+import { useSelector } from 'react-redux';
+import { toast } from "react-hot-toast";
 
 export default function CategoryTable() {
+    const token = useSelector((state) => state.auth.token);
 
     const [isModalOpenAddCategory, setIsModalOpenAddCategory] = useState(false);
     const [isModalOpenEditCategory, setIsModalOpenEditCategory] = useState(false);
     const [isModalOpenConfirmEditCategory, setIsModalOpenConfirmEditCategory] = useState(false);
     const [isModalOpenDeleteCategory, setIsModalOpenDeleteCategory] = useState(false);
-
 
     const handleUpdateCategory = () => {
         setIsModalOpenEditCategory(false);
@@ -57,9 +60,21 @@ export default function CategoryTable() {
         },
     ];
 
-    const handleSaveCategory = () => {
-        console.log("Category saved");
-        setIsModalOpenAddCategory(false); 
+    const handleSaveCategory = async (categoryName) => {
+        if(token) {
+            try {
+                const response = await addCategory(categoryName, token);
+                console.log("Category saved", response);
+                toast.success("Category added successfully")
+                setIsModalOpenAddCategory(false); 
+            } catch (error) {
+                console.error("Error adding category", error);
+            }
+
+        } else {
+            console.error("No authentication token");
+            
+        }
     };
 
     return (

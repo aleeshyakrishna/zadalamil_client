@@ -19,7 +19,8 @@ import {
 
 import logo from '../../../assets/images/logo.png';
 import login from "../../../assets/images/login.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
  
 // profile menu component
 const profileMenuItems = [
@@ -27,17 +28,19 @@ const profileMenuItems = [
     label: "Admin Profile",
     icon: UserCircleIcon,
   },
-  {
-    label: "Sign Out",
-    icon: PowerIcon,  
-    path: '/admin/admin-login'
-  },
 ];
  
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const navigate = useNavigate();
  
   const closeMenu = () => setIsMenuOpen(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    toast.success("Admin Sign Out Successfully")
+    navigate("/admin/admin-login");
+  };
  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -92,6 +95,19 @@ function ProfileMenu() {
             </Link>
           );
         })}
+
+        <MenuItem
+          onClick={() => {
+            closeMenu();
+            handleLogout();
+          }}
+          className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+        >
+          <PowerIcon className="h-4 w-4 text-red-500" strokeWidth={2} />
+          <Typography as="span" variant="small" color="red" className="font-normal">
+            Sign Out
+          </Typography>
+        </MenuItem>
       </MenuList>
     </Menu>
   );

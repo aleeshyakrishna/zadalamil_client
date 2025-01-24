@@ -36,11 +36,11 @@ import Img5 from '../../../assets/images/brand15.png';
 import Img6 from '../../../assets/images/brand16.png';
 
 import { Link,useNavigate } from 'react-router-dom';
-import { logoutUser } from "../../../Redux/Reducer/userReducer";
+import { logoutUser } from "../../../Redux/reducer/userReducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import axios from "../../../Utils/BaseUrl.js";
-import { setTokens } from "../../../Redux/Reducer/userReducer";
+import { setTokens } from "../../../Redux/reducer/userReducer";
 import { toast } from 'react-hot-toast';
  
 function ProfileMenu() {
