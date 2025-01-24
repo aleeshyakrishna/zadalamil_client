@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.toast-container {
+  background-color: black !important; /* Black background */
+  color: white !important; /* White text */
+}
 
 /* body {
   margin: 0;

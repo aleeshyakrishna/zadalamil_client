@@ -2,7 +2,7 @@ import {  useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import axios from "../../../Utils/BaseUrl.js";
 import { useState } from "react";
-import {  toast } from "react-toastify";
+import {  toast } from "react-hot-toast";
 
 const SignupComp = () => {
   const navigate = useNavigate();

@@ -4,18 +4,12 @@ import logo from "../../../assets/images/logo.png";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import axios from "../../../Utils/BaseUrl.js";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { setTokens,setUserDetails } from "../../../Redux/Reducer/userReducer.js";
 import { useDispatch } from "react-redux";
 
-
 const LoginComp = () => {
-
-
   const dispatch = useDispatch();
-
-
-
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "", server: "" });
   const navigate = useNavigate();
@@ -64,19 +58,15 @@ const LoginComp = () => {
         localStorage.setItem("userAccessToken", token);
         localStorage.setItem("user", JSON.stringify(user));
 
+        dispatch(setUserDetails(response.data.user));
+        console.log(response.data.user,"userdata");
+        dispatch(setTokens(response.data.token));
+        console.log(response.data.token, "token");
 
-          dispatch(setUserDetails(response.data.user));
-          console.log(response.data.user,"userdata");
-          dispatch(setTokens(response.data.token));
-          console.log(response.data.token, "token");
-
-
-
-          toast.success("loggedIn successfully")
-          navigate("/");
+        toast.success("loggedIn successfully")
+        navigate("/");
         }
       } catch (error) {
-
         console.log(error)
         setErrors((prev) => ({
           ...prev,
