@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import {
   UserCircleIcon,
@@ -19,6 +17,7 @@ import { useSelector } from 'react-redux';
 import axios from "../../../Utils/BaseUrl.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { escapeHTML } from "../../../Utils/sanitize.js";
 
 
 const ProfileComp = () => {
@@ -114,17 +113,23 @@ const token = useSelector((state) => state.user.token);
 
   const handleUpdateProfile = () => {
     if (isEditable) {
+      const sanitizedData = {
+        name: escapeHTML(formData.name),
+        email: escapeHTML(formData.email),
+        phone: escapeHTML(formData.phone),
+      };
+
       const token = localStorage.getItem("userAccessToken");
       axios
         .put(
           "/api/user/update_profile",
-          formData,
+          sanitizedData,
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((response) => {
           if (response.data.success) {
            toast.success("Profile updated!");
-            setUserData(formData); 
+            setUserData(sanitizedData); 
             setIsEditable(false); 
           } else {
             toast.error("Try again later!");
@@ -152,10 +157,10 @@ const token = useSelector((state) => state.user.token);
             </span>
           </div>
           <h2 className="text-sm lg:text-lg md:text-lg font-semibold text-gray-800">
-            {userData ? userData.name : "Loading..."}
+            {userData ? escapeHTML(userData.name) : "Loading..."}
           </h2>
           <p className="text-red-900 font-medium text-xs lg:text-sm md:text-sm">
-            {userData ? userData.role : "Loading..."}
+            {userData ? escapeHTML(userData.role) : "Loading..."}
           </p>
         </div>
         <ul className="mt-8 space-y-4 w-full">
@@ -264,63 +269,63 @@ const token = useSelector((state) => state.user.token);
               PROFILE INFORMATION
             </h2>
             <form className="space-y-4">
-  <div>
-    <label className="block text-sm font-medium text-gray-700">Name</label>
-    <input
-      type="text"
-      name="name"
-      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-      placeholder="Enter your full name"
-      value={formData.name || ""}
-      onChange={handleInputChange}
-      readOnly={!isEditable}
-    />
-  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  placeholder="Enter your full name"
+                  value={formData.name || ""}
+                  onChange={handleInputChange}
+                  readOnly={!isEditable}
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700">Email</label>
-    <input
-      type="email"
-      name="email"
-      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
-      value={formData.email || ""}
-      onChange={handleInputChange}
-      readOnly={!isEditable}
-    />
-  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  value={formData.email || ""}
+                  onChange={handleInputChange}
+                  readOnly={!isEditable}
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700">Phone</label>
-    <input
-      type="tel"
-      name="phone"
-      className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
-      value={formData.phone || ""}
-      onChange={handleInputChange}
-      readOnly={!isEditable}
-    />
-  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Phone</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-900"
+                  value={formData.phone || ""}
+                  onChange={handleInputChange}
+                  readOnly={!isEditable}
+                />
+              </div>
 
-  <div className="flex justify-end space-x-4">
-    <button
-      type="button"
-      className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900"
-      onClick={() => {
-        setIsEditable(false);
-        setFormData(userData); 
-      }}
-    >
-      Cancel
-    </button>
-    <button
-      type="button"
-      className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
-      onClick={handleUpdateProfile}
-    >
-      {isEditable ? "Update" : "Edit"}
-    </button>
-  </div>
-</form>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900"
+                  onClick={() => {
+                    setIsEditable(false);
+                    setFormData(userData); 
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-900 text-white rounded-lg hover:bg-red-800"
+                  onClick={handleUpdateProfile}
+                >
+                  {isEditable ? "Update" : "Edit"}
+                </button>
+              </div>
+            </form>
 
           </>
         )}
