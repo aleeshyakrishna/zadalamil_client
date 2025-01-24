@@ -36,43 +36,52 @@ import Img5 from '../../../assets/images/brand15.png';
 import Img6 from '../../../assets/images/brand16.png';
 
 import { Link,useNavigate } from 'react-router-dom';
- 
 import { logoutUser } from "../../../Redux/Reducer/userReducer";
 import { useDispatch } from "react-redux";
-
 import { useSelector } from 'react-redux';
-
-
+import axios from "../../../Utils/BaseUrl.js";
+import { setTokens } from "../../../Redux/Reducer/userReducer";
+import { toast } from 'react-hot-toast';
  
 function ProfileMenu() {
-
   const dispatch = useDispatch();
-const navigate =  useNavigate();
+  const navigate =  useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
   const closeMenu = () => setIsMenuOpen(false);
 
   var user = useSelector((state) => state.user);
-  useEffect(() => {
 
+  useEffect(() => {
     if (user.token==null) {
       const token = localStorage.getItem('userAccessToken');
-      console.log(user.token,"......??????")
-      console.log(token, "toooooooooooooooken.....?????");
-      
+      if (token) {
+        dispatch(setTokens(token));
+      }
     }
-  }, [user]);
+  }, [user, dispatch]);
 
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("userAccessToken");
+      if (!token) {
+        console.error("No token found, unable to log out");
+        return;
+      }
 
-
-const handleLogout = () => {
-  console.log("logoutt")
-  dispatch(logoutUser()); 
-  closeMenu(); 
-  navigate("/login");
-};
-
-
+      await axios.post("/api/user/logout", {}, {
+        headers: {
+          Authorization: `Bearer ${token}` 
+        }
+      });
+      dispatch(logoutUser()); 
+      localStorage.removeItem("userAccessToken");
+      closeMenu(); 
+      toast.success("Sign Out successfully")
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -88,7 +97,6 @@ const handleLogout = () => {
             alt="tania andrew"
             className="border border-gray-900 p-0.5"
             src={login}
-            // src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -139,8 +147,6 @@ const handleLogout = () => {
     </MenuItem>
   </Link>
 )}
-
-    
   
 </MenuList>
 
