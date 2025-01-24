@@ -21,7 +21,7 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory }) {
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Confirm Delete Product</span>
+                    <span className="text-xl font-bold">Confirm Delete Category</span>
                     <Button
                         variant="text"
                         color="black"

@@ -114,6 +114,22 @@ export function SidebarWithBurgerMenu() {
                 </ListItem>
               </Link>
 
+              <Link to='/admin/brand-management'>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <TagIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                      Brand Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
+              </Link>
+
               <Link to='/admin/user-management'>
                 <ListItem className="p-0" selected={open === 1}>
                   <AccordionHeader

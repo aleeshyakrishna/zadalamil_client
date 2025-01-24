@@ -40,6 +40,7 @@ import ProductManagementVendorPage from './pages/Vendor/ProductManagementVendorP
 import CategoryManagementVendorPage from './pages/Vendor/CategoryVendorManage.jsx';
 import OrderManagementVendorPage from './pages/Vendor/OrderVendorManage.jsx';
 import OrderDetailsVendorPage from './pages/Vendor/OrderDetailsVendorPage.jsx';
+import BrandManagement from './pages/Admin/BrandManage.jsx';
 import Loader from './components/Loader/Loader.jsx';
 import { useSelector } from 'react-redux';
 
@@ -85,6 +86,7 @@ const App = () => {
         <Route path='/admin/user-management' element={ <UserManagement />} />
         <Route path='/admin/banner-management' element={ <BannerManagement />} />
         <Route path='/admin/vendor-management' element={ <Vendormanagement />} />
+        <Route path='/admin/brand-management' element={ <BrandManagement />} />
 
 
         {/* SELLER */}
