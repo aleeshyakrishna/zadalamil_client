@@ -40,13 +40,12 @@ const SellerForm = () => {
         if (videoRef.current && canvasRef.current) {
             const canvas = canvasRef.current;
             const context = canvas.getContext("2d");
-            // Set canvas size to match the video element
             canvas.width = videoRef.current.videoWidth;
             canvas.height = videoRef.current.videoHeight;
             context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-            const photo = canvas.toDataURL("image/png"); // Convert canvas to image URL
+            const photo = canvas.toDataURL("image/png");
             setPhotoCaptured(photo);
-            setIsCameraActive(false); // Turn off camera after capturing the photo
+            setIsCameraActive(false);
         }
     };
 
@@ -62,7 +61,6 @@ const SellerForm = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Form Data Submitted:", formData);
-        // Add form submission logic (e.g., send to backend)
       };
 
     return (

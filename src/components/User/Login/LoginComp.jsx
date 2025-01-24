@@ -70,7 +70,7 @@ const LoginComp = () => {
         console.log(error)
         setErrors((prev) => ({
           ...prev,
-          server: "An error occurred. Please try again.",
+          server: "Invalid Credentials. Please try again.",
         }));
       }
     }
