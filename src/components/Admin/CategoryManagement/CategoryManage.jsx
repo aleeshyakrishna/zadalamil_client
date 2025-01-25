@@ -24,7 +24,7 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
-import { addCategory, getCategories } from '../../../Utils/categoryService.js';
+import { addCategory, deleteCategory, getCategories } from '../../../Utils/categoryService.js';
 import { useSelector } from 'react-redux';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
@@ -57,6 +57,7 @@ export default function CategoryTable()  {
     const [isModalOpenConfirmEditCategory, setIsModalOpenConfirmEditCategory] = useState(false);
     const [isModalOpenDeleteCategory, setIsModalOpenDeleteCategory] = useState(false);
     const [loading, setLoading] = useState([]);
+    const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
 
     useEffect(() => {
         if (token) {
@@ -66,6 +67,7 @@ export default function CategoryTable()  {
                     const fetchedCategories = await getCategories(token);
                     const mappedCategories = fetchedCategories.map((cat) => ({
                         categoryName: cat.name, 
+                        categoryId: cat._id,
                         status: cat.status?.toUpperCase() === "LIST" , 
                     }));
     
@@ -91,10 +93,32 @@ export default function CategoryTable()  {
         setIsModalOpenConfirmEditCategory(false); 
     };
 
-    const handleDeleteCategory = () => {
-        console.log("Category deleted");
-        setIsModalOpenDeleteCategory(false); 
+    const openDeleteModal = (categoryId) => {
+        setCategoryIdToDelete(categoryId);
+        setIsModalOpenDeleteCategory(true);
     };
+
+    const handleDeleteCategory = async (categoryId) => {
+        if (!token) {
+            toast.error("No authentication token found");
+            return;
+        }
+        
+        try {
+            // Make the API call to delete the category
+            const response = await deleteCategory(categoryId, token);
+    
+            if (response.success) {
+                setCategories(prevCategories => prevCategories.filter(cat => cat.categoryId  !== categoryId));
+                toast.success("Category deleted successfully");
+                setIsModalOpenDeleteCategory(false); // Close the modal
+            }
+        } catch (error) {
+            toast.error("Failed to delete category");
+            console.error("Error deleting category:", error);
+        }
+    };
+    
 
     const handleSaveCategory = async (categoryName) => {
         if(token) {
@@ -107,15 +131,16 @@ export default function CategoryTable()  {
                 }
 
                 const response = await addCategory(categoryName, token);
-
+                
                 if(response.success) {
-                    setCategories((prevCategories) => [
-                        ...prevCategories,
-                        {
-                            categoryName: response.category.name,
-                            status: response.category.status === "LIST"
-                        }
-                    ]);
+                    const fetchedCategories = await getCategories(token);
+                    const mappedCategories = fetchedCategories.map((cat) => ({
+                        categoryName: cat.name, 
+                        categoryId: cat._id,
+                        status: cat.status?.toUpperCase() === "LIST", 
+                    }));
+    
+                    setCategories(mappedCategories);
                     toast.success("Category added successfully")
                     setIsModalOpenAddCategory(false); 
                 }
@@ -197,7 +222,7 @@ export default function CategoryTable()  {
                         <tbody>
                             { categories.length > 0 ? (
                                 categories.map(
-                                    ({ categoryName, status }, index) => {
+                                    ({ categoryId, categoryName, status }, index) => {
                                     const isLast = index === categories.length - 1;
                                     const classes = isLast
                                         ? "p-4"
@@ -251,7 +276,7 @@ export default function CategoryTable()  {
                                                 <Tooltip content="Delete Category">
                                                     <IconButton variant="text">
                                                         <TrashIcon 
-                                                        onClick={() => setIsModalOpenDeleteCategory(true) }
+                                                        onClick={() => openDeleteModal(categoryId) }
                                                         className="h-4 w-4 text-red-900" />
                                                     </IconButton>
                                                 </Tooltip>
@@ -293,7 +318,8 @@ export default function CategoryTable()  {
                         <DeleteCategoryModal
                             open={isModalOpenDeleteCategory}
                             setOpen={setIsModalOpenDeleteCategory}
-                            deleteCategory={handleDeleteCategory}
+                            deleteCategory={() => handleDeleteCategory(categoryIdToDelete)}
+                            categoryId={categoryIdToDelete}
                         />
                     </table>
                 </CardBody>

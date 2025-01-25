@@ -36,3 +36,20 @@ export const getCategories = async (token, page = 1, limit = 10) => {
         throw error.response?.data?.message || "Something went wrong";
     }
 };
+
+export const deleteCategory = async (categoryId, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.delete(`/api/admin/delete-category/${categoryId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || "Something went wrong";
+    }
+};

@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function DeleteCategoryModal({ open, setOpen, deleteCategory }) {
+export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId  }) {
   return (
     <Dialog
         open={open}
@@ -34,7 +34,7 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory }) {
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the category?</h3>
+                    <h3>Are you sure you want to delete the category:<strong></strong>?</h3>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
@@ -48,7 +48,7 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory }) {
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
-                    onClick={deleteCategory}
+                    onClick={() => deleteCategory(categoryId)}
                 >
                     <span>DELETE</span>
                 </Button>
@@ -62,4 +62,5 @@ DeleteCategoryModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   deleteCategory: PropTypes.func.isRequired,
+  categoryId: PropTypes.string.isRequired,
 };
