@@ -19,3 +19,20 @@ export const addCategory = async (name, token) => {
         throw error.response?.data?.message || "Something went wrong";
     }
 };
+
+export const getCategories = async (token, page = 1, limit = 10) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.get(`/api/admin/get-categories?page=${page}&limit=${limit}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data.categories;
+    } catch (error) {
+        throw error.response?.data?.message || "Something went wrong";
+    }
+};
