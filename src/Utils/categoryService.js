@@ -93,9 +93,30 @@ export const checkCategoryNacheckCategoryNameExists = async (categoryName, token
     const data = await response.json();
     
     if (response.ok) {
-        return { exists: false, message: data.message }; // "Category name is available"
+        return { exists: false, message: data.message };
     } else {
-        return { exists: true, message: data.message }; // "Category name already exists"
+        return { exists: true, message: data.message }; 
     }
 };
+
+export const updateCategoryStatus = async (categoryId, status, token) => {
+    try {
+        const statusValue = status === true ? 'list' : 'unlist';  
+        const response = await api.put(`api/admin/edit-category-status/${categoryId}`, 
+            {
+                status: statusValue,  
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,  
+                }
+            });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error updating category status:', error);
+        throw error;
+    }
+};
+
 

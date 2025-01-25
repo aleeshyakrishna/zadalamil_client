@@ -24,10 +24,11 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
-import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory } from '../../../Utils/categoryService.js';
+import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory, updateCategoryStatus } from '../../../Utils/categoryService.js';
 import { useSelector } from 'react-redux';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
+import { StatusCategoryModal } from '../Modal/Category/StatusCategoryModal.jsx';
 
 const TABS = [
     {
@@ -56,6 +57,7 @@ export default function CategoryTable()  {
     const [isModalOpenEditCategory, setIsModalOpenEditCategory] = useState(false);
     const [isModalOpenConfirmEditCategory, setIsModalOpenConfirmEditCategory] = useState(false);
     const [isModalOpenDeleteCategory, setIsModalOpenDeleteCategory] = useState(false);
+    const [isModalOpenStatusCategory, setIsModalOpenStatusCategory] = useState(false);
     const [loading, setLoading] = useState([]);
     const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -201,6 +203,32 @@ export default function CategoryTable()  {
             toast.error("No authentication token found");
         }
     };
+
+    const handleStatusCategory = async (category) => {
+        if (!token) {
+            toast.error("No authentication token found");
+            return;
+        }
+    
+        try {
+            const newStatus = !category.status;
+            const response = await updateCategoryStatus(category.categoryId, { status: newStatus }, token);
+            
+            if (response.success) {
+                setCategories((prev) =>
+                    prev.map((cat) =>
+                        cat.categoryId === category.categoryId ? { ...cat, status: newStatus } : cat
+                    )
+                );
+                toast.success("Category status updated successfully");
+                setIsModalOpenStatusCategory(false);
+            }
+        } catch (error) {
+            toast.error("Failed to update category status");
+            console.error("Error updating status:", error);
+        }
+    };
+    
     
     return (
         <Card className="h-full w-full">
@@ -305,6 +333,10 @@ export default function CategoryTable()  {
                                                         size="sm"
                                                         value={displayStatus}
                                                         color={chipColor}
+                                                        onClick={() => {
+                                                            setSelectedCategory({ categoryId, categoryName, status }); // Set the selected category for the modal
+                                                            setIsModalOpenStatusCategory(true); // Open the status modal
+                                                        }}
                                                     />
                                                 </div>
                                             </td>
@@ -374,6 +406,14 @@ export default function CategoryTable()  {
                             deleteCategory={() => handleDeleteCategory(categoryIdToDelete)}
                             categoryId={categoryIdToDelete}
                         />
+
+                        <StatusCategoryModal
+                            open={isModalOpenStatusCategory}
+                            setOpen={setIsModalOpenStatusCategory}
+                            category={selectedCategory}
+                            handleStatusChange={handleStatusCategory}
+                        />
+
                     </table>
                 </CardBody>
                 <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
