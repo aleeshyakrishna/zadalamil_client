@@ -94,6 +94,13 @@ export default function CategoryTable()  {
     const handleSaveCategory = async (categoryName) => {
         if(token) {
             try {
+                const isCategoryExist = categories.some(cat => cat.categoryName.toLowerCase() === categoryName.toLowerCase());
+                
+                if(isCategoryExist) {
+                    toast.error("Category already exists");
+                    return;
+                }
+
                 const response = await addCategory(categoryName, token);
 
                 if(response.success) {
@@ -109,7 +116,6 @@ export default function CategoryTable()  {
                 }
             } catch (error) {
                 console.error("Error adding category", error);
-                toast.error("Failed to add category");
             }
 
         } else {
@@ -249,6 +255,7 @@ export default function CategoryTable()  {
                         open={isModalOpenAddCategory}
                         setOpen={setIsModalOpenAddCategory}
                         saveCategory={handleSaveCategory}
+                        categories= {categories}
                     />
 
                     <EditCategoryModal

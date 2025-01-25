@@ -6,16 +6,32 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function AddCategoryModal({ open, setOpen, saveCategory }) {
+export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
     const [categoryName, setCategoryName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        if(open) {
+            setErrorMessage("");
+            setCategoryName("");
+        }
+    }, [open])
 
     const handleSave = () => {
         if (categoryName.trim()) {
-            saveCategory(categoryName);
+            const isCategoryExist = categories.some(
+                (cat) => cat.categoryName.toLowerCase() === categoryName.toLocaleLowerCase()
+            );
+            if(isCategoryExist) {
+                setErrorMessage("Category already exists.");
+            } else {
+                setErrorMessage("");
+                saveCategory(categoryName);
+            }
         } else {
-            console.error("category name is required");
+            setErrorMessage("Category name is required.");
         }
     };
 
@@ -56,6 +72,11 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
                     </div>
+                    {errorMessage && (
+                        <div className='text-red-900 mt-2 text-sm'>
+                            {errorMessage}
+                        </div>
+                    )}
                 </form>
                 </DialogBody>
 
@@ -81,7 +102,8 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
 }
 
 AddCategoryModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  saveCategory: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    saveCategory: PropTypes.func.isRequired,
+    categories: PropTypes.array.isRequired,
 };
