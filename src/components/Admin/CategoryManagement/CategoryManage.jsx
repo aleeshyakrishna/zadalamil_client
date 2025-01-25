@@ -24,7 +24,7 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
-import { addCategory, deleteCategory, getCategories, updateCategory } from '../../../Utils/categoryService.js';
+import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory } from '../../../Utils/categoryService.js';
 import { useSelector } from 'react-redux';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
@@ -48,7 +48,7 @@ const TABLE_HEAD = ["No", "Category Name", "Status", "Edit", "Delete"];
 
    
 export default function CategoryTable()  {
-        const token = useSelector((state) => state.auth.token);
+    const token = useSelector((state) => state.auth.token);
 
     const [categories, setCategories] = useState([]);
 
@@ -84,15 +84,31 @@ export default function CategoryTable()  {
         }
     }, [token]);
     
-    const handleUpdateCategory = (categoryName) => {
-        console.log("Category updated:", categoryName);
-        setIsModalOpenEditCategory(false);
-        setSelectedCategory(prev => ({
-            ...prev,
-            categoryName: categoryName,  
-        }));
-        setIsModalOpenConfirmEditCategory(true); 
+    const handleUpdateCategory = async (categoryName) => {
+        if (!token) {
+            toast.error("No authentication token found");
+            return;
+        }
+    
+        try {
+            const { exists } = await checkCategoryNacheckCategoryNameExists(categoryName, token);
+            if (exists) {
+                return;
+            }
+    
+            console.log("Category name is valid for update:", categoryName);
+            setSelectedCategory((prev) => ({
+                ...prev,
+                categoryName,
+            }));
+            setIsModalOpenEditCategory(false);
+            setIsModalOpenConfirmEditCategory(true);
+        } catch (error) {
+            toast.error("Error validating category name");
+            console.error("Error:", error);
+        }
     };
+    
     
 
     const handleConfirmUpdateCategory = async () => {
@@ -343,6 +359,7 @@ export default function CategoryTable()  {
                             setOpen={setIsModalOpenEditCategory}
                             saveCategory={handleUpdateCategory}
                             categoryData={selectedCategory}
+                            token={token}
                         />
                     
                         <ConfirmEditCategoryModal

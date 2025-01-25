@@ -75,3 +75,27 @@ export const updateCategory = async (categoryId, categoryName, token) => {
         throw error.response?.data?.message || "Something went wrong";
     }
 };
+
+
+
+export const checkCategoryNacheckCategoryNameExists = async (categoryName, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`http://localhost:5001/api/admin/check-category-name/${categoryName}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    const data = await response.json();
+    
+    if (response.ok) {
+        return { exists: false, message: data.message }; // "Category name is available"
+    } else {
+        return { exists: true, message: data.message }; // "Category name already exists"
+    }
+};
+
