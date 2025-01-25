@@ -6,8 +6,22 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useEffect, useState } from 'react';
 
-export function EditCategoryModal({ open, setOpen, saveCategory }) {
+export function EditCategoryModal({ open, setOpen, saveCategory, categoryData  }) {
+    const [categoryName, setCategoryName] = useState("");
+
+    useEffect(() => {
+        console.log("categoryData:", categoryData);
+        if (categoryData) {
+          setCategoryName(categoryData.categoryName || "");
+        }
+      }, [categoryData]);
+    
+      const handleInputChange = (event) => {
+        setCategoryName(event.target.value); 
+      };
+
   return (
     <Dialog
         open={open}
@@ -39,7 +53,8 @@ export function EditCategoryModal({ open, setOpen, saveCategory }) {
                 <div>
                     <input
                         type="text"
-                        placeholder="Category Name"
+                        value={categoryName}  
+                onChange={handleInputChange} 
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
@@ -57,7 +72,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
-                    onClick={saveCategory}
+                    onClick={() => saveCategory(categoryName)}
                 >
                     <span>UPDATE</span>
                 </Button>
@@ -71,4 +86,5 @@ EditCategoryModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   saveCategory: PropTypes.func.isRequired,
+  categoryData: PropTypes.object.isRequired,
 };

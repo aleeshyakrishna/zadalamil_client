@@ -24,7 +24,7 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
-import { addCategory, deleteCategory, getCategories } from '../../../Utils/categoryService.js';
+import { addCategory, deleteCategory, getCategories, updateCategory } from '../../../Utils/categoryService.js';
 import { useSelector } from 'react-redux';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
@@ -58,6 +58,7 @@ export default function CategoryTable()  {
     const [isModalOpenDeleteCategory, setIsModalOpenDeleteCategory] = useState(false);
     const [loading, setLoading] = useState([]);
     const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
         if (token) {
@@ -83,14 +84,46 @@ export default function CategoryTable()  {
         }
     }, [token]);
     
-    const handleUpdateCategory = () => {
+    const handleUpdateCategory = (categoryName) => {
+        console.log("Category updated:", categoryName);
         setIsModalOpenEditCategory(false);
+        setSelectedCategory(prev => ({
+            ...prev,
+            categoryName: categoryName,  
+        }));
         setIsModalOpenConfirmEditCategory(true); 
     };
+    
 
-    const handleConfirmUpdateCategory = () => {
-        console.log("category updated");
-        setIsModalOpenConfirmEditCategory(false); 
+    const handleConfirmUpdateCategory = async () => {
+        if (!token || !selectedCategory) {
+            toast.error("No authentication token or category selected");
+            return;
+        }
+    
+        try {
+            const response = await updateCategory(
+                selectedCategory.categoryId,
+                selectedCategory.categoryName,
+                token
+            );
+    
+            if (response.success) {
+                const fetchedCategories = await getCategories(token);
+                const mappedCategories = fetchedCategories.map((cat) => ({
+                    categoryName: cat.name,
+                    categoryId: cat._id,
+                    status: cat.status?.toUpperCase() === "LIST",
+                }));
+    
+                setCategories(mappedCategories);
+                toast.success("Category updated successfully");
+                setIsModalOpenConfirmEditCategory(false);
+            }
+        } catch (error) {
+            toast.error("Failed to update category");
+            console.error("Error updating category:", error);
+        }
     };
 
     const openDeleteModal = (categoryId) => {
@@ -105,13 +138,12 @@ export default function CategoryTable()  {
         }
         
         try {
-            // Make the API call to delete the category
             const response = await deleteCategory(categoryId, token);
     
             if (response.success) {
                 setCategories(prevCategories => prevCategories.filter(cat => cat.categoryId  !== categoryId));
                 toast.success("Category deleted successfully");
-                setIsModalOpenDeleteCategory(false); // Close the modal
+                setIsModalOpenDeleteCategory(false);
             }
         } catch (error) {
             toast.error("Failed to delete category");
@@ -265,7 +297,10 @@ export default function CategoryTable()  {
                                                 <Tooltip content="Edit Category">
                                                     <IconButton variant="text">
                                                         <PencilIcon 
-                                                        onClick={() => setIsModalOpenEditCategory(true)}
+                                                        onClick={() => {
+                                                            setSelectedCategory({ categoryId, categoryName });
+                                                            setIsModalOpenEditCategory(true);
+                                                        }}
             
                                                         className="h-4 w-4 text-blue-900" />
                                                     </IconButton>
@@ -307,6 +342,7 @@ export default function CategoryTable()  {
                             open={isModalOpenEditCategory}
                             setOpen={setIsModalOpenEditCategory}
                             saveCategory={handleUpdateCategory}
+                            categoryData={selectedCategory}
                         />
                     
                         <ConfirmEditCategoryModal

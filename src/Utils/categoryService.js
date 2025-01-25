@@ -53,3 +53,25 @@ export const deleteCategory = async (categoryId, token) => {
         throw error.response?.data?.message || "Something went wrong";
     }
 };
+
+export const updateCategory = async (categoryId, categoryName, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.put(`/api/admin/edit-category/${categoryId}`, 
+            { name: categoryName },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating category:", error);
+        throw error.response?.data?.message || "Something went wrong";
+    }
+};
