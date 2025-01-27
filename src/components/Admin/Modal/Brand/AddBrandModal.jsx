@@ -10,18 +10,29 @@ import { useEffect, useState } from 'react';
 
 export function AddBrandModal({ open, setOpen, saveBrand }) {
     const [brandName, setBrandName] = useState(""); 
+    const [logo, setLogo] = useState(null);
 
     useEffect(() => {
         if (open) {
             setBrandName(""); 
+            setLogo(null);
         }
     }, [open]);
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setLogo(file);
+        }
+    };
+
     const handleSubmit = () => {
-        const brandData = {
-            name: brandName,
-        };
-        saveBrand(brandData); 
+        const formData = new FormData();
+        formData.append("name", brandName);
+        if (logo) {
+            formData.append("logo", logo);
+        }
+        saveBrand(formData); 
     };
 
     return (
@@ -67,6 +78,7 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg, image/jpg"
+                                onChange={handleFileChange}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
                         </div>

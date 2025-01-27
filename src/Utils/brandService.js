@@ -70,6 +70,7 @@ export const createBrand = async (brandData) => {
         const response = await api.post("/api/admin/create-brand", brandData, {
             headers: {
                 Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             },
         });
 
