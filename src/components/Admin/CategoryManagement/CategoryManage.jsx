@@ -61,20 +61,24 @@ export default function CategoryTable()  {
     const [loading, setLoading] = useState([]);
     const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCategories, setTotalCategories] = useState(0);
+    const categoriesPerPage = 10;
 
     useEffect(() => {
         if (token) {
             setLoading(true);
             const fetchCategories = async () => {
                 try {
-                    const fetchedCategories = await getCategories(token);
+                    const { categories: fetchedCategories, totalCategories: total } = await getCategories(token, currentPage, categoriesPerPage);
                     const mappedCategories = fetchedCategories.map((cat) => ({
-                        categoryName: cat.name, 
+                        categoryName: cat.name,
                         categoryId: cat._id,
-                        status: cat.status?.toUpperCase() === "LIST" , 
+                        status: cat.status?.toUpperCase() === "LIST",
                     }));
-    
+
                     setCategories(mappedCategories);
+                    setTotalCategories(total); 
                     setLoading(false);
                 } catch (error) {
                     toast.error("Failed to fetch categories");
@@ -84,7 +88,19 @@ export default function CategoryTable()  {
             };
             fetchCategories();
         }
-    }, [token]);
+    }, [token, currentPage]);
+
+    const handleNextPage = () => {
+        if (currentPage * categoriesPerPage < totalCategories) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
     
     const handleUpdateCategory = async (categoryName) => {
         if (!token) {
@@ -127,16 +143,23 @@ export default function CategoryTable()  {
             );
     
             if (response.success) {
-                const fetchedCategories = await getCategories(token);
-                const mappedCategories = fetchedCategories.map((cat) => ({
-                    categoryName: cat.name,
-                    categoryId: cat._id,
-                    status: cat.status?.toUpperCase() === "LIST",
-                }));
+                const { categories: fetchedCategories, totalCategories: total  } = await getCategories(token, currentPage, categoriesPerPage);
+                setCategories(fetchedCategories);
+                setTotalCategories(total);
+                
+                if (Array.isArray(fetchedCategories)) {
+                    const mappedCategories = fetchedCategories.map((cat) => ({
+                        categoryName: cat.name,
+                        categoryId: cat._id,
+                        status: cat.status?.toUpperCase() === "LIST",
+                    }));
     
-                setCategories(mappedCategories);
-                toast.success("Category updated successfully");
-                setIsModalOpenConfirmEditCategory(false);
+                    setCategories(mappedCategories);
+                    console.log("Category updated successfully");
+                    setIsModalOpenConfirmEditCategory(false);
+                } else {
+                    console.error("Fetched categories are not in an array format:", fetchedCategories);
+                }
             }
         } catch (error) {
             toast.error("Failed to update category");
@@ -160,6 +183,10 @@ export default function CategoryTable()  {
     
             if (response.success) {
                 setCategories(prevCategories => prevCategories.filter(cat => cat.categoryId  !== categoryId));
+                setTotalCategories(response.totalCategories);
+                if (currentPage * categoriesPerPage >= response.totalCategories) {
+                    setCurrentPage(prevPage => prevPage - 1); 
+                }
                 toast.success("Category deleted successfully");
                 setIsModalOpenDeleteCategory(false);
             }
@@ -183,7 +210,8 @@ export default function CategoryTable()  {
                 const response = await addCategory(categoryName, token);
                 
                 if(response.success) {
-                    const fetchedCategories = await getCategories(token);
+                    const { categories: fetchedCategories, totalCategories: total } = await getCategories(token);
+                    console.log(fetchedCategories);
                     const mappedCategories = fetchedCategories.map((cat) => ({
                         categoryName: cat.name, 
                         categoryId: cat._id,
@@ -191,6 +219,12 @@ export default function CategoryTable()  {
                     }));
     
                     setCategories(mappedCategories);
+                    setTotalCategories(total);
+                    if (currentPage * categoriesPerPage >= total) {
+                        const lastPage = Math.ceil(total / categoriesPerPage);
+                        setCurrentPage(lastPage); // Move to the last page if we're on an out-of-bound page
+                    }
+    
                     toast.success("Category added successfully")
                     setIsModalOpenAddCategory(false); 
                 }
@@ -417,18 +451,18 @@ export default function CategoryTable()  {
                     </table>
                 </CardBody>
                 <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                        Page 1 of 10
-                    </Typography>
-                    <div className="flex gap-2">
-                        <Button variant="outlined" size="sm">
-                        Previous
-                        </Button>
-                        <Button variant="outlined" size="sm">
-                        Next
-                        </Button>
-                    </div>
-                </CardFooter>
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                            Page {currentPage} of {Math.ceil(totalCategories / categoriesPerPage)}
+                        </Typography>
+                        <div className="flex gap-2">
+                            <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                Previous
+                            </Button>
+                            <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage * categoriesPerPage >= totalCategories}>
+                                Next
+                            </Button>
+                        </div>
+                    </CardFooter>
             </>
             )}
         </Card>

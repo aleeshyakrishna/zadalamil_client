@@ -31,7 +31,10 @@ export const getCategories = async (token, page = 1, limit = 10) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return response.data.categories;
+        return {
+            categories: response.data.categories,
+            totalCategories: response.data.totalCategories,
+        };
     } catch (error) {
         throw error.response?.data?.message || "Something went wrong";
     }

@@ -14,7 +14,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory, categoryData, t
     const [validationMessage, setValidationMessage] = useState("");
 
     useEffect(() => {
-        console.log("categoryData:", categoryData);
+        // console.log("categoryData:", categoryData);
         if (categoryData) {
           setCategoryName(categoryData.categoryName || "");
         }
