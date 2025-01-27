@@ -156,6 +156,7 @@ export default function CategoryTable()  {
     
                     setCategories(mappedCategories);
                     console.log("Category updated successfully");
+                    toast.success("Category updated successfully");
                     setIsModalOpenConfirmEditCategory(false);
                 } else {
                     console.error("Fetched categories are not in an array format:", fetchedCategories);
