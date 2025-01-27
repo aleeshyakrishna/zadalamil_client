@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import axios from "../../../Utils/BaseUrl.js";
@@ -13,6 +13,9 @@ const LoginComp = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "", server: "" });
   const navigate = useNavigate();
+  const location = useLocation(); 
+  const message = location.state?.message; 
+
 
   const validateForm = () => {
     let valid = true;
@@ -51,8 +54,6 @@ const LoginComp = () => {
 
           console.log(response.data,"this is the response...>")
 
-
-        // Save token to localStorage
         var token = response.data.token
         var user = response.data.user
         localStorage.setItem("userAccessToken", token);
@@ -91,6 +92,11 @@ const LoginComp = () => {
           <div className="flex justify-center mb-6">
             <img src={logo} alt="Logo" className="h-10" />
           </div>
+
+          { message && (
+            <p className="text-red-900 text-center mb-4 font-medium">{message}</p>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">

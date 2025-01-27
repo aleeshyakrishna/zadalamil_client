@@ -52,13 +52,13 @@ function ProfileMenu() {
   var user = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user.token==null) {
+    if (!user.token) {
       const token = localStorage.getItem('userAccessToken');
       if (token) {
         dispatch(setTokens(token));
       }
     }
-  }, [user, dispatch]);
+  }, [user.token, dispatch]);
 
   const handleLogout = async () => {
     try {
@@ -67,21 +67,37 @@ function ProfileMenu() {
         console.error("No token found, unable to log out");
         return;
       }
-
-      await axios.post("/api/user/logout", {}, {
-        headers: {
-          Authorization: `Bearer ${token}` 
+  
+      await axios.post(
+        "/api/user/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
         }
-      });
-      dispatch(logoutUser()); 
+      );
+  
+      dispatch(logoutUser());
       localStorage.removeItem("userAccessToken");
-      closeMenu(); 
-      toast.success("Sign Out successfully")
+      toast.success("Sign Out successfully");
       navigate("/login");
+      console.log("Sign out successful");
+  
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("Logout error:", error.response?.data || error.message);
+  
+      if (error.response?.data?.message === "Token has expired") {
+        console.warn("Token expired. Forcing logout...");
+        dispatch(logoutUser());
+        localStorage.removeItem("userAccessToken");
+        toast.success("Sign Out successfully");
+        navigate("/login", { state: { message: "Session expired. Please log in again." } });
+
+      }
     }
   };
+  
  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
