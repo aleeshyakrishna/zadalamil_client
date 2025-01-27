@@ -51,16 +51,26 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                 
                 <DialogBody>
                 <form className="items-center">
-                    <label className="text-lg font-medium">Brand Name</label>
+                    <label className="text-sm font-medium">Brand Name</label>
                     <div>
                         <input
                             type="text"
                             placeholder="Brand Name"
                             value={brandName}
                             onChange={(e) => setBrandName(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
                         />
                     </div>
+
+                    <label className="text-sm font-medium mt-4">Logo (PNG, JPG, JPEG)</label>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/png, image/jpeg, image/jpg"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            />
+                        </div>
+
                 </form>
                 </DialogBody>
 
