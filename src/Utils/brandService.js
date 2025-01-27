@@ -80,3 +80,31 @@ export const createBrand = async (brandData) => {
         throw error.response?.data?.message || "Something went wrong while creating the brand.";
     }
 };
+
+export const deleteBrand = async (brandId) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const response = await api.delete(`/api/admin/delete-brand/${brandId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Error deleting brand:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while deleting the brand.";
+    }
+};

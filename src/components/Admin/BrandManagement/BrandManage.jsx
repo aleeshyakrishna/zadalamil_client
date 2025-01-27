@@ -24,7 +24,7 @@ import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
-import { createBrand, fetchBrands } from "../../../Utils/brandService.js";
+import { createBrand, deleteBrand, fetchBrands } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 
@@ -45,29 +45,6 @@ const TABS = [
 
 const TABLE_HEAD = ["No", "Brand Name", "Status", "Edit", "Delete"];
 
-const TABLE_ROWS = [
-    {
-        brandName: "Samsung",
-        status: true,
-    },
-    {
-        brandName: "iPhone",
-        status: true,
-    },
-    {
-        brandName: "Oppo",
-        status: false,
-    },
-    {
-        brandName: "Vivo",
-        status: true,
-    },
-    {
-        brandName: "Huawei",
-        status: true,
-    },
-];
-   
 export default function BrandTable() {
     const [isModalOpenAddBrand, setIsModalOpenAddBrand] = useState(false);
     const [isModalOpenEditBrand, setIsModalOpenEditBrand] = useState(false);
@@ -77,6 +54,8 @@ export default function BrandTable() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [selectedBrandId, setSelectedBrandId] = useState(null); 
+
 
     
     useEffect(() => {
@@ -127,9 +106,17 @@ export default function BrandTable() {
         setIsModalOpenConfirmEditBrand(false); 
     };
 
-    const handleDeleteBrand = () => {
-        console.log("Brand deleted");
-        setIsModalOpenDeleteBrand(false); 
+    const handleDeleteBrand = async (brandId) => {
+        try {
+            const data = await deleteBrand(brandId);
+            console.log("Brand deleted successfully:", data);
+            toast.success("Brand deleted successfully");
+            setIsModalOpenDeleteBrand(false);
+            setBrands((prevBrands) => prevBrands.filter((brand) => brand._id !== brandId));
+        } catch (error) {
+            console.error("Error deleting brand:", error);
+            toast.error("Error deleting brand");
+        }
     };
     
     return (
@@ -200,7 +187,7 @@ export default function BrandTable() {
                     <tbody>
                     {brands.map(
                         (brand, index) => {
-                        const isLast = index === TABLE_ROWS.length - 1;
+                        const isLast = index === brands.length - 1;
                         const classes = isLast
                             ? "p-4"
                             : "p-4 border-b border-blue-gray-50";
@@ -250,7 +237,11 @@ export default function BrandTable() {
                                     <Tooltip content="Delete Brand">
                                         <IconButton variant="text">
                                             <TrashIcon 
-                                            onClick={() => setIsModalOpenDeleteBrand(true) }
+                                            onClick={() => {
+                                                setSelectedBrandId(brand._id);  
+                                                setIsModalOpenDeleteBrand(true); 
+                                            }}
+                            
                                             className="h-4 w-4 text-red-900" />
                                         </IconButton>
                                     </Tooltip>
@@ -281,7 +272,7 @@ export default function BrandTable() {
                     <DeleteBrandModal
                         open={isModalOpenDeleteBrand}
                         setOpen={setIsModalOpenDeleteBrand}
-                        deleteBrand={handleDeleteBrand}
+                        deleteBrand={() => handleDeleteBrand(selectedBrandId)} 
                     />
                 </table>
             </CardBody>
