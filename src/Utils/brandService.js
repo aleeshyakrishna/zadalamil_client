@@ -50,3 +50,32 @@ export const fetchBrands = async (page = 1, limit = 10) => {
         throw error.response?.data?.message || "Something went wrong while fetching brands.";
     }
 };
+
+
+export const createBrand = async (brandData) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const response = await api.post("/api/admin/create-brand", brandData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Error creating brand:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while creating the brand.";
+    }
+};

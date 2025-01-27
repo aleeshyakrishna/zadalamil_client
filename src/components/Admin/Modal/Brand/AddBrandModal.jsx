@@ -6,8 +6,24 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useEffect, useState } from 'react';
 
 export function AddBrandModal({ open, setOpen, saveBrand }) {
+    const [brandName, setBrandName] = useState(""); 
+
+    useEffect(() => {
+        if (open) {
+            setBrandName(""); 
+        }
+    }, [open]);
+
+    const handleSubmit = () => {
+        const brandData = {
+            name: brandName,
+        };
+        saveBrand(brandData); 
+    };
+
     return (
         <Dialog
             open={open}
@@ -40,6 +56,8 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                         <input
                             type="text"
                             placeholder="Brand Name"
+                            value={brandName}
+                            onChange={(e) => setBrandName(e.target.value)}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
                     </div>
@@ -57,7 +75,7 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                     </Button>
                     <Button
                         className='bg-green-900 text-white px-6 py-2 rounded-md'
-                        onClick={saveBrand}
+                        onClick={handleSubmit}
                     >
                         <span>SAVE</span>
                     </Button>

@@ -24,8 +24,9 @@ import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
-import { fetchBrands } from "../../../Utils/brandService.js";
+import { createBrand, fetchBrands } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
+import { toast } from "react-hot-toast";
 
 const TABS = [
     {
@@ -85,6 +86,7 @@ export default function BrandTable() {
                 const data = await fetchBrands(currentPage, 10);
                 setBrands(data.brands);
                 setTotalPages(data.totalPages);
+                
             } catch (error) {
                 console.error("Error loading brands:", error.message);
             } finally {
@@ -103,9 +105,16 @@ export default function BrandTable() {
         if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
 
-    const handleSaveBrand = () => {
-        console.log("Brand saved");
-        setIsModalOpenAddBrand(false); 
+    const handleSaveBrand = async (brandData) => {
+        try {
+            const data = await createBrand(brandData);
+            console.log("Brand created successfully:", data);
+            toast.success("Brand added successfully")
+            setIsModalOpenAddBrand(false);
+            setBrands((prevBrands) => [...prevBrands, data.brand]);
+        } catch (error) {
+            console.error("Error saving brand:", error);
+        }
     };
 
     const handleUpdateBrand = () => {
