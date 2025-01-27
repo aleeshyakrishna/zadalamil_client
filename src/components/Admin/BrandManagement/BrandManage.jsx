@@ -185,71 +185,82 @@ export default function BrandTable() {
                     </tr>
                     </thead>
                     <tbody>
-                    {brands.map(
-                        (brand, index) => {
-                        const isLast = index === brands.length - 1;
-                        const classes = isLast
-                            ? "p-4"
-                            : "p-4 border-b border-blue-gray-50";
-        
-                        return (
-                            <tr key={brand._id}>
-                                <td className="py-3 px-4 text-center">{index + 1}</td>
-                                <td className={classes}>
-                                    <div className="flex items-center gap-3">
-                                        
-                                        <div className="flex flex-col">
-                                            <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal"
-                                            >
-                                            {brand.name}
-                                            </Typography>
+                        { brands.length > 0 ? (
+                            brands.map(
+                            (brand, index) => {
+                            const isLast = index === brands.length - 1;
+                            const classes = isLast
+                                ? "p-4"
+                                : "p-4 border-b border-blue-gray-50";
+            
+                            return (
+                                <tr key={brand._id}>
+                                    <td className="py-3 px-4 text-center">{index + 1}</td>
+                                    <td className={classes}>
+                                        <div className="flex items-center gap-3">
                                             
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                                >
+                                                {brand.name}
+                                                </Typography>
+                                                
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td className={classes}>
-                                    <div className="w-max">
-                                        <Chip
-                                            variant="ghost"
-                                            className="w-16 items-center justify-center"
-                                            size="sm"
-                                            value={brand.status ? "LIST" : "UNLIST"}
-                                            color={brand.status ? "green" : "red"}
-                                        />
-                                    </div>
-                                </td>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="w-max">
+                                            <Chip
+                                                variant="ghost"
+                                                className="w-16 items-center justify-center"
+                                                size="sm"
+                                                value={brand.status ? "LIST" : "UNLIST"}
+                                                color={brand.status ? "green" : "red"}
+                                            />
+                                        </div>
+                                    </td>
 
-                                <td className={classes}>
-                                    <Tooltip content="Edit Brand">
-                                        <IconButton variant="text">
-                                            <PencilIcon 
-                                            onClick={() => setIsModalOpenEditBrand(true)}
+                                    <td className={classes}>
+                                        <Tooltip content="Edit Brand">
+                                            <IconButton variant="text">
+                                                <PencilIcon 
+                                                onClick={() => setIsModalOpenEditBrand(true)}
 
-                                            className="h-4 w-4 text-blue-900" />
-                                        </IconButton>
-                                    </Tooltip>
-                                </td>
+                                                className="h-4 w-4 text-blue-900" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </td>
 
-                                <td className={classes}>
-                                    <Tooltip content="Delete Brand">
-                                        <IconButton variant="text">
-                                            <TrashIcon 
-                                            onClick={() => {
-                                                setSelectedBrandId(brand._id);  
-                                                setIsModalOpenDeleteBrand(true); 
-                                            }}
-                            
-                                            className="h-4 w-4 text-red-900" />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <td className={classes}>
+                                        <Tooltip content="Delete Brand">
+                                            <IconButton variant="text">
+                                                <TrashIcon 
+                                                onClick={() => {
+                                                    setSelectedBrandId(brand._id);  
+                                                    setIsModalOpenDeleteBrand(true); 
+                                                }}
+                                
+                                                className="h-4 w-4 text-red-900" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </td>
+                                </tr>
+                                );
+                                
+                            })
+                        ):(
+                            <tr>
+                                <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                                    <Typography variant="small" color="red" className="font-medium text-md">
+                                        No brands to display
+                                    </Typography>
+
                                 </td>
                             </tr>
-                        );
-                        },
-                    )}
+                        )}
                     </tbody>
                     <AddBrandModal
                         open={isModalOpenAddBrand}

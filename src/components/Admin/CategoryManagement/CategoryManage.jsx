@@ -223,7 +223,7 @@ export default function CategoryTable()  {
                     setTotalCategories(total);
                     if (currentPage * categoriesPerPage >= total) {
                         const lastPage = Math.ceil(total / categoriesPerPage);
-                        setCurrentPage(lastPage); // Move to the last page if we're on an out-of-bound page
+                        setCurrentPage(lastPage); 
                     }
     
                     toast.success("Category added successfully")
@@ -369,8 +369,8 @@ export default function CategoryTable()  {
                                                         value={displayStatus}
                                                         color={chipColor}
                                                         onClick={() => {
-                                                            setSelectedCategory({ categoryId, categoryName, status }); // Set the selected category for the modal
-                                                            setIsModalOpenStatusCategory(true); // Open the status modal
+                                                            setSelectedCategory({ categoryId, categoryName, status });
+                                                            setIsModalOpenStatusCategory(true); 
                                                         }}
                                                     />
                                                 </div>
@@ -406,7 +406,7 @@ export default function CategoryTable()  {
                             ):(
                                 <tr>
                                     <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                                        <Typography variant="small" color="red" className="font-medium text-lg">
+                                        <Typography variant="small" color="red" className="font-medium text-md">
                                             No categories to display
                                         </Typography>
 
