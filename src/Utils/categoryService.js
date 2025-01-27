@@ -104,7 +104,7 @@ export const checkCategoryNacheckCategoryNameExists = async (categoryName, token
 
 export const updateCategoryStatus = async (categoryId, status, token) => {
     try {
-        const statusValue = status === true ? 'list' : 'unlist';  
+        const statusValue = status === 'list' ? 'list' : 'unlist';  
         const response = await api.put(`api/admin/edit-category-status/${categoryId}`, 
             {
                 status: statusValue,  
