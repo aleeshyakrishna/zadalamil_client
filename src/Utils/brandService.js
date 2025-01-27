@@ -108,3 +108,24 @@ export const deleteBrand = async (brandId) => {
         throw error.response?.data?.message || "Something went wrong while deleting the brand.";
     }
 };
+
+export const updateBrandStatus = async (brandId, status, token) => {
+    try {
+        const statusValue = status === 'list' ? 'list' : 'unlist';  
+        const response = await api.put(`/api/admin/edit-brand-status/${brandId}`, 
+            {
+                status: statusValue, 
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,  
+                }
+            });
+
+        return response.data; 
+    } catch (error) {
+        console.error('Error updating brand status:', error);  
+        throw error;  
+    }
+};
+

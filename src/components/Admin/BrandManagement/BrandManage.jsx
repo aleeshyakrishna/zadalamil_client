@@ -56,8 +56,6 @@ export default function BrandTable() {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedBrandId, setSelectedBrandId] = useState(null); 
 
-
-    
     useEffect(() => {
         const loadBrands = async () => {
             setLoading(true);
@@ -217,8 +215,8 @@ export default function BrandTable() {
                                                 variant="ghost"
                                                 className="w-16 items-center justify-center"
                                                 size="sm"
-                                                value={brand.status ? "LIST" : "UNLIST"}
-                                                color={brand.status ? "green" : "red"}
+                                                value={brand.status === "LIST" ? "LIST" : "UNLIST"}
+                                                color={brand.status === "LIST" ? "green" : "red"}
                                             />
                                         </div>
                                     </td>
