@@ -18,12 +18,14 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddBrandModal } from '../Modal/Brand/AddBrandModal.jsx';
 import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
+import { fetchBrands } from "../../../Utils/brandService.js";
+import Loader from "../../Loader/Loader.jsx";
 
 const TABS = [
     {
@@ -70,6 +72,36 @@ export default function BrandTable() {
     const [isModalOpenEditBrand, setIsModalOpenEditBrand] = useState(false);
     const [isModalOpenConfirmEditBrand, setIsModalOpenConfirmEditBrand] = useState(false);
     const [isModalOpenDeleteBrand, setIsModalOpenDeleteBrand] = useState(false);
+    const [brands, setBrands] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    
+    useEffect(() => {
+        const loadBrands = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchBrands(currentPage, 10);
+                setBrands(data.brands);
+                setTotalPages(data.totalPages);
+            } catch (error) {
+                console.error("Error loading brands:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadBrands();
+    }, [currentPage]);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
 
     const handleSaveBrand = () => {
         console.log("Brand saved");
@@ -93,6 +125,10 @@ export default function BrandTable() {
     
     return (
         <Card className="h-full w-full">
+            {loading ? (
+                <Loader />
+            ) : (
+                <>
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
@@ -153,15 +189,15 @@ export default function BrandTable() {
                     </tr>
                     </thead>
                     <tbody>
-                    {TABLE_ROWS.map(
-                        ({ brandName, status }, index) => {
+                    {brands.map(
+                        (brand, index) => {
                         const isLast = index === TABLE_ROWS.length - 1;
                         const classes = isLast
                             ? "p-4"
                             : "p-4 border-b border-blue-gray-50";
         
                         return (
-                            <tr key={brandName}>
+                            <tr key={brand._id}>
                                 <td className="py-3 px-4 text-center">{index + 1}</td>
                                 <td className={classes}>
                                     <div className="flex items-center gap-3">
@@ -172,7 +208,7 @@ export default function BrandTable() {
                                             color="blue-gray"
                                             className="font-normal"
                                             >
-                                            {brandName}
+                                            {brand.name}
                                             </Typography>
                                             
                                         </div>
@@ -184,8 +220,8 @@ export default function BrandTable() {
                                             variant="ghost"
                                             className="w-16 items-center justify-center"
                                             size="sm"
-                                            value={status ? "block" : "unblock"}
-                                            color={status ? "green" : "red"}
+                                            value={brand.status ? "LIST" : "UNLIST"}
+                                            color={brand.status ? "green" : "red"}
                                         />
                                     </div>
                                 </td>
@@ -242,17 +278,19 @@ export default function BrandTable() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography variant="small" color="blue-gray" className="font-normal">
-                    Page 1 of 10
+                    Page {currentPage} of {totalPages}
                 </Typography>
                 <div className="flex gap-2">
-                    <Button variant="outlined" size="sm">
+                    <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
                     Previous
                     </Button>
-                    <Button variant="outlined" size="sm">
+                    <Button variant="outlined" size="sm" onClick={handleNextPage}>
                     Next
                     </Button>
                 </div>
             </CardFooter>
+            </>
+            )}
         </Card>
     );
 }

@@ -21,6 +21,7 @@ const AdminLoginComp = () => {
             if(response.data.success) {
                 dispatch(login(response.data.token));
                 console.log("Token received after login:", response.data.token);
+                localStorage.setItem("authToken", response.data.token);
                 toast.success("Admin LoggedIn Successfully")
                 navigate("/admin/dashboard");
             }
