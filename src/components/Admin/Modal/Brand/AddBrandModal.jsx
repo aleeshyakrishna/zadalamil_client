@@ -11,27 +11,38 @@ import { useEffect, useState } from 'react';
 export function AddBrandModal({ open, setOpen, saveBrand }) {
     const [brandName, setBrandName] = useState(""); 
     const [logo, setLogo] = useState(null);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (open) {
             setBrandName(""); 
             setLogo(null);
+            setError("");
         }
     }, [open]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setLogo(file);
+            const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (validImageTypes.includes(file.type)) {
+                setLogo(file);
+                setError(""); 
+            } else {
+                setLogo(null);
+                setError("Invalid file type. Only PNG, JPG, and JPEG are allowed.");
+            }
         }
     };
 
     const handleSubmit = () => {
+        if (!brandName.trim() || !logo) {
+            setError("Please provide both brand name and logo.");
+            return;
+        }
         const formData = new FormData();
         formData.append("name", brandName);
-        if (logo) {
-            formData.append("logo", logo);
-        }
+        formData.append("logo", logo);
         saveBrand(formData); 
     };
 
@@ -82,6 +93,10 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
                         </div>
+
+                        {error && (
+                            <p className='text-red-900 text-xs mt-2'>{error}</p>
+                        )}
 
                 </form>
                 </DialogBody>
