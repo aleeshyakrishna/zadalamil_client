@@ -24,7 +24,7 @@ import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
-import { createBrand, deleteBrand, fetchBrands, updateBrandStatus } from "../../../Utils/brandService.js";
+import { createBrand, deleteBrand, fetchBrands, updateBrand, updateBrandStatus } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusBrandModal } from "../Modal/Brand/StatusBrandModal.jsx";
@@ -60,6 +60,7 @@ export default function BrandTable() {
     const [selectedBrandId, setSelectedBrandId] = useState(null); 
     const [isModalOpenStatusBrand, setIsModalOpenStatusBrand] = useState(false);
     const [selectedBrand, setSelectedBrand] = useState(null);
+    const [editingBrand, setEditingBrand] = useState(null);
 
 
     useEffect(() => {
@@ -100,14 +101,32 @@ export default function BrandTable() {
         }
     };
 
-    const handleUpdateBrand = () => {
-        setIsModalOpenEditBrand(false);
-        setIsModalOpenConfirmEditBrand(true); 
+    const handleEditBrand = (brand) => {
+        setEditingBrand(brand); 
+        setIsModalOpenEditBrand(true);
     };
 
-    const handleConfirmUpdateBrand = () => {
-        console.log("Brand updated");
-        setIsModalOpenConfirmEditBrand(false); 
+    const handleUpdateBrand = async (brand) => {
+        console.log("brand", brand);
+        setIsModalOpenEditBrand(false); 
+        setIsModalOpenConfirmEditBrand(true);
+    };
+
+    const handleConfirmUpdateBrand = async () => {
+        try {
+            const data = await updateBrand(editingBrand._id, editingBrand); 
+            console.log("Brand updated:", data);
+            toast.success("Brand updated successfully");
+            setBrands((prevBrands) =>
+                prevBrands.map((b) =>
+                    b._id === editingBrand._id ? { ...b, name: editingBrand.name, logo: editingBrand.logo } : b
+                )
+            );
+            setIsModalOpenConfirmEditBrand(false); 
+        } catch (error) {
+            console.error("Error updating brand:", error);
+            toast.error("Failed to update brand");
+        }
     };
 
     const handleDeleteBrand = async (brandId) => {
@@ -258,7 +277,7 @@ export default function BrandTable() {
                                         <Tooltip content="Edit Brand">
                                             <IconButton variant="text">
                                                 <PencilIcon 
-                                                onClick={() => setIsModalOpenEditBrand(true)}
+                                                onClick={() => handleEditBrand(brand)}
                                                 className="h-4 w-4 text-blue-900" />
                                             </IconButton>
                                         </Tooltip>
@@ -301,13 +320,16 @@ export default function BrandTable() {
                     <EditBrandModal
                         open={isModalOpenEditBrand}
                         setOpen={setIsModalOpenEditBrand}
-                        saveBrand={handleUpdateBrand}
+                        saveBrand={() => handleUpdateBrand(editingBrand)}
+                        brand={editingBrand}
+                        setEditingBrand={setEditingBrand}
                     />
                 
                     <ConfirmEditBrandModal
                         open={isModalOpenConfirmEditBrand}
                         setOpen={setIsModalOpenConfirmEditBrand}
                         saveBrand={handleConfirmUpdateBrand} 
+                        brand={editingBrand}
                     />
 
                     <DeleteBrandModal

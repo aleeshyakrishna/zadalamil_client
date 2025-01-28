@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function EditBrandModal({ open, setOpen, saveBrand }) {
+export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBrand }) {
     return (
         <Dialog
             open={open}
@@ -39,7 +39,8 @@ export function EditBrandModal({ open, setOpen, saveBrand }) {
                     <div>
                         <input
                             type="text"
-                            placeholder="Brand Name"
+                            value={brand ? brand.name : ""}
+                                onChange={(e) => setEditingBrand({ ...brand, name: e.target.value })}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
                     </div>
@@ -49,6 +50,7 @@ export function EditBrandModal({ open, setOpen, saveBrand }) {
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg, image/jpg"
+                                onChange={(e) => setEditingBrand({ ...brand, logo: e.target.files[0] })}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
                         </div>
@@ -77,7 +79,9 @@ export function EditBrandModal({ open, setOpen, saveBrand }) {
 }
 
 EditBrandModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  saveBrand: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    saveBrand: PropTypes.func.isRequired,
+    brand: PropTypes.object.isRequired,
+    setEditingBrand: PropTypes.func.isRequired, 
 };

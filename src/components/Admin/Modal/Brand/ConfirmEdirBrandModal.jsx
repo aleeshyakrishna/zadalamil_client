@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function ConfirmEditBrandModal({ open, setOpen, saveBrand }) {
+export function ConfirmEditBrandModal({ open, setOpen, saveBrand, brand }) {
     return (
         <Dialog
             open={open}
@@ -21,7 +21,7 @@ export function ConfirmEditBrandModal({ open, setOpen, saveBrand }) {
             <div className='p-6'>
                 <DialogHeader>
                     <div className="flex justify-between w-full">
-                        <span className="text-xl font-bold">Confirm Update Brand</span>
+                        <span className="text-xl font-bold">Confirm Update Brand: {brand?.name}</span>
                         <Button
                         variant="text"
                         color="black"
@@ -59,7 +59,10 @@ export function ConfirmEditBrandModal({ open, setOpen, saveBrand }) {
 }
 
 ConfirmEditBrandModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  saveBrand: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    saveBrand: PropTypes.func.isRequired,
+    brand: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+    }).isRequired,
 };

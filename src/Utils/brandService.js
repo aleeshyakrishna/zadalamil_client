@@ -122,3 +122,38 @@ export const updateBrandStatus = async (brandId, statusData, token) => {
         throw error; 
     }
 };
+
+export const updateBrand = async (brandId, brandData) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("name", brandData.name);
+        if (brandData.logo) {
+            formData.append("logo", brandData.logo); 
+        }
+
+        const response = await api.put(`/api/admin/update-brand/${brandId}`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",  
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating brand:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while updating the brand.";
+    }
+};
