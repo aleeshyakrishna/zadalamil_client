@@ -216,14 +216,13 @@ export default function BrandTable() {
                         { brands.length > 0 ? (
                             brands.map(
                             (brand, index) => {
-                            const isLast = index === brands.length - 1;
-                            const classes = isLast
-                                ? "p-4"
-                                : "p-4 border-b border-blue-gray-50";
+                                const listingNumber = (currentPage - 1) * 10 + index + 1;
+                                const isLast = index === brands.length - 1;
+                                const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
             
                             return (
                                 <tr key={brand._id}>
-                                    <td className="py-3 px-4 text-center">{index + 1}</td>
+                                    <td className="py-3 px-4 text-center">{listingNumber}</td>
                                     <td className={classes}>
                                         <div className="flex items-center gap-3">
                                             
@@ -243,7 +242,7 @@ export default function BrandTable() {
                                         <div className="w-max">
                                             <Chip
                                                 variant="ghost"
-                                                className="w-16 items-center justify-center"
+                                                className="w-16 items-center justify-center cursor-pointer"
                                                 size="sm"
                                                 value={brand.status}
                                                 color={brand.status === "LIST" ? "green" : "red"}
@@ -315,6 +314,7 @@ export default function BrandTable() {
                         open={isModalOpenDeleteBrand}
                         setOpen={setIsModalOpenDeleteBrand}
                         deleteBrand={() => handleDeleteBrand(selectedBrandId)} 
+                        brand={selectedBrand}
                     />
 
                     <StatusBrandModal
@@ -328,13 +328,13 @@ export default function BrandTable() {
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography variant="small" color="blue-gray" className="font-normal">
-                    Page {currentPage} of {totalPages}
+                  Page {currentPage}
                 </Typography>
                 <div className="flex gap-2">
-                    <Button variant="outlined" size="sm" onClick={handlePreviousPage}>
+                    <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous
                     </Button>
-                    <Button variant="outlined" size="sm" onClick={handleNextPage}>
+                    <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
                     Next
                     </Button>
                 </div>

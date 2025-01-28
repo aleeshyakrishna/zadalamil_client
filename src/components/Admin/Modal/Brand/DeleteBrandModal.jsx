@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function DeleteBrandModal({ open, setOpen, deleteBrand }) {
+export function DeleteBrandModal({ open, setOpen, deleteBrand, brand }) {
     return (
         <Dialog
             open={open}
@@ -21,7 +21,7 @@ export function DeleteBrandModal({ open, setOpen, deleteBrand }) {
             <div className='p-6'>
                 <DialogHeader>
                     <div className="flex justify-between w-full">
-                        <span className="text-xl font-bold">Confirm Delete Brand</span>
+                        <span className="text-xl font-bold">Confirm Delete Brand: {brand?.name}</span>
                         <Button
                             variant="text"
                             color="black"
@@ -62,4 +62,7 @@ DeleteBrandModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   deleteBrand: PropTypes.func.isRequired,
+  brand: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    }).isRequired,
 };

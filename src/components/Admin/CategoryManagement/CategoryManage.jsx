@@ -364,7 +364,7 @@ export default function CategoryTable()  {
                                                 <div className="w-max">
                                                     <Chip
                                                         variant="ghost"
-                                                        className="w-16 items-center justify-center"
+                                                        className="w-16 items-center justify-center cursor-pointer"
                                                         size="sm"
                                                         value={displayStatus}
                                                         color={chipColor}

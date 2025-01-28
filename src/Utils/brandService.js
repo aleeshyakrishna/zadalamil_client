@@ -28,17 +28,14 @@ export const fetchBrands = async (page = 1, limit = 10) => {
 
     try {
         console.log("Fetching brands with token:", token);
-        const response = await api.get("/api/admin/get-brands", {
+        const response = await api.get(`/api/admin/get-brands?page=${page}&limit=${limit}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
-            },
-            params: {
-                page,
-                limit,
             },
         });
 
         console.log("Fetched brands data:", response.data);
+        
 
         return {
             brands: response.data.brands,
