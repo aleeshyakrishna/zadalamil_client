@@ -1,17 +1,17 @@
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../Utils/BaseUrl.js";
-import {  toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const SellerForm = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
     const [isCameraActive, setIsCameraActive] = useState(false);
     const [photoCaptured, setPhotoCaptured] = useState(null); 
     const [stream, setStream] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -27,7 +27,24 @@ const SellerForm = () => {
         description: "",
         licenseDocument: null,
         idDocument: null,
-        livePhoto:null
+        livePhoto: null
+    });
+
+    const [formErrors, setFormErrors] = useState({
+        name: "",
+        ownerName: "",
+        tradeName: "",
+        idNumber: "",
+        licenseNumber: "",
+        issuedDate: "",
+        expiryDate: "",
+        email: "",
+        phone: "",
+        address: "",
+        description: "",
+        licenseDocument: "",
+        idDocument: "",
+        livePhoto: ""
     });
 
     const handleChange = (e) => {
@@ -35,39 +52,133 @@ const SellerForm = () => {
         if (type === "file") {
             setFormData({ ...formData, [name]: files[0] });
         } else {
-            setFormData({ ...formData, [name]: value });
+            // Handle phone number validation during typing
+            if (name === "phone") {
+                if (value.length <= 10) {
+                    setFormData({ ...formData, [name]: value });
+                    // Clear error if phone length is valid
+                    if (value.length === 10) {
+                        setFormErrors((prevErrors) => ({ ...prevErrors, phone: "" }));
+                    }
+                } else {
+                    return; // Prevent more than 10 digits
+                }
+            } else {
+                setFormData({ ...formData, [name]: value });
+            }
         }
     };
 
-    const handleSubmit = async(e) => {
+    const validateForm = () => {
+        const errors = {};
+        let isValid = true;
+    
+        // General field validation
+        Object.keys(formData).forEach((key) => {
+            if (!formData[key] && key !== "licenseDocument" && key !== "idDocument" && key !== "livePhoto") {
+                errors[key] = `${key.replace(/([A-Z])/g, ' $1').toUpperCase()} is required.`;
+                isValid = false;
+            }
+        });
+    
+        // Validate license document, ID document, and live photo
+        if (!formData.licenseDocument) {
+            errors.licenseDocument = "License document is required.";
+            isValid = false;
+        }
+        if (!formData.idDocument) {
+            errors.idDocument = "ID document is required.";
+            isValid = false;
+        }
+        if (!formData.livePhoto) {
+            errors.livePhoto = "Live photo is required.";
+            isValid = false;
+        }
+    
+        // Validate issued and expiry dates
+        if (formData.issuedDate && formData.expiryDate) {
+            const issuedDate = new Date(formData.issuedDate);
+            const expiryDate = new Date(formData.expiryDate);
+            const currentDate = new Date();
+    
+            if (issuedDate > currentDate) {
+                errors.issuedDate = "Issued date should not be in Future.";
+                isValid = false;
+            }
+            if (expiryDate < issuedDate) {
+                errors.expiryDate = "Expiry date should not be before the issued date.";
+                isValid = false;
+            }
+
+            if(expiryDate < currentDate){
+                errors.expiryDate = "Expired license/passport";
+                isValid = false;
+            }
+        }
+    
+        // Validate license number (assuming it should be numeric)
+        if (formData.licenseNumber && !/^\d+$/.test(formData.licenseNumber)) {
+            errors.licenseNumber = "License number must be numeric.";
+            isValid = false;
+        }
+    
+        // Validate ID number (assuming it should be numeric)
+        if (formData.idNumber && !/^\d+$/.test(formData.idNumber)) {
+            errors.idNumber = "ID number must be numeric.";
+            isValid = false;
+        }
+    
+        // Validate mobile number (assuming it should be exactly 10 digits)
+        if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+            errors.phone = "Phone number must be 10 digits.";
+            isValid = false;
+        }
+
+     // Validate email format with stricter validation
+     if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|int|co|io|[a-zA-Z]{2,})$/.test(formData.email)) {
+        errors.email = "Please enter a valid email address.";
+        isValid = false;
+    }
+    
+        setFormErrors(errors);
+        return isValid;
+    };
+    
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) return;
+
+        setLoading(true);
         console.log("Form Data Submitted:::::", formData);
 
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+
         try {
-            const response = await axios.post("/api/user/submit-seller-application", 
-              formData,{
+            const response = await axios.post("/api/user/submit-seller-application", formDataToSend, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
-              }
-            );
-            console.log(response,"this is the signup response..............>>>>")
-            if (response.status === 201) {
-             toast.success("Application sent successfully")
-            navigate("/seller-submit");
-            
-            }
-          } catch (error) {
+            });
 
-            if (error.response) {
-              const errorMessage = error.response.data.message;
-                console.log(error,errorMessage)
-                toast.error(errorMessage)
-           
-            } else {
-                toast.error("An unexpected error occurred.")
+            console.log(response, "this is the signup response..............>>>>");
+            if (response.status === 201) {
+                toast.success("Application sent successfully");
+                navigate("/seller-submit");
             }
-          }
+        } catch (error) {
+            setLoading(false);
+            if (error.response) {
+                const errorMessage = error.response.data.message;
+                toast.error(errorMessage);
+            } else {
+                toast.error("An unexpected error occurred.");
+            }
+        }
     };
 
     const handleStartCamera = async () => {
@@ -91,8 +202,6 @@ const SellerForm = () => {
         setIsCameraActive(false);
     };
 
-   
-
     const handleTakeSnapshot = () => {
         if (videoRef.current && canvasRef.current) {
             const canvas = canvasRef.current;
@@ -100,10 +209,10 @@ const SellerForm = () => {
             canvas.width = videoRef.current.videoWidth;
             canvas.height = videoRef.current.videoHeight;
             context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    
+
             const snapshot = canvas.toDataURL("image/png");
             setPhotoCaptured(snapshot);
-    
+
             const base64Data = snapshot.split(",")[1];
             const binary = atob(base64Data);
             const array = [];
@@ -111,25 +220,31 @@ const SellerForm = () => {
                 array.push(binary.charCodeAt(i));
             }
             const blob = new Blob([new Uint8Array(array)], { type: "image/png" });
-    
+
             // Create a File object
             const livePhotoFile = new File([blob], "livePhoto.png", { type: "image/png" });
-    
+
             setFormData((prevData) => ({
                 ...prevData,
                 livePhoto: livePhotoFile,
             }));
-    
+
             handleStopCamera();
         }
     };
-    
-
 
     const handleRetakePhoto = () => {
         setPhotoCaptured(null);
-        handleStartCamera(); 
+        handleStartCamera();
     };
+
+    useEffect(() => {
+        return () => {
+            if (isCameraActive) {
+                handleStopCamera();
+            }
+        };
+    }, [isCameraActive]);
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] bg-gray-100 py-32 px-8">
@@ -143,7 +258,7 @@ const SellerForm = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {[ 
+                        {[
                             { label: "Name", name: "name" },
                             { label: "Owner's Name", name: "ownerName" },
                             { label: "Trade Name", name: "tradeName" },
@@ -151,7 +266,7 @@ const SellerForm = () => {
                             { label: "License No.", name: "licenseNumber" },
                             { label: "Issued Date", name: "issuedDate", type: "date" },
                             { label: "Expiry Date", name: "expiryDate", type: "date" },
-                            { label: "Email ID", name: "email", type: "email" },
+                            { label: "Email ID", name: "email" },
                             { label: "Phone No.", name: "phone" },
                             { label: "Address", name: "address" },
                             { label: "Description", name: "description" },
@@ -166,11 +281,15 @@ const SellerForm = () => {
                                     value={formData[name]}
                                     onChange={handleChange}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    
                                 />
+                                {formErrors[name] && (
+                                    <p className="text-red-600 text-sm mt-1">{formErrors[name]}</p>
+                                )}
                             </div>
                         ))}
 
-                        {[ 
+                        {[
                             { label: "Upload License Document", name: "licenseDocument" },
                             { label: "Upload National ID/Passport Document", name: "idDocument" },
                         ].map(({ label, name }, index) => (
@@ -184,13 +303,15 @@ const SellerForm = () => {
                                     accept=".pdf,.jpg,.png"
                                     onChange={handleChange}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                                    required
+                                   
                                 />
+                                {formErrors[name] && (
+                                    <p className="text-red-600 text-sm mt-1">{formErrors[name]}</p>
+                                )}
                             </div>
                         ))}
 
                         {/* Camera Section */}
-                        
                         <div className="col-span-2 flex items-center space-x-4 mb-6">
                             <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                                 {photoCaptured ? (
@@ -239,6 +360,9 @@ const SellerForm = () => {
                                     </button>
                                 )}
                             </div>
+                            {formErrors.livePhoto && (
+                                <p className="text-red-600 text-sm mt-1">{formErrors.livePhoto}</p>
+                            )}
                         </div>
                     </div>
 
@@ -252,8 +376,9 @@ const SellerForm = () => {
                         <button
                             type="submit"
                             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                            disabled={loading}
                         >
-                            SUBMIT
+                            {loading ? "Submitting..." : "SUBMIT"}
                         </button>
                     </div>
                 </form>
