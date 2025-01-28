@@ -186,8 +186,8 @@ import Loader from "../../Loader/Loader";
                                         <Chip
                                             variant="ghost"
                                             size="sm"
-                                            value={status ? "unblocked" : "blocked"}
-                                            color={status ? "green" : "blue-gray"}
+                                            value={status}
+                                            color={status === "UNBLOCKED" ? "green" : status === "BLOCKED" ? "red" : "gray"}
                                         />
                                     </div>
                                 </td>
