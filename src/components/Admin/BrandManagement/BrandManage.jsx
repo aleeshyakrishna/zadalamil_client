@@ -24,7 +24,7 @@ import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
-import { createBrand, deleteBrand, fetchBrands, updateBrand, updateBrandStatus } from "../../../Utils/brandService.js";
+import { checkBrandNameExists, createBrand, deleteBrand, fetchBrands, updateBrand, updateBrandStatus } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusBrandModal } from "../Modal/Brand/StatusBrandModal.jsx";
@@ -107,11 +107,28 @@ export default function BrandTable() {
     };
 
     const handleUpdateBrand = async (brand) => {
-        console.log("brand", brand);
-        setIsModalOpenEditBrand(false); 
-        setIsModalOpenConfirmEditBrand(true);
+        if (!token) {
+            console.error("No authentication token found");
+            return;
+        }
+    
+        try {
+            const { exists, message } = await checkBrandNameExists(brand.name, token);
+    
+            if (exists) {
+                setEditingBrand({ ...brand, errorMessage: message });
+                return;
+            }
+    
+            setEditingBrand(brand);
+            setIsModalOpenEditBrand(false);
+            setIsModalOpenConfirmEditBrand(true);
+        } catch (error) {
+            console.error("Error validating brand name:", error.message);
+            setEditingBrand({ ...brand, errorMessage: error.message });
+        }
     };
-
+    
     const handleConfirmUpdateBrand = async () => {
         try {
             const data = await updateBrand(editingBrand._id, editingBrand); 

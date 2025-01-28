@@ -8,6 +8,17 @@ import {
 } from "@material-tailwind/react";
 
 export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBrand }) {
+    const handleSave = () => {
+        if (!brand.name.trim()) {
+            setEditingBrand({
+                ...brand,
+                errorMessage: "Brand name is required",
+            });
+            return;
+        }
+        saveBrand(brand);
+    };
+
     return (
         <Dialog
             open={open}
@@ -39,20 +50,37 @@ export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBran
                     <div>
                         <input
                             type="text"
-                            value={brand ? brand.name : ""}
-                                onChange={(e) => setEditingBrand({ ...brand, name: e.target.value })}
+                            value={brand?.name || ""}
+                                onChange={(e) =>
+                                    setEditingBrand({
+                                        ...brand,
+                                        name: e.target.value,
+                                        errorMessage: "",
+                                    })
+                                }
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
-                    </div>
 
+                            {brand?.errorMessage && (
+                                <p className="text-red-500 text-xs mt-1">
+                                    {brand.errorMessage}
+                                </p>
+                            )}
+                    </div>
                     <label className="text-sm font-medium mt-4">Logo (PNG, JPG, JPEG)</label>
                         <div>
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg, image/jpg"
-                                onChange={(e) => setEditingBrand({ ...brand, logo: e.target.files[0] })}
+                                onChange={(e) =>
+                                    setEditingBrand({
+                                        ...brand,
+                                        logo: e.target.files[0],
+                                    })
+                                }
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
+                            
                         </div>
                 </form>
                 </DialogBody>
@@ -68,7 +96,7 @@ export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBran
                     </Button>
                     <Button
                         className='bg-green-900 text-white px-6 py-2 rounded-md'
-                        onClick={saveBrand}
+                        onClick={handleSave}
                     >
                         <span>UPDATE</span>
                     </Button>

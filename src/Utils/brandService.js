@@ -157,3 +157,31 @@ export const updateBrand = async (brandId, brandData) => {
         throw error.response?.data?.message || "Something went wrong while updating the brand.";
     }
 };
+
+export const checkBrandNameExists = async (brandName, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.get(`/api/admin/check-brand-name/${brandName}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = response.data;
+
+        if (response.status === 200) {
+            return { exists: false, message: data.message };
+        } else {
+            return { exists: true, message: data.message };
+        }
+    } catch (error) {
+        if (error.response && error.response.data) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
+    }
+};
