@@ -15,13 +15,15 @@ import {
     Tabs,
     TabsHeader,
     Tab,
-    Avatar,
+    //Avatar,
     IconButton,
     Tooltip,
   } from "@material-tailwind/react";
 
   import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUsers } from "../../../Utils/adminUsersService";
+import Loader from "../../Loader/Loader";
    
   const TABS = [
     {
@@ -40,46 +42,28 @@ import { useState } from "react";
    
   const TABLE_HEAD = ["No", "Customer", "Email", "Status", "Phone Number", "Delete"];
    
-  const TABLE_ROWS = [
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "John Michael",
-      email: "john@creative-tim.com",
-      status: true,
-      phone: "+9715865985256",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "Alexa Liras",
-      email: "alexa@creative-tim.com",
-      status: false,
-      phone: "+9715865985256",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "Laurent Perrier",
-      email: "laurent@creative-tim.com",
-      status: false,
-      phone: "+9715865985256",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "Michael Levi",
-      email: "michael@creative-tim.com",
-      status: true,
-      phone: "+9715865985256",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "Richard Gran",
-      email: "richard@creative-tim.com",
-      status: false,
-      phone: "+9715865985256",
-    },
-  ];
-   
   export function UserTable() {
         const [isModalOpenDeleteUser, setIsModalOpenDeleteUser] = useState(false);
+        const [users, setUsers] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState("");
+        const [selectedTab, setSelectedTab] = useState("all");
+
+        useEffect(() => {
+            const fetchUsersData = async () => {
+                try {
+                    const usersData = await getUsers(selectedTab);
+                    setUsers(usersData);
+                } catch (err) {
+                    setError("Error fetching users");
+                    console.log(err);
+                    
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchUsersData();
+        }, [selectedTab]);
 
         const handleDeleteUser = () => {
             console.log("User deleted");
@@ -88,6 +72,14 @@ import { useState } from "react";
     
     return (
         <Card className="h-full w-full ">
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <tr>
+                    <td colSpan="6" className="text-center">{error}</td>
+                </tr>
+            ) : (
+                <>
             <CardHeader floated={false} shadow={false} className="rounded-none">
                 <div className="mb-8 flex items-center justify-between gap-8">
                     <div>
@@ -100,7 +92,7 @@ import { useState } from "react";
                     </div>
                 </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                <Tabs value="all" className="w-full md:w-max">
+                <Tabs value={selectedTab} onChange={setSelectedTab} className="w-full md:w-max">
                     <TabsHeader>
                         {TABS.map(({ label, value }) => (
                         <Tab key={value} value={value}>
@@ -141,19 +133,18 @@ import { useState } from "react";
                     </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                            ({ img, name, email, status, phone }, index) => {
-                            const isLast = index === TABLE_ROWS.length - 1;
+                        {users.map(({ _id, name, email, status, phone }, index)  => {
+                            const isLast = index === users.length - 1;
                             const classes = isLast
                                 ? "p-4"
                                 : "p-4 border-b border-blue-gray-50";
             
                             return (
-                                <tr key={name}>
+                                <tr key={_id}>
                                 <td className="py-3 px-4 text-center">{index + 1}</td>
                                 <td className={classes}>
                                     <div className="flex items-center gap-3">
-                                        <Avatar src={img} alt={name} size="sm" />
+                                        {/* <Avatar src={img} alt={name} size="sm" /> */}
                                         <div className="flex flex-col">
                                             <Typography
                                             variant="small"
@@ -225,6 +216,8 @@ import { useState } from "react";
                     </Button>
                 </div>
             </CardFooter>
+            </>
+            )}
 
             <DeleteUserModal
                 open={isModalOpenDeleteUser}
