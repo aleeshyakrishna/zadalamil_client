@@ -13,6 +13,7 @@ const SignupComp = () => {
     confirmPassword: "",
     mobile: "",
   });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -23,9 +24,10 @@ const SignupComp = () => {
   };
 
   const validateForm = () => {
+
     const newErrors = {};
     if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full Name is required.";
+      newErrors.fullName = "Full Name is required...";
     }
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
@@ -46,6 +48,7 @@ const SignupComp = () => {
       newErrors.mobile = "Enter a valid 10-digit mobile number.";
     }
     return newErrors;
+
   };
 
   const handleSubmit = async (e) => {
