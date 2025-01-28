@@ -109,23 +109,19 @@ export const deleteBrand = async (brandId) => {
     }
 };
 
-export const updateBrandStatus = async (brandId, status, token) => {
+export const updateBrandStatus = async (brandId, statusData, token) => {
     try {
-        const statusValue = status === 'list' ? 'list' : 'unlist';  
-        const response = await api.put(`/api/admin/edit-brand-status/${brandId}`, 
-            {
-                status: statusValue, 
-            },
+        const response = await api.put(`/api/admin/edit-brand-status/${brandId}`, statusData,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`,  
-                }
-            });
-
+                    Authorization: `Bearer ${token}`, 
+                    "Content-Type": "application/json",
+                },
+            }
+        );
         return response.data; 
     } catch (error) {
-        console.error('Error updating brand status:', error);  
-        throw error;  
+        console.error("Error updating brand status:", error);
+        throw error; 
     }
 };
-

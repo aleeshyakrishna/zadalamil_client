@@ -24,9 +24,11 @@ import { EditBrandModal } from '../Modal/Brand/EditBrandModal.jsx';
 import { ConfirmEditBrandModal } from '../Modal/Brand/ConfirmEdirBrandModal.jsx';
 import { DeleteBrandModal } from '../Modal/Brand/DeleteBrandModal.jsx';
 import { SiBrandfolder } from "react-icons/si";
-import { createBrand, deleteBrand, fetchBrands } from "../../../Utils/brandService.js";
+import { createBrand, deleteBrand, fetchBrands, updateBrandStatus } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
+import { StatusBrandModal } from "../Modal/Brand/StatusBrandModal.jsx";
+import { useSelector } from "react-redux";
 
 const TABS = [
     {
@@ -46,6 +48,7 @@ const TABS = [
 const TABLE_HEAD = ["No", "Brand Name", "Status", "Edit", "Delete"];
 
 export default function BrandTable() {
+    const token = useSelector((state) => state.auth.token);
     const [isModalOpenAddBrand, setIsModalOpenAddBrand] = useState(false);
     const [isModalOpenEditBrand, setIsModalOpenEditBrand] = useState(false);
     const [isModalOpenConfirmEditBrand, setIsModalOpenConfirmEditBrand] = useState(false);
@@ -55,6 +58,9 @@ export default function BrandTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [selectedBrandId, setSelectedBrandId] = useState(null); 
+    const [isModalOpenStatusBrand, setIsModalOpenStatusBrand] = useState(false);
+    const [selectedBrand, setSelectedBrand] = useState(null);
+
 
     useEffect(() => {
         const loadBrands = async () => {
@@ -116,6 +122,30 @@ export default function BrandTable() {
             toast.error("Error deleting brand");
         }
     };
+
+    const handleStatusBrand = async (brand) => {
+        const updatedStatus = brand.status === "LIST" ? "UNLIST" : "LIST";
+    
+        try {
+            const result = await updateBrandStatus(brand._id, { status: updatedStatus }, token);
+    
+            if (result.success) {
+                setBrands((prevBrands) =>
+                    prevBrands.map((b) =>
+                        b._id === brand._id ? { ...b, status: updatedStatus } : b
+                    )
+                );
+                console.log("Brand status updated successfully!");
+                toast.success("Brand status updated successfully");
+                setIsModalOpenStatusBrand(false);
+            } else {
+                console.error("Failed to update brand status:", result.message);
+            }
+        } catch (err) {
+            console.error("Error updating brand status:", err);
+        }
+    };
+    
     
     return (
         <Card className="h-full w-full">
@@ -215,8 +245,12 @@ export default function BrandTable() {
                                                 variant="ghost"
                                                 className="w-16 items-center justify-center"
                                                 size="sm"
-                                                value={brand.status === "LIST" ? "LIST" : "UNLIST"}
+                                                value={brand.status}
                                                 color={brand.status === "LIST" ? "green" : "red"}
+                                                onClick={() => {
+                                                    setSelectedBrand(brand);
+                                                    setIsModalOpenStatusBrand(true);
+                                                }}
                                             />
                                         </div>
                                     </td>
@@ -226,7 +260,6 @@ export default function BrandTable() {
                                             <IconButton variant="text">
                                                 <PencilIcon 
                                                 onClick={() => setIsModalOpenEditBrand(true)}
-
                                                 className="h-4 w-4 text-blue-900" />
                                             </IconButton>
                                         </Tooltip>
@@ -283,6 +316,14 @@ export default function BrandTable() {
                         setOpen={setIsModalOpenDeleteBrand}
                         deleteBrand={() => handleDeleteBrand(selectedBrandId)} 
                     />
+
+                    <StatusBrandModal
+                        open={isModalOpenStatusBrand}
+                        setOpen={setIsModalOpenStatusBrand}
+                        brand={selectedBrand}
+                        handleStatusChange={handleStatusBrand}
+                    />
+
                 </table>
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
