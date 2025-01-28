@@ -20,10 +20,12 @@ import {
     Tooltip,
   } from "@material-tailwind/react";
 
-  import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
+import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
+import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
+
    
   const TABS = [
     {
@@ -43,6 +45,7 @@ import Loader from "../../Loader/Loader";
   const TABLE_HEAD = ["No", "Customer", "Email", "Status", "Phone Number", "Delete"];
    
   export function UserTable() {
+
         const [isModalOpenDeleteUser, setIsModalOpenDeleteUser] = useState(false);
         const [users, setUsers] = useState([]);
         const [loading, setLoading] = useState(true);
@@ -50,6 +53,9 @@ import Loader from "../../Loader/Loader";
         const [selectedTab, setSelectedTab] = useState("all");
         const [currentPage, setCurrentPage] = useState(1);
         const [totalPages, setTotalPages] = useState(1);
+        const [isModalOpenStatusUser, setIsModalOpenStatusUser] = useState(false);
+        const [selectedUser, setSelectedUser] = useState(null);
+
 
         useEffect(() => {
             const fetchUsersData = async () => {
@@ -82,6 +88,11 @@ import Loader from "../../Loader/Loader";
             console.log("User deleted");
             setIsModalOpenDeleteUser(false); 
         };
+
+        const handleStatusUser = () => {
+
+        }
+        
     
     return (
         <Card className="h-full w-full ">
@@ -188,6 +199,12 @@ import Loader from "../../Loader/Loader";
                                             size="sm"
                                             value={status}
                                             color={status === "UNBLOCKED" ? "green" : status === "BLOCKED" ? "red" : "gray"}
+                                            onClick={() => {
+                                                if (name) {
+                                                    setSelectedUser({ _id, name, email, status, phone });
+                                                    setIsModalOpenStatusUser(true);
+                                                }
+                                            }}
                                         />
                                     </div>
                                 </td>
@@ -238,6 +255,14 @@ import Loader from "../../Loader/Loader";
                 setOpen={setIsModalOpenDeleteUser}
                 deleteUser={handleDeleteUser}
             />
+
+            <StatusUserModal
+                open={isModalOpenStatusUser}
+                setOpen={setIsModalOpenStatusUser}
+                user={selectedUser}
+                handleStatusChange={handleStatusUser}
+            />
+
       </Card>
     );
   }
