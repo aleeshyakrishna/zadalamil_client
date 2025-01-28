@@ -10,7 +10,7 @@ const isTokenValid = (token) => {
     }
 };
 
-export const getUsers = async (status = "all") => {
+export const getUsers = async (status = "all", page = 1, limit = 10) => {
     const token = localStorage.getItem("authToken");
 
     console.log("Token in localStorage:", token);
@@ -27,11 +27,12 @@ export const getUsers = async (status = "all") => {
     }
 
     try {
-        const response = await api.get(`/api/admin/users-list`, {
+        const response = await api.get(`/api/admin/users-list?page=${page}&limit=${limit}`, {
             params: { status },
             headers: { Authorization: `Bearer ${token}` }, 
         });
-        return response.data.data;
+        console.log("API Response:", response.data);
+        return response.data;
     } catch (error) {
         console.error("Error fetching users:", error);
         throw error;

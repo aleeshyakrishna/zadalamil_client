@@ -48,12 +48,17 @@ import Loader from "../../Loader/Loader";
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState("");
         const [selectedTab, setSelectedTab] = useState("all");
+        const [currentPage, setCurrentPage] = useState(1);
+        const [totalPages, setTotalPages] = useState(1);
 
         useEffect(() => {
             const fetchUsersData = async () => {
+                setLoading(true);
                 try {
-                    const usersData = await getUsers(selectedTab);
-                    setUsers(usersData);
+                    const usersData = await getUsers(selectedTab, currentPage, 10);
+                    setUsers(usersData.data);
+                    setTotalPages(usersData.totalPages || 1); 
+
                 } catch (err) {
                     setError("Error fetching users");
                     console.log(err);
@@ -63,7 +68,15 @@ import Loader from "../../Loader/Loader";
                 }
             };
             fetchUsersData();
-        }, [selectedTab]);
+        }, [selectedTab, currentPage]);
+
+        const handleNextPage = () => {
+            if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+        };
+    
+        const handlePreviousPage = () => {
+            if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+        };
 
         const handleDeleteUser = () => {
             console.log("User deleted");
@@ -138,10 +151,11 @@ import Loader from "../../Loader/Loader";
                             const classes = isLast
                                 ? "p-4"
                                 : "p-4 border-b border-blue-gray-50";
+                                const userIndex = (currentPage - 1) * 10 + index + 1;
             
                             return (
                                 <tr key={_id}>
-                                <td className="py-3 px-4 text-center">{index + 1}</td>
+                                <td className="py-3 px-4 text-center">{userIndex}</td>
                                 <td className={classes}>
                                     <div className="flex items-center gap-3">
                                         {/* <Avatar src={img} alt={name} size="sm" /> */}
@@ -205,13 +219,13 @@ import Loader from "../../Loader/Loader";
             </CardBody>
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                 <Typography variant="small" color="blue-gray" className="font-normal">
-                    Page 1 of 10
+                    Page {currentPage}
                 </Typography>
                 <div className="flex gap-2">
-                    <Button variant="outlined" size="sm">
+                    <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
                         Previous
                     </Button>
-                    <Button variant="outlined" size="sm">
+                    <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
                         Next
                     </Button>
                 </div>
