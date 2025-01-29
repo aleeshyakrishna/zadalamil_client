@@ -20,13 +20,13 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { AddBannerModal } from '../Modal/Banner/AddBannerModal.jsx';
-// import { EditBannerModal } from '../Modal/Brand/EditBannerModal.jsx';
-// import { ConfirmEditBannerModal } from '../Modal/Brand/ConfirmEdirBannerModal.jsx';
+import { EditBannerModal } from '../Modal/Banner/EditBannerModal.jsx';
+import { ConfirmEditBannerModal } from '../Modal/Banner/ConfirmEditBannerModal.jsx';
 import { DeleteBannerModal } from "../Modal/Banner/DeleteBannerModal.jsx";
 import { StatusBannerModal } from "../Modal/Banner/StatusBannerModal.jsx";
 import { SiBrandfolder } from "react-icons/si";
 import Loader from "../../Loader/Loader.jsx";
-import { createBanner, deleteBanner, fetchBanners, updateBannerStatus } from "../../../Utils/bannerService.js";
+import { checkBannerNameExists, createBanner, deleteBanner, fetchBanners, updateBanner, updateBannerStatus } from "../../../Utils/bannerService.js";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
@@ -50,8 +50,8 @@ const TABLE_HEAD = ["No", "Banner Name", "Status", "Edit", "Delete"];
 export default function BannerTable() {
     const token = useSelector((state) => state.auth.token);
     const [isModalOpenAddBanner, setIsModalOpenAddBanner] = useState(false);
-    //const [isModalOpenEditBanner, setIsModalOpenEditBanner] = useState(false);
-    //const [isModalOpenConfirmEditBanner, setIsModalOpenConfirmEditBanner] = useState(false);
+    const [isModalOpenEditBanner, setIsModalOpenEditBanner] = useState(false);
+    const [isModalOpenConfirmEditBanner, setIsModalOpenConfirmEditBanner] = useState(false);
     const [isModalOpenDeleteBanner, setIsModalOpenDeleteBanner] = useState(false);
     const [banners, setBanners] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export default function BannerTable() {
     const [selectedBannerId, setSelectedBannerId] = useState(null); 
     const [isModalOpenStatusBanner, setIsModalOpenStatusBanner] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState(null);
-    //const [editingBanner, setEditingBanner] = useState(null);
+    const [editingBanner, setEditingBanner] = useState(null);
 
 
     useEffect(() => {
@@ -104,50 +104,50 @@ export default function BannerTable() {
     };
     
 
-    // const handleEditBanner = (banner) => {
-    //     setEditingBanner(banner); 
-    //     setIsModalOpenEditBanner(true);
-    // };
+    const handleEditBanner = (banner) => {
+        setEditingBanner(banner); 
+        setIsModalOpenEditBanner(true);
+    };
 
-    // const handleUpdateBanner = async (banner) => {
-    //     if (!token) {
-    //         console.error("No authentication token found");
-    //         return;
-    //     }
+    const handleUpdateBanner = async (banner) => {
+        if (!token) {
+            console.error("No authentication token found");
+            return;
+        }
     
-    //     try {
-    //         const { exists, message } = await checkBannerNameExists(banner.name, token);
+        try {
+            const { exists, message } = await checkBannerNameExists(banner.name, token);
     
-    //         if (exists) {
-    //             setEditingBanner({ ...banner, errorMessage: message });
-    //             return;
-    //         }
+            if (exists) {
+                setEditingBanner({ ...banner, errorMessage: message });
+                return;
+            }
     
-    //         setEditingBanner(banner);
-    //         setIsModalOpenEditBanner(false);
-    //         setIsModalOpenConfirmEditBanner(true);
-    //     } catch (error) {
-    //         console.error("Error validating banner name:", error.message);
-    //         setEditingBanner({ ...banner, errorMessage: error.message });
-    //     }
-    // };
+            setEditingBanner(banner);
+            setIsModalOpenEditBanner(false);
+            setIsModalOpenConfirmEditBanner(true);
+        } catch (error) {
+            console.error("Error validating banner name:", error.message);
+            setEditingBanner({ ...banner, errorMessage: error.message });
+        }
+    };
     
-    // const handleConfirmUpdateBanner = async () => {
-    //     try {
-    //         const data = await updateBanner(editingBanner._id, editingBanner); 
-    //         console.log("Banner updated:", data);
-    //         toast.success("Banner updated successfully");
-    //         setBanners((prevBanners) =>
-    //             prevBanners.map((b) =>
-    //                 b._id === editingBanner._id ? { ...b, name: editingBanner.name, logo: editingBanner.logo } : b
-    //             )
-    //         );
-    //         setIsModalOpenConfirmEditBanner(false); 
-    //     } catch (error) {
-    //         console.error("Error updating banner:", error);
-    //         toast.error("Failed to update banner");
-    //     }
-    // };
+    const handleConfirmUpdateBanner = async () => {
+        try {
+            const data = await updateBanner(editingBanner._id, editingBanner); 
+            console.log("Banner updated:", data);
+            toast.success("Banner updated successfully");
+            setBanners((prevBanners) =>
+                prevBanners.map((b) =>
+                    b._id === editingBanner._id ? { ...b, name: editingBanner.name, logo: editingBanner.logo } : b
+                )
+            );
+            setIsModalOpenConfirmEditBanner(false); 
+        } catch (error) {
+            console.error("Error updating banner:", error);
+            toast.error("Failed to update banner");
+        }
+    };
 
     const handleDeleteBanner = async (bannerId) => {
         try {
@@ -298,7 +298,7 @@ export default function BannerTable() {
                                         <Tooltip content="Edit Banner">
                                             <IconButton variant="text">
                                                 <PencilIcon 
-                                                //onClick={() => handleEditBanner(banner)}
+                                                onClick={() => handleEditBanner(banner)}
                                                 className="h-4 w-4 text-blue-900" />
                                             </IconButton>
                                         </Tooltip>
@@ -339,20 +339,20 @@ export default function BannerTable() {
                         saveBanner={handleSaveBanner}
                     />
 
-                    {/* <EditBannerModal
+                    <EditBannerModal
                         open={isModalOpenEditBanner}
                         setOpen={setIsModalOpenEditBanner}
                         saveBanner={() => handleUpdateBanner(editingBanner)}
                         banner={editingBanner}
                         setEditingBanner={setEditingBanner}
-                    /> */}
+                    />
                 
-                    {/* <ConfirmEditBannerModal
+                    <ConfirmEditBannerModal
                         open={isModalOpenConfirmEditBanner}
                         setOpen={setIsModalOpenConfirmEditBanner}
                         saveBanner={handleConfirmUpdateBanner} 
                         banner={editingBanner}
-                    /> */}
+                    />
 
                     <DeleteBannerModal
                         open={isModalOpenDeleteBanner}

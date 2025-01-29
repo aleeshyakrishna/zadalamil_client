@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function ConfirmEditBannerModal({ open, setOpen, saveBanner }) {
+export function ConfirmEditBannerModal({ open, setOpen, saveBanner, banner }) {
   return (
     <Dialog
         open={open}
@@ -21,7 +21,7 @@ export function ConfirmEditBannerModal({ open, setOpen, saveBanner }) {
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Confirm Update Banner</span>
+                    <span className="text-xl font-bold">Confirm Update Banner: {banner?.name}</span>
                     <Button
                     variant="text"
                     color="black"
@@ -62,4 +62,7 @@ ConfirmEditBannerModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   saveBanner: PropTypes.func.isRequired,
+  banner: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+}).isRequired,
 };

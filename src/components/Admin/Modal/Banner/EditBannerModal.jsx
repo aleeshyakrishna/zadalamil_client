@@ -7,7 +7,19 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function EditBannerModal({ open, setOpen, saveBanner }) {
+export function EditBannerModal({ open, setOpen, saveBanner, banner, setEditingBanner }) {
+
+    const handleSave = () => {
+        if (!banner.name.trim()) {
+            setEditingBanner({
+                ...banner,
+                errorMessage: "Banner name is required",
+            });
+            return;
+        }
+        saveBanner(banner);
+    };
+
   return (
     <Dialog
         open={open}
@@ -35,21 +47,40 @@ export function EditBannerModal({ open, setOpen, saveBanner }) {
             
             <DialogBody>
             <form className="items-center">
-                <label className="text-lg font-medium">Banner Head</label>
-                <div className='mb-5'>
-                    <input
-                        type="text"
-                        placeholder="Banner Head"
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
-                </div>
 
                 <label className="text-lg font-medium">Banner Text</label>
                 <div>
                     <input
                         type="text"
-                        placeholder="Banner Text"
+                        value={banner?.name || ""}
+                                onChange={(e) =>
+                                    setEditingBanner({
+                                        ...banner,
+                                        name: e.target.value,
+                                        errorMessage: "",
+                                    })
+                                }
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    {banner?.errorMessage && (
+                                <p className="text-red-500 text-xs mt-1">
+                                    {banner.errorMessage}
+                                </p>
+                            )}
+                </div>
+
+                <label className="text-lg font-medium">Banner Image</label>
+                <div>
+                <input
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                                onChange={(e) =>
+                                    setEditingBanner({
+                                        ...banner,
+                                        logo: e.target.files[0],
+                                    })
+                                }
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
             </form>
@@ -66,7 +97,7 @@ export function EditBannerModal({ open, setOpen, saveBanner }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
-                    onClick={saveBanner}
+                    onClick={handleSave}
                 >
                     <span>UPDATE</span>
                 </Button>
@@ -80,4 +111,6 @@ EditBannerModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   saveBanner: PropTypes.func.isRequired,
+  banner: PropTypes.object.isRequired,
+    setEditingBanner: PropTypes.func.isRequired, 
 };

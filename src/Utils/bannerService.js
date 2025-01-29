@@ -115,3 +115,66 @@ export const deleteBanner = async (bannerId) => {
         throw error.response?.data?.message || "Something went wrong while deleting the banner.";
     }
 };
+
+export const updateBanner = async (bannerId, bannerData) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("name", bannerData.name);
+        if (bannerData.logo) {
+            formData.append("logo", bannerData.logo); 
+        }
+
+        const response = await api.put(`/api/admin/edit-banner/${bannerId}`, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",  
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating banner:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while updating the banner.";
+    }
+};
+
+export const checkBannerNameExists = async (bannerName, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.get(`/api/admin/check-banner-name/${bannerName}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = response.data;
+
+        if (response.status === 200) {
+            return { exists: false, message: data.message };
+        } else {
+            return { exists: true, message: data.message };
+        }
+    } catch (error) {
+        if (error.response && error.response.data) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
+    }
+};
