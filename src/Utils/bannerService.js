@@ -133,8 +133,8 @@ export const updateBanner = async (bannerId, bannerData) => {
     try {
         const formData = new FormData();
         formData.append("name", bannerData.name);
-        if (bannerData.logo) {
-            formData.append("logo", bannerData.logo); 
+        if (bannerData.bannerImage) {
+            formData.append("logo", bannerData.bannerImage); 
         }
 
         const response = await api.put(`/api/admin/edit-banner/${bannerId}`, formData, {

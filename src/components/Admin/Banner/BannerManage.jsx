@@ -115,22 +115,25 @@ export default function BannerTable() {
             return;
         }
     
-        try {
-            const { exists, message } = await checkBannerNameExists(banner.name, token);
-    
-            if (exists) {
-                setEditingBanner({ ...banner, errorMessage: message });
+        if (banner.name !== editingBanner.name) {
+            try {
+                const { exists, message } = await checkBannerNameExists(banner.name, token);
+                if (exists) {
+                    setEditingBanner({ ...banner, errorMessage: message });
+                    return;
+                }
+            } catch (error) {
+                console.error("Error validating banner name:", error.message);
+                setEditingBanner({ ...banner, errorMessage: error.message });
                 return;
             }
-    
-            setEditingBanner(banner);
-            setIsModalOpenEditBanner(false);
-            setIsModalOpenConfirmEditBanner(true);
-        } catch (error) {
-            console.error("Error validating banner name:", error.message);
-            setEditingBanner({ ...banner, errorMessage: error.message });
         }
+    
+        setEditingBanner(banner);
+        setIsModalOpenEditBanner(false);
+        setIsModalOpenConfirmEditBanner(true);
     };
+    
     
     const handleConfirmUpdateBanner = async () => {
         try {
