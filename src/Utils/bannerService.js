@@ -71,9 +71,9 @@ export const fetchBanners = async (page = 1, limit = 10) => {
     }
 };
 
-export const updateBannerStatus = async (banneId, statusData, token) => {
+export const updateBannerStatus = async (bannerId, statusData, token) => {
     try {
-        const response = await api.put(`/api/admin/edit-banner-status/${banneId}`, statusData,
+        const response = await api.put(`/api/admin/edit-banner-status/${bannerId}`, statusData,
             {
                 headers: {
                     Authorization: `Bearer ${token}`, 

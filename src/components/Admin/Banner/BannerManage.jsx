@@ -66,8 +66,10 @@ export default function BannerTable() {
     useEffect(() => {
         const loadBanners = async () => {
             setLoading(true);
+            setBanners([]);
             try {
                 const data = await fetchBanners(currentPage, 10);
+                console.log("Fetched banners response:", data);
                 setBanners(data.banners);
                 setTotalPages(data.totalPages);
                 

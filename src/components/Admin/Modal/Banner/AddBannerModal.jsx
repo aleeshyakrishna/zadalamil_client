@@ -6,13 +6,21 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function AddBannerModal({ open, setOpen, saveBanner }) {
 
     const [bannerName, setBannerName] = useState('');
     const [bannerImg, setBannerImg] = useState(null);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+            if (open) {
+                setBannerName(""); 
+                setBannerImg(null);
+                setError("");
+            }
+        }, [open]);
 
     const handleBannerImageChange = (e) => {
         const file = e.target.files[0];
