@@ -39,5 +39,35 @@ export const fetchBanners = async (page = 1, limit = 10) => {
     }
   };
 
+  export const createBanner = async (bannerData) => {
+    const token = localStorage.getItem("authToken");
 
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("name", bannerData.name);
+        formData.append("bannerImg", bannerData.bannerImg); 
+        
+        const response = await api.post('/api/admin/create-banner', formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        
+        return response.data; 
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
 

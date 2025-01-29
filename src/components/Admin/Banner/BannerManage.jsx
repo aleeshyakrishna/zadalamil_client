@@ -91,14 +91,15 @@ export default function BannerTable() {
     const handleSaveBanner = async (bannerData) => {
         try {
             const data = await createBanner(bannerData);
-            console.log("Banner created successfully:", data);
-            toast.success("Banner added successfully")
+            toast.success("Banner added successfully");
             setIsModalOpenAddBanner(false);
-            setBanners((prevBanners) => [...prevBanners, data.banner]);
+            setBanners((prevBanners) => [...prevBanners, data.banner]); 
         } catch (error) {
             console.error("Error saving banner:", error);
+            toast.error("Error saving banner");
         }
     };
+    
 
     // const handleEditBanner = (banner) => {
     //     setEditingBanner(banner); 

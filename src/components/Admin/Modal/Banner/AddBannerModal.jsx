@@ -6,8 +6,24 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
 export function AddBannerModal({ open, setOpen, saveBanner }) {
+
+    const [bannerName, setBannerName] = useState('');
+    const [bannerImg, setBannerImg] = useState(null);
+
+    const handleBannerImageChange = (e) => {
+        setBannerImg(e.target.files[0]); 
+    };
+
+    const handleSave = () => {
+        if (!bannerName || !bannerImg) {
+            alert("Please provide a banner name and an image");
+            return;
+        }
+        saveBanner({ name: bannerName, bannerImg }); 
+    };
 
   return (
     <Dialog
@@ -42,7 +58,9 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                     <input
                         type="text"
                         name= "name"
-                        placeholder="Banner Text"
+                        placeholder="Banner name"
+                        value={bannerName}
+                                onChange={(e) => setBannerName(e.target.value)}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
@@ -51,6 +69,7 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                 <div>
                 <input
                     type="file"
+                    onChange={handleBannerImageChange}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
@@ -68,7 +87,7 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
-                    onClick={saveBanner}
+                    onClick={handleSave}
                 >
                     <span>SAVE</span>
                 </Button>
