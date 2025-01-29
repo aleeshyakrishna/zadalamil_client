@@ -8,6 +8,7 @@ import {
 } from "@material-tailwind/react";
 
 export function AddBannerModal({ open, setOpen, saveBanner }) {
+
   return (
     <Dialog
         open={open}
@@ -35,19 +36,12 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
             
             <DialogBody>
             <form className="items-center">
-                <label className="text-lg font-medium">Banner Head</label>
-                <div className='mb-6'>
-                    <input
-                        type="text"
-                        placeholder="Banner Heading"
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                    />
-                </div>
 
                 <label className="text-lg font-medium">Banner Text</label>
                 <div className='mb-6'>
                     <input
                         type="text"
+                        name= "name"
                         placeholder="Banner Text"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />

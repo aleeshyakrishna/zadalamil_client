@@ -32,9 +32,12 @@ export const fetchBanners = async (page = 1, limit = 10) => {
             Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Fetched brands data:", response.data);
+      console.log("Fetched banners data:", response.data);
       return await response.data;
     } catch (error) {
       throw new Error(error.message);
     }
   };
+
+
+
