@@ -71,3 +71,19 @@ export const fetchBanners = async (page = 1, limit = 10) => {
     }
 };
 
+export const updateBannerStatus = async (banneId, statusData, token) => {
+    try {
+        const response = await api.put(`/api/admin/edit-banner-status/${banneId}`, statusData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, 
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data; 
+    } catch (error) {
+        console.error("Error updating banne status:", error);
+        throw error; 
+    }
+};

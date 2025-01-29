@@ -23,11 +23,12 @@ import { AddBannerModal } from '../Modal/Banner/AddBannerModal.jsx';
 // import { EditBannerModal } from '../Modal/Brand/EditBannerModal.jsx';
 // import { ConfirmEditBannerModal } from '../Modal/Brand/ConfirmEdirBannerModal.jsx';
 // import { DeleteBannerModal } from '../Modal/Brand/DeleteBannerModal.jsx';
+import { StatusBannerModal } from "../Modal/Banner/StatusBannerModal.jsx";
 import { SiBrandfolder } from "react-icons/si";
 import Loader from "../../Loader/Loader.jsx";
-import { createBanner, fetchBanners } from "../../../Utils/bannerService.js";
+import { createBanner, fetchBanners, updateBannerStatus } from "../../../Utils/bannerService.js";
 import { toast } from "react-hot-toast";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const TABS = [
     {
@@ -47,7 +48,7 @@ const TABS = [
 const TABLE_HEAD = ["No", "Banner Name", "Status", "Edit", "Delete"];
 
 export default function BannerTable() {
-    //const token = useSelector((state) => state.auth.token);
+    const token = useSelector((state) => state.auth.token);
     const [isModalOpenAddBanner, setIsModalOpenAddBanner] = useState(false);
     //const [isModalOpenEditBanner, setIsModalOpenEditBanner] = useState(false);
     //const [isModalOpenConfirmEditBanner, setIsModalOpenConfirmEditBanner] = useState(false);
@@ -57,8 +58,8 @@ export default function BannerTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     //const [selectedBannerId, setSelectedBannerId] = useState(null); 
-    //const [isModalOpenStatusBanner, setIsModalOpenStatusBanner] = useState(false);
-    //const [selectedBanner, setSelectedBanner] = useState(null);
+    const [isModalOpenStatusBanner, setIsModalOpenStatusBanner] = useState(false);
+    const [selectedBanner, setSelectedBanner] = useState(null);
     //const [editingBanner, setEditingBanner] = useState(null);
 
 
@@ -159,28 +160,28 @@ export default function BannerTable() {
     //     }
     // };
 
-    // const handleStatusBanner = async (banner) => {
-    //     const updatedStatus = banner.status === "LIST" ? "UNLIST" : "LIST";
+    const handleStatusBanner = async (banner) => {
+        const updatedStatus = banner.status === "ACTIVATED" ? "DEACTIVATED" : "ACTIVATED";
     
-    //     try {
-    //         const result = await updateBannerStatus(banner._id, { status: updatedStatus }, token);
+        try {
+            const result = await updateBannerStatus(banner._id, { status: updatedStatus }, token);
     
-    //         if (result.success) {
-    //             setBanners((prevBanners) =>
-    //                 prevBanners.map((b) =>
-    //                     b._id === banner._id ? { ...b, status: updatedStatus } : b
-    //                 )
-    //             );
-    //             console.log("Banner status updated successfully!");
-    //             toast.success("Banner status updated successfully");
-    //             setIsModalOpenStatusBanner(false);
-    //         } else {
-    //             console.error("Failed to update banner status:", result.message);
-    //         }
-    //     } catch (err) {
-    //         console.error("Error updating banner status:", err);
-    //     }
-    // };
+            if (result.success) {
+                setBanners((prevBanners) =>
+                    prevBanners.map((b) =>
+                        b._id === banner._id ? { ...b, status: updatedStatus } : b
+                    )
+                );
+                console.log("Banner status updated successfully!");
+                toast.success("Banner status updated successfully");
+                setIsModalOpenStatusBanner(false);
+            } else {
+                console.error("Failed to update banner status:", result.message);
+            }
+        } catch (err) {
+            console.error("Error updating banner status:", err);
+        }
+    };
     
     
     return (
@@ -279,14 +280,14 @@ export default function BannerTable() {
                                         <div className="w-max">
                                             <Chip
                                                 variant="ghost"
-                                                className="w-16 items-center justify-center cursor-pointer"
+                                                className="w-24 items-center justify-center cursor-pointer"
                                                 size="sm"
                                                 value={banner.status}
                                                 color={banner.status === "ACTIVATED" ? "green" : "red"}
-                                                // onClick={() => {
-                                                //     setSelectedBanner(banner);
-                                                //     setIsModalOpenStatusBanner(true);
-                                                // }}
+                                                onClick={() => {
+                                                    setSelectedBanner(banner);
+                                                    setIsModalOpenStatusBanner(true);
+                                                }}
                                             />
                                         </div>
                                     </td>
@@ -358,12 +359,12 @@ export default function BannerTable() {
                         banner={selectedBanner}
                     /> */}
 
-                    {/* <StatusBannerModal
+                    <StatusBannerModal
                         open={isModalOpenStatusBanner}
                         setOpen={setIsModalOpenStatusBanner}
                         banner={selectedBanner}
                         handleStatusChange={handleStatusBanner}
-                    /> */}
+                    />
 
                 </table>
             </CardBody>
