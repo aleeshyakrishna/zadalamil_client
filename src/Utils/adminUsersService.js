@@ -59,3 +59,22 @@ export const updateUserStatus = async (userId, status) => {
         throw error;
     }
 };
+
+export const deleteUser = async (userId) => {
+    const token = localStorage.getItem("authToken");
+
+    if(!token) {
+        console.error("No Authentication token found");
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.delete(`/api/admin/delete-user/${userId}`, {
+            headers: { Authorization: `Bearer ${token}`},
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting user: ", error);
+        throw error;
+    }
+};

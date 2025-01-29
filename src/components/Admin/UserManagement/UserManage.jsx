@@ -22,7 +22,7 @@ import {
 
 import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
 import { useEffect, useState } from "react";
-import { getUsers, updateUserStatus } from "../../../Utils/adminUsersService";
+import { deleteUser, getUsers, updateUserStatus } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
 import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
 import { toast } from "react-hot-toast";
@@ -84,9 +84,21 @@ import { toast } from "react-hot-toast";
             if (currentPage > 1) setCurrentPage((prev) => prev - 1);
         };
 
-        const handleDeleteUser = () => {
-            console.log("User deleted");
-            setIsModalOpenDeleteUser(false); 
+        const handleDeleteUser = async (user) => {
+            if (!user || !user._id) {
+                console.error("Invalid user object:", user);
+                return;
+            }
+            try {
+                await deleteUser(user._id);
+                setUsers((prevUsers) => prevUsers.filter((u) => u._id !== user._id));
+                toast.success("User deleted successfully");
+            } catch (error) {
+                toast.error("Failed to delete user");
+                console.error(error);
+            } finally {
+                setIsModalOpenDeleteUser(false);
+            }
         };
 
         const handleStatusUser = async (userId, currentStatus) => {
@@ -232,7 +244,10 @@ import { toast } from "react-hot-toast";
                                 <td className={classes}>
                                     <Tooltip content="Delete User">
                                     <IconButton 
-                                        onClick={() => setIsModalOpenDeleteUser(true) }
+                                        onClick={() => {
+                                            setSelectedUser({ _id, name, email, status, phone });
+                                            setIsModalOpenDeleteUser(true);
+                                        }}
                                         variant="text"
                                     >
                                         <TrashIcon className="h-4 w-4" />
@@ -265,7 +280,8 @@ import { toast } from "react-hot-toast";
             <DeleteUserModal
                 open={isModalOpenDeleteUser}
                 setOpen={setIsModalOpenDeleteUser}
-                deleteUser={handleDeleteUser}
+                deleteUser={() => handleDeleteUser(selectedUser)} 
+                user={selectedUser}
             />
 
             <StatusUserModal

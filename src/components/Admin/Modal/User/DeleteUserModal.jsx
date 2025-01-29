@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function DeleteUserModal({ open, setOpen, deleteUser }) {
+export function DeleteUserModal({ open, setOpen, deleteUser, user }) {
   return (
     <Dialog
         open={open}
@@ -34,7 +34,7 @@ export function DeleteUserModal({ open, setOpen, deleteUser }) {
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the user?</h3>
+                    <h3>Are you sure you want to delete the user: {user?.name}?</h3>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
@@ -59,7 +59,8 @@ export function DeleteUserModal({ open, setOpen, deleteUser }) {
 }
 
 DeleteUserModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  deleteUser: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    deleteUser: PropTypes.func.isRequired,
+    user: PropTypes.object,
 };
