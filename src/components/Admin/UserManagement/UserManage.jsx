@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import { getUsers, updateUserStatus } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
 import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
-
+import { toast } from "react-hot-toast";
    
   const TABS = [
     {
@@ -99,6 +99,7 @@ import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
                         user._id === userId ? { ...user, status: response.status } : user
                     )
                 );
+                toast.success("User status updated successfully");
                 setIsModalOpenStatusUser(false);
             } catch (error) {
                 console.error("Failed to update user status:", error);

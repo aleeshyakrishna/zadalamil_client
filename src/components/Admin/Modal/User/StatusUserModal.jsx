@@ -8,6 +8,8 @@ import {
 } from "@material-tailwind/react";
 
 export function StatusUserModal({ open, setOpen, user, handleStatusChange   }) {
+    console.log("User::", user);
+    
   return (
     <Dialog
         open={open}
@@ -35,6 +37,8 @@ export function StatusUserModal({ open, setOpen, user, handleStatusChange   }) {
             <DialogBody>
                 <div className="flex justify-between w-full">
                     <h3>Are you sure you want to change the user status?</h3>
+                </div>
+                <div className="flex justify-between w-full mt-4">
                     <h2>
                         Current status: <strong className='text-blue-900'>{user?.status === "UNBLOCKED" ? "UNBLOCKED" : "BLOCKED"}</strong>
                     </h2>

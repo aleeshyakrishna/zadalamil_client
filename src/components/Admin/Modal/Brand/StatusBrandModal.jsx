@@ -35,6 +35,8 @@ export function StatusBrandModal({ open, setOpen, brand, handleStatusChange  }) 
             <DialogBody>
                 <div className="flex justify-between w-full">
                     <h3>Are you sure you want to change the brand status?</h3>
+                </div>
+                <div className="flex justify-between w-full mt-4">
                     <h2>
                         Current status: <strong className='text-blue-900'>{brand?.status === "LIST" ? "LIST" : "UNLIST"}</strong>
                     </h2>

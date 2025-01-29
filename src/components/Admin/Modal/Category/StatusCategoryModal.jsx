@@ -35,8 +35,10 @@ export function StatusCategoryModal({ open, setOpen, category, handleStatusChang
             <DialogBody>
                 <div className="flex justify-between w-full">
                     <h3>Are you sure you want to change the category status?</h3>
+                </div>
+                <div className="flex justify-between w-full mt-4">
                     <h2>
-                        Current status: <strong>{category?.status ? "LIST" : "UNLIST"}</strong>
+                        Current status: <strong className='text-blue-900'>{category?.status ? "LIST" : "UNLIST"}</strong>
                     </h2>
                 </div>
             </DialogBody>
