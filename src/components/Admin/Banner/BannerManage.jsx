@@ -22,11 +22,11 @@ import { useEffect, useState } from "react";
 import { AddBannerModal } from '../Modal/Banner/AddBannerModal.jsx';
 // import { EditBannerModal } from '../Modal/Brand/EditBannerModal.jsx';
 // import { ConfirmEditBannerModal } from '../Modal/Brand/ConfirmEdirBannerModal.jsx';
-// import { DeleteBannerModal } from '../Modal/Brand/DeleteBannerModal.jsx';
+import { DeleteBannerModal } from "../Modal/Banner/DeleteBannerModal.jsx";
 import { StatusBannerModal } from "../Modal/Banner/StatusBannerModal.jsx";
 import { SiBrandfolder } from "react-icons/si";
 import Loader from "../../Loader/Loader.jsx";
-import { createBanner, fetchBanners, updateBannerStatus } from "../../../Utils/bannerService.js";
+import { createBanner, deleteBanner, fetchBanners, updateBannerStatus } from "../../../Utils/bannerService.js";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
@@ -52,12 +52,12 @@ export default function BannerTable() {
     const [isModalOpenAddBanner, setIsModalOpenAddBanner] = useState(false);
     //const [isModalOpenEditBanner, setIsModalOpenEditBanner] = useState(false);
     //const [isModalOpenConfirmEditBanner, setIsModalOpenConfirmEditBanner] = useState(false);
-    //const [isModalOpenDeleteBanner, setIsModalOpenDeleteBanner] = useState(false);
+    const [isModalOpenDeleteBanner, setIsModalOpenDeleteBanner] = useState(false);
     const [banners, setBanners] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    //const [selectedBannerId, setSelectedBannerId] = useState(null); 
+    const [selectedBannerId, setSelectedBannerId] = useState(null); 
     const [isModalOpenStatusBanner, setIsModalOpenStatusBanner] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState(null);
     //const [editingBanner, setEditingBanner] = useState(null);
@@ -147,18 +147,18 @@ export default function BannerTable() {
     //     }
     // };
 
-    // const handleDeleteBanner = async (bannerId) => {
-    //     try {
-    //         const data = await deleteBanner(bannerId);
-    //         console.log("Banner deleted successfully:", data);
-    //         toast.success("Banner deleted successfully");
-    //         setIsModalOpenDeleteBanner(false);
-    //         setBanners((prevBanners) => prevBanners.filter((banner) => banner._id !== bannerId));
-    //     } catch (error) {
-    //         console.error("Error deleting banner:", error);
-    //         toast.error("Error deleting banner");
-    //     }
-    // };
+    const handleDeleteBanner = async (bannerId) => {
+        try {
+            const data = await deleteBanner(bannerId);
+            console.log("Banner deleted successfully:", data);
+            toast.success("Banner deleted successfully");
+            setIsModalOpenDeleteBanner(false);
+            setBanners((prevBanners) => prevBanners.filter((banner) => banner._id !== bannerId));
+        } catch (error) {
+            console.error("Error deleting banner:", error);
+            toast.error("Error deleting banner");
+        }
+    };
 
     const handleStatusBanner = async (banner) => {
         const updatedStatus = banner.status === "ACTIVATED" ? "DEACTIVATED" : "ACTIVATED";
@@ -306,10 +306,10 @@ export default function BannerTable() {
                                         <Tooltip content="Delete Banner">
                                             <IconButton variant="text">
                                                 <TrashIcon 
-                                                // onClick={() => {
-                                                //     setSelectedBannerId(banner._id);  
-                                                //     setIsModalOpenDeleteBanner(true); 
-                                                // }}
+                                                onClick={() => {
+                                                    setSelectedBannerId(banner._id);  
+                                                    setIsModalOpenDeleteBanner(true); 
+                                                }}
                                 
                                                 className="h-4 w-4 text-red-900" />
                                             </IconButton>
@@ -352,12 +352,12 @@ export default function BannerTable() {
                         banner={editingBanner}
                     /> */}
 
-                    {/* <DeleteBannerModal
+                    <DeleteBannerModal
                         open={isModalOpenDeleteBanner}
                         setOpen={setIsModalOpenDeleteBanner}
                         deleteBanner={() => handleDeleteBanner(selectedBannerId)} 
                         banner={selectedBanner}
-                    /> */}
+                    />
 
                     <StatusBannerModal
                         open={isModalOpenStatusBanner}
