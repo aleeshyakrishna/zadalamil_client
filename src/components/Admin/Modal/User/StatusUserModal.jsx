@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function StatusUserModal({ open, setOpen, user  }) {
+export function StatusUserModal({ open, setOpen, user, handleStatusChange   }) {
   return (
     <Dialog
         open={open}
@@ -51,6 +51,7 @@ export function StatusUserModal({ open, setOpen, user  }) {
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
+                    onClick={() => handleStatusChange(user._id, user.status)}
                 >
                     <span>CHANGE</span>
                 </Button>
@@ -64,8 +65,9 @@ StatusUserModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     user: PropTypes.shape({
+        _id: PropTypes.string.isRequired, 
         name: PropTypes.string.isRequired,
         status: PropTypes.string.isRequired,
-        }).isRequired,
-    handleStatusChange: PropTypes.func.isRequired,
+    }).isRequired,
+    handleStatusChange: PropTypes.func.isRequired, 
 };

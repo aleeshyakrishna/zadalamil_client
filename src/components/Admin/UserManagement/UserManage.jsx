@@ -22,7 +22,7 @@ import {
 
 import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
 import { useEffect, useState } from "react";
-import { getUsers } from "../../../Utils/adminUsersService";
+import { getUsers, updateUserStatus } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
 import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
 
@@ -89,11 +89,22 @@ import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
             setIsModalOpenDeleteUser(false); 
         };
 
-        const handleStatusUser = () => {
-
-        }
+        const handleStatusUser = async (userId, currentStatus) => {
+            const newStatus = currentStatus === "UNBLOCKED" ? "blocked" : "unblocked";
         
-    
+            try {
+                const response = await updateUserStatus(userId, newStatus);
+                setUsers((prevUsers) =>
+                    prevUsers.map((user) =>
+                        user._id === userId ? { ...user, status: response.status } : user
+                    )
+                );
+                setIsModalOpenStatusUser(false);
+            } catch (error) {
+                console.error("Failed to update user status:", error);
+            }
+        };
+        
     return (
         <Card className="h-full w-full ">
             {loading ? (
@@ -262,7 +273,6 @@ import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
                 user={selectedUser}
                 handleStatusChange={handleStatusUser}
             />
-
       </Card>
     );
-  }
+}

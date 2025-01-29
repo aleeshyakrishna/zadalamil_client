@@ -38,3 +38,24 @@ export const getUsers = async (status = "all", page = 1, limit = 10) => {
         throw error;
     }
 };
+
+export const updateUserStatus = async (userId, status) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    try {
+        const response = await api.put(
+            `/api/admin/edit-user-status/${userId}`,
+            { status },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error updating user status:", error);
+        throw error;
+    }
+};
