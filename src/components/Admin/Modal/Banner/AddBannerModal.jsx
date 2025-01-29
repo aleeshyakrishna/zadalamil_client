@@ -12,14 +12,26 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
 
     const [bannerName, setBannerName] = useState('');
     const [bannerImg, setBannerImg] = useState(null);
+    const [error, setError] = useState("");
 
     const handleBannerImageChange = (e) => {
-        setBannerImg(e.target.files[0]); 
+        const file = e.target.files[0];
+
+        if (file) {
+            const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (validImageTypes.includes(file.type)) {
+                setBannerImg(file);
+                setError(""); 
+            } else {
+                setBannerImg(null);
+                setError("Invalid file type. Only PNG, JPG, and JPEG are allowed.");
+            }
+        }
     };
 
     const handleSave = () => {
         if (!bannerName || !bannerImg) {
-            alert("Please provide a banner name and an image");
+            setError("Please provide both banner name and image.");
             return;
         }
         saveBanner({ name: bannerName, bannerImg }); 
@@ -73,6 +85,9 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
+                {error && (
+                            <p className='text-red-900 text-xs mt-2'>{error}</p>
+                        )}
             </form>
             </DialogBody>
 
