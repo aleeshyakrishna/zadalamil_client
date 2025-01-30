@@ -183,11 +183,20 @@ export default function CategoryTable()  {
             const response = await deleteCategory(categoryId, token);
     
             if (response.success) {
-                setCategories(prevCategories => prevCategories.filter(cat => cat.categoryId  !== categoryId));
+                setCategories(prevCategories => {
+                    const updatedCategories = prevCategories.filter(cat => cat.categoryId !== categoryId);
+                    
+                    const newTotalCategories = response.totalCategories;
+                    const lastPage = Math.max(1, Math.ceil(newTotalCategories / categoriesPerPage));
+                    
+                    if (updatedCategories.length === 0 && currentPage > 1) {
+                        setCurrentPage(lastPage);
+                    }
+    
+                    return updatedCategories;
+                });
+    
                 setTotalCategories(response.totalCategories);
-                if (currentPage * categoriesPerPage >= response.totalCategories) {
-                    setCurrentPage(prevPage => prevPage - 1); 
-                }
                 toast.success("Category deleted successfully");
                 setIsModalOpenDeleteCategory(false);
             }
@@ -196,6 +205,7 @@ export default function CategoryTable()  {
             console.error("Error deleting category:", error);
         }
     };
+    
     
 
     const handleSaveCategory = async (categoryName) => {
