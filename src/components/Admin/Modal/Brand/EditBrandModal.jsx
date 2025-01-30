@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBrand }) {
+export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBrand, existingBrands=[] }) {
     const handleSave = () => {
         if (!brand.name.trim()) {
             setEditingBrand({
@@ -16,8 +16,26 @@ export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBran
             });
             return;
         }
+        const isDuplicate = existingBrands.some(
+            (existingBrand) =>
+                existingBrand.name === brand.name && existingBrand._id !== brand._id
+        );
+    
+        if (isDuplicate) {
+            setEditingBrand({
+                ...brand,
+                errorMessage: "This brand name already exists.",
+            });
+            return;
+        }
+    
+        setEditingBrand({
+            ...brand,
+            errorMessage: "",
+        });
+    
         saveBrand(brand);
-    };
+    };      
 
     return (
         <Dialog
@@ -112,4 +130,5 @@ EditBrandModal.propTypes = {
     saveBrand: PropTypes.func.isRequired,
     brand: PropTypes.object.isRequired,
     setEditingBrand: PropTypes.func.isRequired, 
+    existingBrands: PropTypes.array.isRequired,
 };

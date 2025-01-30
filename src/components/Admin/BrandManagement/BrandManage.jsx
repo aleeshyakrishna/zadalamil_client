@@ -106,28 +106,56 @@ export default function BrandTable() {
         setIsModalOpenEditBrand(true);
     };
 
+    // const handleUpdateBrand = async (brand) => {
+    //         if (!token) {
+    //             console.error("No authentication token found");
+    //             return;
+    //         }
+        
+    //         if (brand.name !== editingBrand.name) {
+    //             try {
+    //                 const { exists, message } = await checkBrandNameExists(brand.name, token);
+    //                 if (exists) {
+    //                     setEditingBrand({ ...brand, errorMessage: message });
+    //                     return;
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error validating brand name:", error.message);
+    //                 setEditingBrand({ ...brand, errorMessage: error.message });
+    //                 return;
+    //             }
+    //         }
+        
+    //         setEditingBrand(brand);
+    //         setIsModalOpenEditBrand(false);
+    //         setIsModalOpenConfirmEditBrand(true);
+    //     };
+
     const handleUpdateBrand = async (brand) => {
         if (!token) {
             console.error("No authentication token found");
             return;
         }
     
-        try {
-            const { exists, message } = await checkBrandNameExists(brand.name, token);
-    
-            if (exists) {
-                setEditingBrand({ ...brand, errorMessage: message });
+        if (brand.name !== editingBrand.name) {
+            try {
+                const { exists, message } = await checkBrandNameExists(brand.name, token);
+                if (exists) {
+                    setEditingBrand({ ...brand, errorMessage: message }); // Set error message
+                    return; // Stop further execution
+                }
+            } catch (error) {
+                console.error("Error validating brand name:", error.message);
+                setEditingBrand({ ...brand, errorMessage: error.message });
                 return;
             }
-    
-            setEditingBrand(brand);
-            setIsModalOpenEditBrand(false);
-            setIsModalOpenConfirmEditBrand(true);
-        } catch (error) {
-            console.error("Error validating brand name:", error.message);
-            setEditingBrand({ ...brand, errorMessage: error.message });
         }
+    
+        setEditingBrand(brand);
+        setIsModalOpenEditBrand(false);
+        setIsModalOpenConfirmEditBrand(true);
     };
+    
     
     const handleConfirmUpdateBrand = async () => {
         try {
@@ -142,7 +170,7 @@ export default function BrandTable() {
             setIsModalOpenConfirmEditBrand(false); 
         } catch (error) {
             console.error("Error updating brand:", error);
-            toast.error("Failed to update brand");
+            //toast.error("Failed to update brand");
         }
     };
 
