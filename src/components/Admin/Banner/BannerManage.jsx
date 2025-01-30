@@ -148,7 +148,6 @@ export default function BannerTable() {
             setIsModalOpenConfirmEditBanner(false); 
         } catch (error) {
             console.error("Error updating banner:", error);
-            toast.error("Failed to update banner");
         }
     };
 
@@ -345,9 +344,10 @@ export default function BannerTable() {
                     <EditBannerModal
                         open={isModalOpenEditBanner}
                         setOpen={setIsModalOpenEditBanner}
-                        saveBanner={() => handleUpdateBanner(editingBanner)}
+                        saveBanner={handleUpdateBanner} 
                         banner={editingBanner}
                         setEditingBanner={setEditingBanner}
+                        existingBanners={banners}
                     />
                 
                     <ConfirmEditBannerModal
