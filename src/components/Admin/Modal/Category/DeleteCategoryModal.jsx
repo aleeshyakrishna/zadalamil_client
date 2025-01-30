@@ -46,7 +46,7 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the category:<strong></strong>?</h3>
+                    <h3>Are you sure you want to delete the category?</h3>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
