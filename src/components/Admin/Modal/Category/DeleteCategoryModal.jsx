@@ -6,8 +6,20 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
 export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId  }) {
+    const [loading, setLoading] = useState(false); 
+
+    const handleDelete = () => {
+        setLoading(true); 
+        deleteCategory(categoryId)
+        .finally(() => {
+            setLoading(false);
+            setOpen(false); 
+        });
+    };
+
   return (
     <Dialog
         open={open}
@@ -48,9 +60,14 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
-                    onClick={() => deleteCategory(categoryId)}
+                    onClick={handleDelete}
+                    disabled={loading}
                 >
-                    <span>DELETE</span>
+                    {loading ? (
+                        <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                        <span>DELETE</span>
+                    )}
                 </Button>
             </DialogFooter>
         </div>
