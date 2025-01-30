@@ -13,6 +13,7 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
     const [bannerName, setBannerName] = useState('');
     const [bannerImg, setBannerImg] = useState(null);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false); 
 
     useEffect(() => {
             if (open) {
@@ -42,7 +43,11 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
             setError("Please provide both banner name and image.");
             return;
         }
-        saveBanner({ name: bannerName, bannerImg }); 
+        setLoading(true); 
+        saveBanner({ name: bannerName, bannerImg })
+        .finally(() => {
+            setLoading(false);
+        })
     };
 
   return (
@@ -111,8 +116,13 @@ export function AddBannerModal({ open, setOpen, saveBanner }) {
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
                     onClick={handleSave}
+                    disabled={loading}
                 >
-                    <span>SAVE</span>
+                    {loading ? (
+                        <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                            <span>SAVE</span>
+                    )}
                 </Button>
             </DialogFooter>
         </div>
