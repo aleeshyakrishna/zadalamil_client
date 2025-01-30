@@ -6,8 +6,43 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useEffect, useState } from 'react';
 
 export function AddCouponModal({ open, setOpen, saveCoupon }) {
+    const [couponCode, setCouponCode] = useState(""); 
+    const [description, setDescription] = useState("");
+    const [discountAmount, setDiscountAmount] = useState("");
+    const [expiryDate, setExpiryDate] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+            if (open) {
+                setCouponCode(""); 
+                setDescription("");
+                setDiscountAmount("");
+                setExpiryDate("");
+                setError("");
+            }
+        }, [open]);
+
+        const handleSubmit = () => {
+            if (!couponCode || !description || !discountAmount || !expiryDate ) {
+                setError("Please provideall details");
+                return;
+            }
+            const formData = new FormData();
+            formData.append("couponCode", couponCode);
+            formData.append("description", description);
+            formData.append("discountAmount", Number(discountAmount));
+            formData.append("expiryDate", new Date(expiryDate).toISOString());
+            setLoading(true); 
+            saveCoupon(formData)
+            .finally(() => {
+                setLoading(false);
+            });
+        };
+
   return (
     <Dialog
         open={open}
@@ -39,16 +74,31 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                 <div className='mb-5'>
                     <input
                         type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
                         placeholder="Coupon Code"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
 
-                <label className="text-lg font-medium">Discount</label>
+                <label className="text-lg font-medium">Discount Amount</label>
+                <div className='mb-5'>
+                    <input
+                        type='number'
+                        placeholder="Discount"
+                        value={discountAmount}
+                        onChange={(e) => setDiscountAmount(e.target.value)}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                </div>
+
+                <label className="text-lg font-medium">Description</label>
                 <div className='mb-5'>
                     <input
                         type="text"
-                        placeholder="Discount"
+                        placeholder="Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
@@ -56,11 +106,18 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                 <label className="text-lg font-medium">Expiry Date</label>
                 <div >
                     <input
-                        type="text"
+                        type='date'
                         placeholder="Expiry Date"
+                        value={expiryDate}
+                        onChange={(e) => setExpiryDate(e.target.value)}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
                 </div>
+
+                {error && (
+                    <p className='text-red-900 text-xs mt-2'>{error}</p>
+                )}
+
             </form>
             </DialogBody>
 
@@ -75,9 +132,14 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2 rounded-md'
-                    onClick={saveCoupon}
+                    onClick={handleSubmit}
+                    disabled={loading}
                 >
-                    <span>SAVE</span>
+                    {loading ? (
+                            <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                            <span>SAVE</span>
+                        )}
                 </Button>
             </DialogFooter>
         </div>

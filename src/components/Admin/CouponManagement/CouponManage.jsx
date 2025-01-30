@@ -29,7 +29,7 @@ import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusCouponModal } from "../Modal/Coupon/StatusCouponModal.jsx";
 import { useSelector } from "react-redux";
-import { fetchCoupons } from "../../../Utils/couponService.js";
+import { createCoupon, fetchCoupons } from "../../../Utils/couponService.js";
 
 const TABS = [
     {
@@ -46,7 +46,7 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["No", "Coupon Name", "Status", "Edit", "Delete"];
+const TABLE_HEAD = ["No", "Coupon Name", "Status", "Expiry Date", "Edit", "Delete"];
 
 export default function CouponTable() {
     const token = useSelector((state) => state.auth.token);
@@ -90,17 +90,17 @@ export default function CouponTable() {
         if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
 
-    // const handleSaveCoupon = async (couponData) => {
-    //     try {
-    //         const data = await createCoupon(couponData);
-    //         console.log("Coupon created successfully:", data);
-    //         toast.success("Coupon added successfully")
-    //         setIsModalOpenAddCoupon(false);
-    //         setCoupons((prevCoupons) => [...prevCoupons, data.coupon]);
-    //     } catch (error) {
-    //         console.error("Error saving coupon:", error);
-    //     }
-    // };
+    const handleSaveCoupon = async (couponData) => {
+        try {
+            const data = await createCoupon(couponData);
+            console.log("Coupon created successfully:", data);
+            toast.success("Coupon added successfully")
+            setIsModalOpenAddCoupon(false);
+            setCoupons((prevCoupons) => [...prevCoupons, data.coupon]);
+        } catch (error) {
+            console.error("Error saving coupon:", error);
+        }
+    };
 
     const handleEditCoupon = (coupon) => {
         setEditingCoupon(coupon); 
@@ -294,6 +294,22 @@ export default function CouponTable() {
                                     </td>
 
                                     <td className={classes}>
+                                        <div className="flex items-center gap-3">
+                                            
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                                >
+                                                {coupon.expiryDate}
+                                                </Typography>
+                                                
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td className={classes}>
                                         <Tooltip content="Edit Coupon">
                                             <IconButton variant="text">
                                                 <PencilIcon 
@@ -334,7 +350,7 @@ export default function CouponTable() {
                     <AddCouponModal
                         open={isModalOpenAddCoupon}
                         setOpen={setIsModalOpenAddCoupon}
-                        //saveCoupon={handleSaveCoupon}
+                        saveCoupon={handleSaveCoupon}
                     />
 
                     <EditCouponModal

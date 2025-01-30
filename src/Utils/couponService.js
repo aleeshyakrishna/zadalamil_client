@@ -47,3 +47,34 @@ export const fetchCoupons = async (page = 1, limit = 10) => {
         throw error.response?.data?.message || "Something went wrong while fetching coupons.";
     }
 };
+
+export const createCoupon = async (couponData) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        console.log("Sending Coupon Data:", couponData); 
+
+        const response = await api.post("/api/admin/create-coupon", couponData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Error creating coupon:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while creating the coupon.";
+    }
+};
