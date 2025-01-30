@@ -368,6 +368,7 @@ export default function BrandTable() {
                         saveBrand={() => handleUpdateBrand(editingBrand)}
                         brand={editingBrand}
                         setEditingBrand={setEditingBrand}
+                        existingBrands={brands}
                     />
                 
                     <ConfirmEditBrandModal
