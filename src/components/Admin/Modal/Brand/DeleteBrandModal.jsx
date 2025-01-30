@@ -6,8 +6,20 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
-export function DeleteBrandModal({ open, setOpen, deleteBrand, brand }) {
+export function DeleteBrandModal({ open, setOpen, deleteBrand }) {
+    const [loading, setLoading] = useState(false); 
+
+    const handleDelete = () => {
+        setLoading(true); 
+        deleteBrand()
+        .finally(() => {
+            setLoading(false);
+            setOpen(false); 
+        });
+    };
+    
     return (
         <Dialog
             open={open}
@@ -21,7 +33,7 @@ export function DeleteBrandModal({ open, setOpen, deleteBrand, brand }) {
             <div className='p-6'>
                 <DialogHeader>
                     <div className="flex justify-between w-full">
-                        <span className="text-xl font-bold">Confirm Delete Brand: {brand?.name}</span>
+                        <span className="text-xl font-bold">Confirm Delete Brand</span>
                         <Button
                             variant="text"
                             color="black"
@@ -48,9 +60,14 @@ export function DeleteBrandModal({ open, setOpen, deleteBrand, brand }) {
                     </Button>
                     <Button
                         className='bg-red-900 text-white px-6 py-2'
-                        onClick={deleteBrand}
+                        onClick={handleDelete}
+                        disabled={loading}
                     >
-                        <span>DELETE</span>
+                        {loading ? (
+                            <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                            ) : (
+                            <span>DELETE</span>
+                        )}
                     </Button>
                 </DialogFooter>
             </div>
