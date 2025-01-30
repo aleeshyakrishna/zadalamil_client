@@ -11,14 +11,14 @@ import { useState } from 'react';
 export function ConfirmEditCategoryModal({ open, setOpen, saveCategory }) {
     const [loading, setLoading] = useState(false); 
 
-  const handleSave = () => {
-    setLoading(true); 
-    saveCategory()
-      .finally(() => {
-        setLoading(false); 
-        setOpen(false); 
-      });
-  };
+    const handleSave = () => {
+        setLoading(true); 
+        saveCategory()
+        .finally(() => {
+            setLoading(false); 
+            setOpen(false); 
+        });
+    };
 
   return (
     <Dialog
