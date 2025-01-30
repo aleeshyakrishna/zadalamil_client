@@ -6,8 +6,20 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
 export function ConfirmEditBrandModal({ open, setOpen, saveBrand, brand }) {
+    const [loading, setLoading] = useState(false); 
+
+    const handleSave = () => {
+        setLoading(true); 
+        saveBrand()
+        .finally(() => {
+            setLoading(false); 
+            setOpen(false); 
+        });
+    };
+    
     return (
         <Dialog
             open={open}
@@ -48,9 +60,14 @@ export function ConfirmEditBrandModal({ open, setOpen, saveBrand, brand }) {
                     </Button>
                     <Button
                         className='bg-green-900 text-white px-6 py-2'
-                        onClick={saveBrand}
+                        onClick={handleSave}
+                        disabled={loading}
                     >
-                        <span>YES</span>
+                        {loading ? (
+                            <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                            ) : (
+                            <span>YES</span>
+                        )}
                     </Button>
                 </DialogFooter>
             </div>
