@@ -1,3 +1,4 @@
+import { useState,useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { TrashIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import {
@@ -12,16 +13,15 @@ import {
   Tabs,
   TabsHeader,
   Tab,
-  Avatar,
   IconButton,
   Tooltip
 } from "@material-tailwind/react";
-import { useState } from "react";
-
 import {VendorDetailsModal} from '../Modal/Vendor/VendorDetailsModal.jsx';
 import {ConfirmEditVendorDetailsModal} from '../Modal/Vendor/ConfirmUpdateVendorModal.jsx';
 import { DeleteVendorModal } from '../Modal/Vendor/DeleteVendorModal.jsx';
- 
+import axios from "../../../Utils/BaseUrl.js";
+import { toast } from "react-hot-toast";
+
 const TABS = [
   {
     label: "All",
@@ -47,79 +47,87 @@ const TABS = [
  
 const TABLE_HEAD = ["No", "Vendor", "Company Name", "Status", "Date","Action", "Details", "Delete"];
  
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "approved",
-    date: "23/04/18",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "ongoing",
-    date: "23/04/18",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "pending",
-    date: "19/09/17",
-    action: false,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "approved",
-    date: "24/12/08",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "rejected",
-    date: "04/10/21",
-    action: false,
-  },
-];
- 
+
 export function VendorManage() {
   const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
   const [isModalOpenConfirmEditVendorDetails, setIsModalOpenConfirmEditVendorDetails] = useState(false);
   const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
 
+  const [selectedVendor, setSelectedVendor] = useState(null);
+
+  const [TABLE_ROWS,SETTABLE_ROWS] = useState([])
   const handleUpdateDetails = () => {
+    console.log("hii")
     setIsModalOpenVendorDetails(false);
     setIsModalOpenConfirmEditVendorDetails(true); 
   };
-
-  const handleConfirmUpdateVendorDetails = () => {
-    console.log("Status updated");
-    setIsModalOpenConfirmEditVendorDetails(false); 
-  };
+  const [pendingStatusChange, setPendingStatusChange] = useState(null);
+ 
 
   const handleDeleteVendor = () => {
     console.log("Vendor deleted");
     setIsModalOpenDeleteVendor(false); 
   };
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        console.log("Fetching seller applications...");
+        const response = await axios.get("api/admin/applications");
+        console.log(response,"------------------>>")
+        if(response.status == 200){
+          SETTABLE_ROWS(response.data)
+        }
+        // setApplications(response.data);
+        // setLoading(false);
+      } catch (error) {
+        console.error("Error fetching applications:", error);
+        // setError("Failed to load applications");
+        // setLoading(false);
+      }
+    };
 
+    fetchApplications();
+  }, []);
+      const requestStatusChange = (vendorId, newStatus) => {
+        setPendingStatusChange({ vendorId, newStatus }); // Store status update request
+        setIsModalOpenConfirmEditVendorDetails(true); // Open confirmation modal
+    };
+
+
+    const confirmStatusUpdate = async () => {
+              if (!pendingStatusChange) {
+                  console.error("No pending status change request!");
+                  return;
+              }
+      
+              const { vendorId, newStatus } = pendingStatusChange;
+      
+              try {
+                  console.log(`Updating vendor ${vendorId} status to ${newStatus}...`);
+      
+                  const response = await axios.put(
+                      `/api/admin/application/update-status/${vendorId}`,
+                      { status: newStatus },
+                      { headers: { "Content-Type": "application/json" } }
+                  );
+      
+                  if (response.status === 200) {
+                      SETTABLE_ROWS(prevRows =>
+                          prevRows.map(row => (row._id === vendorId ? { ...row, status: newStatus } : row))
+                      );
+                  } else {
+                      toast.error("Failed to update status. Please try again.");
+                  }
+              } catch (error) {
+                  console.error("Error updating vendor status:", error);
+                  toast.error("Something went wrong. Please try again.");
+              }
+      
+              // Close confirmation modal & reset pending request
+              setIsModalOpenConfirmEditVendorDetails(false);
+              setPendingStatusChange(null);
+              toast.success("status updated!!")
+          };
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -181,32 +189,32 @@ export function VendorManage() {
           </thead>
           <tbody>
             {TABLE_ROWS.map(
-              ({ img, name, email,companyName, LicenseNumber, status, action, date }, index) => {
+              (data, index) => {
                 const isLast = index === TABLE_ROWS.length - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50";
  
                 return (
-                  <tr key={name}>
+                  <tr key={data.name}>
                     <td className="py-3 px-4 text-center">{index + 1}</td>
                     <td className={classes}>
-                      <div className="flex items-center gap-3">
-                        <Avatar src={img} alt={name} size="sm" />
+                      <div className="flex w-[100px] h-[200px] items-center gap-3 ">
+                        <img src={data.livePhoto} alt={data.name} size="sm" />
                         <div className="flex flex-col">
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {name}
+                            {data.name}
                           </Typography>
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal opacity-70"
                           >
-                            {email}
+                            {data.email}
                           </Typography>
                         </div>
                       </div>
@@ -218,14 +226,14 @@ export function VendorManage() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {companyName}
+                          {data.tradeName}
                         </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                          {LicenseNumber}
+                          {data.licenseNumber}
                         </Typography>
                       </div>
                     </td>
@@ -235,15 +243,15 @@ export function VendorManage() {
                             <Chip
                             variant="ghost"
                             size="sm"
-                            value={status}
+                            value={data.status}
                             color={
-                                status === "approved"
+                                data.status === "approved"
                                 ? "green"
-                                : status === "rejected"
+                                : data.status === "rejected"
                                 ? "red"
-                                : status === "ongoing"
+                                : data.status === "ongoing"
                                 ? "orange"
-                                : status === "pending"
+                                : data.status === "pending"
                                 ? "blue"
                                 : "blue-gray"
                             }
@@ -257,7 +265,7 @@ export function VendorManage() {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {date}
+                        {data.createdAt}
                       </Typography>
                     </td>
 
@@ -266,8 +274,8 @@ export function VendorManage() {
                         <Chip
                           variant="filled"
                           size="md"
-                          value={action ? "block" : "unblock"}
-                          color={action ? "green" : "red"}
+                          value={data.action ? "block" : "unblock"}
+                          color={data.action ? "green" : "red"}
                           className="w-20 items-center justify-center cursor-pointer"
                         />
                       </div>
@@ -275,7 +283,10 @@ export function VendorManage() {
 
                     <td className={classes}>
                        <button 
-                       onClick={() => setIsModalOpenVendorDetails(true)}
+                       onClick={() =>
+                       { setSelectedVendor(data); 
+                        setIsModalOpenVendorDetails(true)}
+                      }
                        className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-900">View Details</button>
                     </td>
                     <td className={classes}>
@@ -293,16 +304,20 @@ export function VendorManage() {
               }, 
             )}
 
-            <VendorDetailsModal
-              open={isModalOpenVendorDetails}
-              setOpen={setIsModalOpenVendorDetails}
-              saveDetails={handleUpdateDetails}
-            />
+<VendorDetailsModal
+  open={isModalOpenVendorDetails}
+  setOpen={setIsModalOpenVendorDetails}
+  saveDetails={handleUpdateDetails}
+  requestStatusChange={requestStatusChange}
+  vendorData={selectedVendor}  // Passing the selected vendor data
+/>
+
 
             <ConfirmEditVendorDetailsModal
               open={isModalOpenConfirmEditVendorDetails}
               setOpen={setIsModalOpenConfirmEditVendorDetails}
-              saveDetails={handleConfirmUpdateVendorDetails} 
+              // saveDetails={handleConfirmUpdateVendorDetails} 
+              saveDetails={confirmStatusUpdate}
             />
 
             <DeleteVendorModal
@@ -329,3 +344,127 @@ export function VendorManage() {
     </Card>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+// import { useState, useEffect } from "react";
+// import { VendorDetailsModal } from "../Modal/Vendor/VendorDetailsModal.jsx";
+// import { ConfirmEditVendorDetailsModal } from "../Modal/Vendor/ConfirmUpdateVendorModal.jsx";
+// import axios from "../../../Utils/BaseUrl.js";
+
+// export function VendorManage() {
+//     const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
+//     const [isModalOpenConfirmEditVendorDetails, setIsModalOpenConfirmEditVendorDetails] = useState(false);
+//     const [selectedVendor, setSelectedVendor] = useState(null);
+//     const [pendingStatusChange, setPendingStatusChange] = useState(null); // Stores vendor ID & new status
+//     const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
+
+//     useEffect(() => {
+//         const fetchApplications = async () => {
+//             try {
+//                 const response = await axios.get("api/admin/applications");
+//                 if (response.status === 200) {
+//                     SETTABLE_ROWS(response.data);
+//                 }
+//             } catch (error) {
+//                 console.error("Error fetching applications:", error);
+//             }
+//         };
+//         fetchApplications();
+//     }, []);
+
+//     // **Trigger Confirmation Modal Before Updating Status**
+//     const requestStatusChange = (vendorId, newStatus) => {
+//         setPendingStatusChange({ vendorId, newStatus }); // Store status update request
+//         setIsModalOpenConfirmEditVendorDetails(true); // Open confirmation modal
+//     };
+
+//     // **If Confirmed, Update Status in Backend & UI**
+//     const confirmStatusUpdate = async () => {
+//         if (!pendingStatusChange) {
+//             console.error("No pending status change request!");
+//             return;
+//         }
+
+//         const { vendorId, newStatus } = pendingStatusChange;
+
+//         try {
+//             console.log(`Updating vendor ${vendorId} status to ${newStatus}...`);
+
+//             const response = await axios.put(
+//                 `/api/admin/application/update-status/${vendorId}`,
+//                 { status: newStatus },
+//                 { headers: { "Content-Type": "application/json" } }
+//             );
+
+//             if (response.status === 200) {
+//                 alert("Status updated successfully!");
+//                 SETTABLE_ROWS(prevRows =>
+//                     prevRows.map(row => (row._id === vendorId ? { ...row, status: newStatus } : row))
+//                 );
+//             } else {
+//                 alert("Failed to update status. Please try again.");
+//             }
+//         } catch (error) {
+//             console.error("Error updating vendor status:", error);
+//             alert("Something went wrong. Please try again.");
+//         }
+
+//         // Close confirmation modal & reset pending request
+//         setIsModalOpenConfirmEditVendorDetails(false);
+//         setPendingStatusChange(null);
+//     };
+
+//     return (
+//         <div className="p-6">
+//             <table className="mt-4 w-full min-w-max table-auto text-left">
+//                 <thead>
+//                     <tr>
+//                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">No</th>
+//                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">Vendor</th>
+//                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">Status</th>
+//                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">Details</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {TABLE_ROWS.map((data, index) => (
+//                         <tr key={data._id}>
+//                             <td className="py-3 px-4 text-center">{index + 1}</td>
+//                             <td className="py-3 px-4">{data.name}</td>
+//                             <td className="py-3 px-4">{data.status}</td>
+//                             <td className="py-3 px-4">
+//                                 <button
+//                                     onClick={() => { setSelectedVendor(data); setIsModalOpenVendorDetails(true); }}
+//                                     className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+//                                 >
+//                                     View Details
+//                                 </button>
+//                             </td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </table>
+
+//             <VendorDetailsModal
+//                 open={isModalOpenVendorDetails}
+//                 setOpen={setIsModalOpenVendorDetails}
+//                 requestStatusChange={requestStatusChange} // Call request function
+//                 vendorData={selectedVendor}
+//             />
+
+//             <ConfirmEditVendorDetailsModal
+//                 open={isModalOpenConfirmEditVendorDetails}
+//                 setOpen={setIsModalOpenConfirmEditVendorDetails}
+//                 saveDetails={confirmStatusUpdate} // Update status on confirmation
+//             />
+//         </div>
+//     );
+// }
