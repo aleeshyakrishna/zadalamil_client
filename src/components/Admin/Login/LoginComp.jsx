@@ -2,7 +2,7 @@ import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from '../../../Redux/reducer/authSlice';
-import api from '../../../Utils/BaseUrl';
+import axios from '../../../Utils/BaseUrl';
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -17,7 +17,7 @@ const AdminLoginComp = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post("/api/admin/login", { email, password});
+            const response = await axios.post("/api/admin/login", { email, password});
             if(response.data.success) {
                 dispatch(login(response.data.token));
                 console.log("Token received after login:", response.data.token);
