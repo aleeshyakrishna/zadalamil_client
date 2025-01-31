@@ -46,7 +46,7 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["No", "Coupon Name", "Status", "Expiry Date", "Edit", "Delete"];
+const TABLE_HEAD = ["No", "Coupon Name", "Status", "Expiry Date","Activity", "Edit", "Delete"];
 
 export default function CouponTable() {
     const token = useSelector((state) => state.auth.token);
@@ -91,6 +91,7 @@ export default function CouponTable() {
     };
 
     const handleSaveCoupon = async (couponData) => {
+        console.log(couponData);
         try {
             const data = await createCoupon(couponData);
             console.log("Coupon created successfully:", data);
@@ -307,6 +308,16 @@ export default function CouponTable() {
                                                 
                                             </div>
                                         </div>
+                                    </td>
+
+                                    <td className={classes}>
+                                        <Typography
+                                                variant="small"
+                                                color={new Date(coupon.expiryDate) > new Date() ? "green":"red"}
+                                                className="font-medium"
+                                        >
+                                            {new Date(coupon.expiryDate) > new Date() ? "Active":"Expired"}
+                                        </Typography>
                                     </td>
 
                                     <td className={classes}>

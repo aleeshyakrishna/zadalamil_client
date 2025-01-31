@@ -7,6 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 
 export function AddCouponModal({ open, setOpen, saveCoupon }) {
     const [couponCode, setCouponCode] = useState(""); 
@@ -15,6 +16,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
     const [expiryDate, setExpiryDate] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [timezone, setTimezone] = useState("");
 
     useEffect(() => {
             if (open) {
@@ -22,22 +24,32 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                 setDescription("");
                 setDiscountAmount("");
                 setExpiryDate("");
+                setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
                 setError("");
             }
         }, [open]);
 
         const handleSubmit = () => {
-            if (!couponCode || !description || !discountAmount || !expiryDate ) {
+            if (!couponCode || !description || !discountAmount || !expiryDate || !timezone ) {
                 setError("Please provideall details");
                 return;
             }
-            const formData = new FormData();
-            formData.append("couponCode", couponCode);
-            formData.append("description", description);
-            formData.append("discountAmount", Number(discountAmount));
-            formData.append("expiryDate", new Date(expiryDate).toISOString());
+            if(Number(discountAmount) <=0) {
+                setError("Discount amount must be greater than 0")
+            }
+
+            const localExpiryDate = moment.utc(expiryDate).local().format('YYYY-MM-DD');
+
+            const couponData = {
+                couponCode,
+                description,
+                discountAmount: Number(discountAmount),
+                expiryDate: localExpiryDate,
+                userTimezone: timezone,
+            }
+
             setLoading(true); 
-            saveCoupon(formData)
+            saveCoupon(couponData)
             .finally(() => {
                 setLoading(false);
             });

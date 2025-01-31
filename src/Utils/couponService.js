@@ -12,8 +12,10 @@ const isTokenValid = (token) => {
 
 export const fetchCoupons = async (page = 1, limit = 10) => {
     const token = localStorage.getItem("authToken");
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     console.log("Token in localStorage:", token);
+    console.log("User Timezone:", userTimezone);
 
     if (!token) {
         console.error("No authentication token found.");
@@ -28,7 +30,7 @@ export const fetchCoupons = async (page = 1, limit = 10) => {
 
     try {
         console.log("Fetching coupons with token:", token);
-        const response = await api.get(`/api/admin/all-coupons?page=${page}&limit=${limit}`, {
+        const response = await api.get(`/api/admin/all-coupons?page=${page}&limit=${limit}&userTimezone=${userTimezone}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
