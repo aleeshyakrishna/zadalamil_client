@@ -6,8 +6,20 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
 export function ConfirmEditCategoryModal({ open, setOpen, saveCategory }) {
+    const [loading, setLoading] = useState(false); 
+
+    const handleSave = () => {
+        setLoading(true); 
+        saveCategory()
+        .finally(() => {
+            setLoading(false); 
+            setOpen(false); 
+        });
+    };
+
   return (
     <Dialog
         open={open}
@@ -48,9 +60,14 @@ export function ConfirmEditCategoryModal({ open, setOpen, saveCategory }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2'
-                    onClick={saveCategory}
-                >
-                    <span>YES</span>
+                    onClick={handleSave}
+                    disabled={loading}
+                    >
+                      {loading ? (
+                        <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                      ) : (
+                        <span>YES</span>
+                      )}
                 </Button>
             </DialogFooter>
         </div>

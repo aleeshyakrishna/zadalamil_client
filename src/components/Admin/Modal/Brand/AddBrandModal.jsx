@@ -12,6 +12,7 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
     const [brandName, setBrandName] = useState(""); 
     const [logo, setLogo] = useState(null);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false); 
 
     useEffect(() => {
         if (open) {
@@ -43,7 +44,11 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
         const formData = new FormData();
         formData.append("name", brandName);
         formData.append("logo", logo);
-        saveBrand(formData); 
+        setLoading(true); 
+        saveBrand(formData)
+        .finally(() => {
+            setLoading(false);
+        });
     };
 
     return (
@@ -113,8 +118,13 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                     <Button
                         className='bg-green-900 text-white px-6 py-2 rounded-md'
                         onClick={handleSubmit}
+                        disabled={loading}
                     >
-                        <span>SAVE</span>
+                        {loading ? (
+                            <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                            <span>SAVE</span>
+                        )}
                     </Button>
                 </DialogFooter>
             </div>

@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
     const [categoryName, setCategoryName] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false); 
 
     useEffect(() => {
         if(open) {
@@ -24,11 +25,15 @@ export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
             const isCategoryExist = categories.some(
                 (cat) => cat.categoryName.toLowerCase() === categoryName.toLocaleLowerCase()
             );
-            if(isCategoryExist) {
+            if (isCategoryExist) {
                 setErrorMessage("Category already exists.");
             } else {
                 setErrorMessage("");
-                saveCategory(categoryName);
+                setLoading(true); 
+                saveCategory(categoryName)
+                    .finally(() => {
+                        setLoading(false);
+                    });
             }
         } else {
             setErrorMessage("Category name is required.");
@@ -92,8 +97,13 @@ export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
                     <Button
                         className='bg-green-900 text-white px-6 py-2 rounded-md'
                         onClick={handleSave}
+                        disabled={loading}
                     >
-                        <span>SAVE</span>
+                        {loading ? (
+                            <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                            <span>SAVE</span>
+                        )}
                     </Button>
                 </DialogFooter>
             </div>

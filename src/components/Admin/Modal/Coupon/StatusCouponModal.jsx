@@ -8,18 +8,18 @@ import {
 } from "@material-tailwind/react";
 import { useState } from 'react';
 
-export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId  }) {
+export function StatusCouponModal({ open, setOpen, coupon, handleStatusChange  }) {
     const [loading, setLoading] = useState(false); 
 
-    const handleDelete = () => {
+    const handleStatus = () => {
         setLoading(true); 
-        deleteCategory(categoryId)
+        handleStatusChange(coupon)
         .finally(() => {
             setLoading(false);
             setOpen(false); 
         });
     };
-
+    
   return (
     <Dialog
         open={open}
@@ -33,7 +33,7 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Confirm Delete Category</span>
+                    <span className="text-xl font-bold">Update Status for {coupon?.name}</span>
                     <Button
                         variant="text"
                         color="black"
@@ -46,7 +46,12 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
             </DialogHeader>
             <DialogBody>
                 <div className="flex justify-between w-full">
-                    <h3>Are you sure you want to delete the category?</h3>
+                    <h3>Are you sure you want to change the coupon status?</h3>
+                </div>
+                <div className="flex justify-between w-full mt-4">
+                    <h2>
+                        Current status: <strong className='text-blue-900'>{coupon?.status === "LIST" ? "LIST" : "UNLIST"}</strong>
+                    </h2>
                 </div>
             </DialogBody>
             <DialogFooter className='mt-5 flex justify-between'>
@@ -60,13 +65,13 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
-                    onClick={handleDelete}
+                    onClick={handleStatus}
                     disabled={loading}
                 >
-                    {loading ? (
+                   {loading ? (
                         <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
                         ) : (
-                        <span>DELETE</span>
+                        <span>CHANGE</span>
                     )}
                 </Button>
             </DialogFooter>
@@ -75,9 +80,12 @@ export function DeleteCategoryModal({ open, setOpen, deleteCategory, categoryId 
   );
 }
 
-DeleteCategoryModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  deleteCategory: PropTypes.func.isRequired,
-  categoryId: PropTypes.string.isRequired,
+StatusCouponModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    setOpen: PropTypes.func.isRequired,
+    coupon: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        status: PropTypes.bool.isRequired,
+        }).isRequired,
+    handleStatusChange: PropTypes.func.isRequired,
 };

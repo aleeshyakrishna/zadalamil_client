@@ -183,11 +183,20 @@ export default function CategoryTable()  {
             const response = await deleteCategory(categoryId, token);
     
             if (response.success) {
-                setCategories(prevCategories => prevCategories.filter(cat => cat.categoryId  !== categoryId));
+                setCategories(prevCategories => {
+                    const updatedCategories = prevCategories.filter(cat => cat.categoryId !== categoryId);
+                    
+                    const newTotalCategories = response.totalCategories;
+                    const lastPage = Math.max(1, Math.ceil(newTotalCategories / categoriesPerPage));
+                    
+                    if (updatedCategories.length === 0 && currentPage > 1) {
+                        setCurrentPage(lastPage);
+                    }
+    
+                    return updatedCategories;
+                });
+    
                 setTotalCategories(response.totalCategories);
-                if (currentPage * categoriesPerPage >= response.totalCategories) {
-                    setCurrentPage(prevPage => prevPage - 1); 
-                }
                 toast.success("Category deleted successfully");
                 setIsModalOpenDeleteCategory(false);
             }
@@ -196,6 +205,7 @@ export default function CategoryTable()  {
             console.error("Error deleting category:", error);
         }
     };
+    
     
 
     const handleSaveCategory = async (categoryName) => {
@@ -334,17 +344,18 @@ export default function CategoryTable()  {
                             { categories.length > 0 ? (
                                 categories.map(
                                     ({ categoryId, categoryName, status }, index) => {
-                                    const isLast = index === categories.length - 1;
-                                    const classes = isLast
-                                        ? "p-4"
-                                        : "p-4 border-b border-blue-gray-50";
-            
+                                        const isLast = index === categories.length - 1;
+                                        const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+                            
                                         const displayStatus = status ? "LIST" : "UNLIST";
                                         const chipColor = status ? "green" : "red";
+                            
+                                        const startIndex = (currentPage - 1) * categoriesPerPage;
+                                        const rowIndex = startIndex + index + 1;
                     
                                     return (
                                         <tr key={categoryName}>
-                                            <td className="py-3 px-4 text-center">{index + 1}</td>
+                                            <td className="py-3 px-4 text-center">{rowIndex}</td>
                                             <td className={classes}>
                                                 <div className="flex items-center gap-3">
                                                     
