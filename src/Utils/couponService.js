@@ -78,3 +78,20 @@ export const createCoupon = async (couponData) => {
         throw error.response?.data?.message || "Something went wrong while creating the coupon.";
     }
 };
+
+export const updateCouponStatus = async (couponId, statusData, token) => {
+    try {
+        const response = await api.put(`/api/admin/edit-coupon-status/${couponId}`, statusData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, 
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data; 
+    } catch (error) {
+        console.error("Error updating coupon status:", error);
+        throw error; 
+    }
+};

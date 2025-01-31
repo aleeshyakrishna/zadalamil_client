@@ -29,7 +29,7 @@ import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusCouponModal } from "../Modal/Coupon/StatusCouponModal.jsx";
 import { useSelector } from "react-redux";
-import { createCoupon, fetchCoupons } from "../../../Utils/couponService.js";
+import { createCoupon, fetchCoupons, updateCouponStatus } from "../../../Utils/couponService.js";
 
 const TABS = [
     {
@@ -162,28 +162,28 @@ export default function CouponTable() {
     //     }
     // };
 
-    // const handleStatusCoupon = async (coupon) => {
-    //     const updatedStatus = coupon.status === "LIST" ? "UNLIST" : "LIST";
+    const handleStatusCoupon = async (coupon) => {
+        const updatedStatus = coupon.status === "LIST" ? "UNLIST" : "LIST";
     
-    //     try {
-    //         const result = await updateCouponStatus(coupon._id, { status: updatedStatus }, token);
+        try {
+            const result = await updateCouponStatus(coupon._id, { status: updatedStatus }, token);
     
-    //         if (result.success) {
-    //             setCoupons((prevCoupons) =>
-    //                 prevCoupons.map((b) =>
-    //                     b._id === coupon._id ? { ...b, status: updatedStatus } : b
-    //                 )
-    //             );
-    //             console.log("Coupon status updated successfully!");
-    //             toast.success("Coupon status updated successfully");
-    //             setIsModalOpenStatusCoupon(false);
-    //         } else {
-    //             console.error("Failed to update coupon status:", result.message);
-    //         }
-    //     } catch (err) {
-    //         console.error("Error updating coupon status:", err);
-    //     }
-    // };
+            if (result.success) {
+                setCoupons((prevCoupons) =>
+                    prevCoupons.map((b) =>
+                        b._id === coupon._id ? { ...b, status: updatedStatus } : b
+                    )
+                );
+                console.log("Coupon status updated successfully!");
+                toast.success("Coupon status updated successfully");
+                setIsModalOpenStatusCoupon(false);
+            } else {
+                console.error("Failed to update coupon status:", result.message);
+            }
+        } catch (err) {
+            console.error("Error updating coupon status:", err);
+        }
+    };
     
     
     return (
@@ -380,7 +380,7 @@ export default function CouponTable() {
                         open={isModalOpenStatusCoupon}
                         setOpen={setIsModalOpenStatusCoupon}
                         coupon={selectedCoupon}
-                        //handleStatusChange={handleStatusCoupon}
+                        handleStatusChange={handleStatusCoupon}
                     />
 
                 </table>
