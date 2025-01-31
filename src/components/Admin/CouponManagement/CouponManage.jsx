@@ -29,7 +29,7 @@ import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusCouponModal } from "../Modal/Coupon/StatusCouponModal.jsx";
 import { useSelector } from "react-redux";
-import { createCoupon, fetchCoupons, updateCouponStatus } from "../../../Utils/couponService.js";
+import { createCoupon, deleteCoupon, fetchCoupons, updateCouponStatus } from "../../../Utils/couponService.js";
 
 const TABS = [
     {
@@ -150,18 +150,18 @@ export default function CouponTable() {
     //     }
     // };
 
-    // const handleDeleteCoupon = async (couponId) => {
-    //     try {
-    //         const data = await deleteCoupon(couponId);
-    //         console.log("Coupon deleted successfully:", data);
-    //         toast.success("Coupon deleted successfully");
-    //         setIsModalOpenDeleteCoupon(false);
-    //         setCoupons((prevCoupons) => prevCoupons.filter((coupon) => coupon._id !== couponId));
-    //     } catch (error) {
-    //         console.error("Error deleting coupon:", error);
-    //         toast.error("Error deleting coupon");
-    //     }
-    // };
+    const handleDeleteCoupon = async (couponId) => {
+        try {
+            const data = await deleteCoupon(couponId);
+            console.log("Coupon deleted successfully:", data);
+            toast.success("Coupon deleted successfully");
+            setIsModalOpenDeleteCoupon(false);
+            setCoupons((prevCoupons) => prevCoupons.filter((coupon) => coupon._id !== couponId));
+        } catch (error) {
+            console.error("Error deleting coupon:", error);
+            toast.error("Error deleting coupon");
+        }
+    };
 
     const handleStatusCoupon = async (coupon) => {
         const updatedStatus = coupon.status === "LIST" ? "UNLIST" : "LIST";
@@ -383,7 +383,7 @@ export default function CouponTable() {
                     <DeleteCouponModal
                         open={isModalOpenDeleteCoupon}
                         setOpen={setIsModalOpenDeleteCoupon}
-                        //deleteCoupon={() => handleDeleteCoupon(selectedCouponId)} 
+                        deleteCoupon={() => handleDeleteCoupon(selectedCouponId)} 
                         coupon={selectedCoupon}
                     />
 

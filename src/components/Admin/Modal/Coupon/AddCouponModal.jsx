@@ -31,7 +31,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
 
         const handleSubmit = () => {
             if (!couponCode || !description || !discountAmount || !expiryDate || !timezone ) {
-                setError("Please provideall details");
+                setError("Please provide all details");
                 return;
             }
             if(Number(discountAmount) <=0) {
@@ -82,7 +82,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
             
             <DialogBody>
             <form className="items-center">
-                <label className="text-lg font-medium">Coupon Code</label>
+                <label className="text-sm font-medium">Coupon Code</label>
                 <div className='mb-5'>
                     <input
                         type="text"
@@ -93,7 +93,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                     />
                 </div>
 
-                <label className="text-lg font-medium">Discount Amount</label>
+                <label className="text-sm font-medium">Discount Amount</label>
                 <div className='mb-5'>
                     <input
                         type='number'
@@ -104,7 +104,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                     />
                 </div>
 
-                <label className="text-lg font-medium">Description</label>
+                <label className="text-sm font-medium">Description</label>
                 <div className='mb-5'>
                     <input
                         type="text"
@@ -115,7 +115,7 @@ export function AddCouponModal({ open, setOpen, saveCoupon }) {
                     />
                 </div>
 
-                <label className="text-lg font-medium">Expiry Date</label>
+                <label className="text-sm font-medium">Expiry Date</label>
                 <div >
                     <input
                         type='date'

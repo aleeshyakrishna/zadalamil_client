@@ -97,3 +97,31 @@ export const updateCouponStatus = async (couponId, statusData, token) => {
         throw error; 
     }
 };
+
+export const deleteCoupon = async (couponId) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const response = await api.delete(`/api/admin/delete-coupon/${couponId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Error deleting coupon:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while deleting the coupon.";
+    }
+};
