@@ -24,12 +24,11 @@ import { EditCouponModal } from '../Modal/Coupon/EditCouponModal';
 import { ConfirmEditCouponModal } from '../Modal/Coupon/ConfirmEditCouponModal';
 import { DeleteCouponModal } from '../Modal/Coupon/DeleteCouponModal';
 import { SiBrandfolder } from "react-icons/si";
-//import { checkBrandNameExists, createBrand, deleteBrand, fetchBrands, updateBrand, updateBrandStatus } from "../../../Utils/brandService.js";
 import Loader from "../../Loader/Loader.jsx";
 import { toast } from "react-hot-toast";
 import { StatusCouponModal } from "../Modal/Coupon/StatusCouponModal.jsx";
 import { useSelector } from "react-redux";
-import { createCoupon, deleteCoupon, fetchCoupons, updateCouponStatus } from "../../../Utils/couponService.js";
+import { checkCouponNameExists, createCoupon, deleteCoupon, fetchCoupons, updateCoupon, updateCouponStatus } from "../../../Utils/couponService.js";
 
 const TABS = [
     {
@@ -108,47 +107,47 @@ export default function CouponTable() {
         setIsModalOpenEditCoupon(true);
     };
 
-    // const handleUpdateCoupon = async (coupon) => {
-    //     if (!token) {
-    //         console.error("No authentication token found");
-    //         return;
-    //     }
+    const handleUpdateCoupon = async (coupon) => {
+        if (!token) {
+            console.error("No authentication token found");
+            return;
+        }
     
-    //     if (coupon.name !== editingCoupon.name) {
-    //         try {
-    //             const { exists, message } = await checkCouponNameExists(coupon.name, token);
-    //             if (exists) {
-    //                 setEditingCoupon({ ...coupon, errorMessage: message }); 
-    //                 return; 
-    //             }
-    //         } catch (error) {
-    //             console.error("Error validating coupon name:", error.message);
-    //             setEditingCoupon({ ...coupon, errorMessage: error.message });
-    //             return;
-    //         }
-    //     }
+        if (coupon.name !== editingCoupon.name) {
+            try {
+                const { exists, message } = await checkCouponNameExists(coupon.name, token);
+                if (exists) {
+                    setEditingCoupon({ ...coupon, errorMessage: message }); 
+                    return; 
+                }
+            } catch (error) {
+                console.error("Error validating coupon name:", error.message);
+                setEditingCoupon({ ...coupon, errorMessage: error.message });
+                return;
+            }
+        }
     
-    //     setEditingCoupon(coupon);
-    //     setIsModalOpenEditCoupon(false);
-    //     setIsModalOpenConfirmEditCoupon(true);
-    // };
+        setEditingCoupon(coupon);
+        setIsModalOpenEditCoupon(false);
+        setIsModalOpenConfirmEditCoupon(true);
+    };
     
     
-    // const handleConfirmUpdateCoupon = async () => {
-    //     try {
-    //         const data = await updateCoupon(editingCoupon._id, editingCoupon); 
-    //         console.log("Coupon updated:", data);
-    //         toast.success("Coupon updated successfully");
-    //         setCoupons((prevCoupons) =>
-    //             prevCoupons.map((b) =>
-    //                 b._id === editingCoupon._id ? { ...b, name: editingCoupon.name} : b
-    //             )
-    //         );
-    //         setIsModalOpenConfirmEditCoupon(false); 
-    //     } catch (error) {
-    //         console.error("Error updating coupon:", error);
-    //     }
-    // };
+    const handleConfirmUpdateCoupon = async () => {
+        try {
+            const data = await updateCoupon(editingCoupon._id, editingCoupon); 
+            console.log("Coupon updated:", data);
+            toast.success("Coupon updated successfully");
+            setCoupons((prevCoupons) =>
+                prevCoupons.map((b) =>
+                    b._id === editingCoupon._id ? { ...b, couponCode: editingCoupon.couponCode} : b
+                )
+            );
+            setIsModalOpenConfirmEditCoupon(false); 
+        } catch (error) {
+            console.error("Error updating coupon:", error);
+        }
+    };
 
     const handleDeleteCoupon = async (couponId) => {
         try {
@@ -367,7 +366,7 @@ export default function CouponTable() {
                     <EditCouponModal
                         open={isModalOpenEditCoupon}
                         setOpen={setIsModalOpenEditCoupon}
-                        //saveCoupon={() => handleUpdateCoupon(editingCoupon)}
+                        saveCoupon={() => handleUpdateCoupon(editingCoupon)}
                         coupon={editingCoupon}
                         setEditingCoupon={setEditingCoupon}
                         existingCoupons={coupons}
@@ -376,7 +375,7 @@ export default function CouponTable() {
                     <ConfirmEditCouponModal
                         open={isModalOpenConfirmEditCoupon}
                         setOpen={setIsModalOpenConfirmEditCoupon}
-                        //saveCoupon={handleConfirmUpdateCoupon} 
+                        saveCoupon={handleConfirmUpdateCoupon} 
                         coupon={editingCoupon}
                     />
 

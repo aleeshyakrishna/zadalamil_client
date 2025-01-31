@@ -125,3 +125,60 @@ export const deleteCoupon = async (couponId) => {
         throw error.response?.data?.message || "Something went wrong while deleting the coupon.";
     }
 };
+
+export const updateCoupon = async (couponId, couponData) => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        console.error("No authentication token found.");
+        throw new Error("No authentication token found.");
+    }
+
+    if (!isTokenValid(token)) {
+        console.error("Authentication token is invalid or expired.");
+        localStorage.removeItem("authToken");
+        throw new Error("Authentication token is invalid or expired.");
+    }
+
+    try {
+        const response = await api.put(`/api/admin/update-coupon/${couponId}`, couponData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json", 
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating coupon:", error.response?.data || error.message);
+        throw error.response?.data?.message || "Something went wrong while updating the brand.";
+    }
+};
+
+export const checkCouponNameExists = async (couponCode, token) => {
+    if (!token) {
+        throw new Error("No authentication token found");
+    }
+
+    try {
+        const response = await api.get(`/api/admin/check-coupon-name/${couponCode}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = response.data;
+
+        if (response.status === 200) {
+            return { exists: false, message: data.message };
+        } else {
+            return { exists: true, message: data.message };
+        }
+    } catch (error) {
+        if (error.response && error.response.data) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
+    }
+};

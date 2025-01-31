@@ -6,8 +6,20 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
-export function ConfirmEditCouponModal({ open, setOpen, saveCoupon }) {
+export function ConfirmEditCouponModal({ open, setOpen, saveCoupon, coupon }) {
+    const [loading, setLoading] = useState(false); 
+    
+        const handleSave = () => {
+            setLoading(true); 
+            saveCoupon()
+            .finally(() => {
+                setLoading(false); 
+                setOpen(false); 
+            });
+        };
+
   return (
     <Dialog
         open={open}
@@ -21,7 +33,7 @@ export function ConfirmEditCouponModal({ open, setOpen, saveCoupon }) {
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Confirm Update Category</span>
+                    <span className="text-xl font-bold">Confirm Update Coupon: {coupon?.couponCode}</span>
                     <Button
                         variant="text"
                         color="black"
@@ -48,9 +60,14 @@ export function ConfirmEditCouponModal({ open, setOpen, saveCoupon }) {
                 </Button>
                 <Button
                     className='bg-green-900 text-white px-6 py-2'
-                    onClick={saveCoupon}
+                    onClick={handleSave}
+                    disabled={loading}
                 >
-                    <span>YES</span>
+                    {loading ? (
+                        <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                        <span>YES</span>
+                    )}
                 </Button>
             </DialogFooter>
         </div>
@@ -62,4 +79,7 @@ ConfirmEditCouponModal.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   saveCoupon: PropTypes.func.isRequired,
+  coupon: PropTypes.shape({
+    couponCode: PropTypes.string.isRequired,
+}).isRequired,
 };
