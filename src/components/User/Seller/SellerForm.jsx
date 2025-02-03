@@ -139,7 +139,9 @@ const SellerForm = () => {
         errors.email = "Please enter a valid email address.";
         isValid = false;
     }
-    
+        if(!isValid){
+            toast.error("try again!!")
+        }
         setFormErrors(errors);
         return isValid;
     };

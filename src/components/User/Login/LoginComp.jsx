@@ -14,6 +14,7 @@ const LoginComp = () => {
   const [errors, setErrors] = useState({ email: "", password: "", server: "" });
   const navigate = useNavigate();
   const location = useLocation(); 
+  
   const message = location.state?.message; 
 
 
