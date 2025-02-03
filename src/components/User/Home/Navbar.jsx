@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect, useState} from "react";
 import {
   Navbar,
   MobileNav,
@@ -42,6 +42,7 @@ import { useSelector } from 'react-redux';
 import axios from "../../../Utils/BaseUrl.js";
 import { setTokens } from "../../../Redux/reducer/userReducer";
 import { toast } from 'react-hot-toast';
+import { getCategories } from "../../../Utils/userCategoryService.js";
  
 function ProfileMenu() {
   const dispatch = useDispatch();
@@ -240,6 +241,35 @@ function NavList() {
 }
 
 export function SecondaryNavbar() {
+  const token = useSelector((state) => state.auth.token);
+  
+      const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+          if (token) {
+              //setLoading(true);
+              const fetchCategories = async () => {
+                  try {
+                      const { categories: fetchedCategories } = await getCategories();
+                      const mappedCategories = fetchedCategories.map((cat) => ({
+                          categoryName: cat.name,
+                          categoryId: cat._id,
+                          status: cat.status?.toUpperCase() === "LIST",
+                      }));
+  
+                      setCategories(mappedCategories);
+                      // setTotalCategories(total); 
+                      // setLoading(false);
+                  } catch (error) {
+                      toast.error("Failed to fetch categories");
+                      console.error("Error fetching categories:", error);
+                      //setLoading(false);
+                  }
+              };
+              fetchCategories();
+          }
+      }, [token]);
+
     return (
       <Navbar className="hidden lg:flex bg-[#f6f6f6] py-2 px-6 max-w-none rounded-none fixed top-16 z-40">
         <div className="flex justify-center items-center w-full gap-80">
@@ -265,16 +295,17 @@ export function SecondaryNavbar() {
             </div>
           </MenuHandler>
           <MenuList className="bg-[#f6f6f6] border border-gray-200 shadow-lg rounded-md">
-            <Link to='/mobiles&tabs'><MenuItem>Mobiles & Tablets</MenuItem></Link>
-            <MenuItem>Wearables & Smart Watches</MenuItem>
-            <MenuItem>TV & Audio</MenuItem>
-            <MenuItem>Appliances</MenuItem>
-            <MenuItem>Personal Care</MenuItem>
-            <MenuItem>Computing</MenuItem>
-            <MenuItem>Routers</MenuItem>
-            <MenuItem>Photography</MenuItem>
-            <MenuItem>Gaming</MenuItem>
-            <MenuItem>Accessories</MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category.categoryId} className="cursor-pointer hover:text-blue-500" >
+                <Typography
+                  as="a"
+                  href={`#category-${category.categoryId}`}
+                  className="font-medium text-black"
+                >
+                  {category.categoryName}
+                </Typography>
+              </MenuItem>
+            ))}
           </MenuList>
         </Menu>
         </div>
