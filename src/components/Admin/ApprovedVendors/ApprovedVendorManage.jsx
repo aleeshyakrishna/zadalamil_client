@@ -19,17 +19,15 @@ import {
     Tooltip,
   } from "@material-tailwind/react";
 
-// import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
 import { useEffect, useState } from "react";
-// import { deleteUser, updateUserStatus } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
-//import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { deleteVendor, fetchVendors } from "../../../Utils/vendorService.js";
+import { deleteVendor, fetchVendors, updateVendorStatus } from "../../../Utils/vendorService.js";
 import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApprovedVendorModal.jsx";
+import { StatusAprovedVendorModal } from "../Modal/ApprovedVendor/StatusAproveVendorModal.jsx";
    
-  const TABS = [
+const TABS = [
     {
       label: "All",
       value: "all",
@@ -42,96 +40,98 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
       label: "Unblocked",
       value: "unblocked",
     },
-  ];
+];
    
-  const TABLE_HEAD = ["No", "Vendor", "Email", "Status", "Phone Number", "Delete"];
+const TABLE_HEAD = ["No", "Vendor", "Email", "Status", "Phone Number", "Delete"];
    
-  export function ApprovedVendorTable() {
+export function ApprovedVendorTable() {
+    const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
+    const [vendors, setVendors] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [selectedTab, setSelectedTab] = useState("all");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [isModalOpenStatusVendor, setIsModalOpenStatusVendor] = useState(false);
+    const [selectedVendor, setSelectedVendor] = useState(null);
 
-        const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
-        const [vendors, setVendors] = useState([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState("");
-        const [selectedTab, setSelectedTab] = useState("all");
-        const [currentPage, setCurrentPage] = useState(1);
-        const [totalPages, setTotalPages] = useState(1);
-        // const [isModalOpenStatusUser, setIsModalOpenStatusUser] = useState(false);
-        const [selectedVendor, setSelectedVendor] = useState(null);
-        // const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
+    const navigate = useNavigate();
 
-        const navigate = useNavigate();
-
-
-
-        useEffect(() => {
-            const loadVendors = async () => {
-                setLoading(true);
-                try {
-                    const data = await fetchVendors();
-                    if(data.length === 0) {
-                        setError("No vendors availbale");
-                    } else{
-                        setVendors(data);
-                    }
+    useEffect(() => {
+        const loadVendors = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchVendors();
+                if(data.length === 0) {
+                    setError("No vendors availbale");
+                } else{
+                    setVendors(data);
+                }
+                setLoading(false);
+            } catch (error) {
+                if (error.message.includes("Unauthorized")) {
+                    toast.error(error.message);
                     setLoading(false);
-                } catch (error) {
-                    if (error.message.includes("Unauthorized")) {
-                        toast.error(error.message);
-                        setLoading(false);
-                        navigate("/admin/admin-login");
-                    } else {
-                        toast.error("Failed to load vendors. Please try again.");
-                        setLoading(false);
-                    }
-                } finally {
+                    navigate("/admin/admin-login");
+                } else {
+                    toast.error("Failed to load vendors. Please try again.");
                     setLoading(false);
                 }
-            };
-    
-            loadVendors();
-        }, []);
-
-        const handleNextPage = () => {
-            if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-        };
-    
-        const handlePreviousPage = () => {
-            if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-        };
-
-        const handleDeleteVendor = async (vendor) => {
-            if (!vendor || !vendor._id) {
-                console.error("Invalid vendor object:", vendor);
-                return;
-            }
-            try {
-                await deleteVendor(vendor._id);
-                setVendors((prevVendors) => prevVendors.filter((u) => u._id !== vendor._id));
-                toast.success("Vendor deleted successfully");
-            } catch (error) {
-                toast.error("Failed to delete vendor");
-                console.error(error);
             } finally {
-                setIsModalOpenDeleteVendor(false);
+                setLoading(false);
             }
         };
 
-        // const handleStatusVendor = async (vendorId, currentStatus) => {
-        //     const newStatus = currentStatus === "UNBLOCKED" ? "blocked" : "unblocked";
+        loadVendors();
+    }, []);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
+
+    const handleDeleteVendor = async (vendor) => {
+        if (!vendor || !vendor._id) {
+            console.error("Invalid vendor object:", vendor);
+            return;
+        }
+        try {
+            await deleteVendor(vendor._id);
+            setVendors((prevVendors) => prevVendors.filter((u) => u._id !== vendor._id));
+            toast.success("Vendor deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete vendor");
+            console.error(error);
+        } finally {
+            setIsModalOpenDeleteVendor(false);
+        }
+    };
+
+    const handleStatusVendor = async (vendor) => {
+            const updatedStatus = vendor.status === "UNBLOCKED" ? "BLOCKED" : "UNBLOCKED";
         
-        //     try {
-        //         const response = await updatevendorStatus(vendorId, newStatus);
-        //         setVendors((prevVendors) =>
-        //             prevVendors.map((vendor) =>
-        //                 vendor._id === vendorId ? { ...vendor, status: response.status } : vendor
-        //             )
-        //         );
-        //         toast.success("Vendor status updated successfully");
-        //         setIsModalOpenStatusUser(false);
-        //     } catch (error) {
-        //         console.error("Failed to update vendor status:", error);
-        //     }
-        // };
+            try {
+                const result = await updateVendorStatus(vendor._id, { status: updatedStatus });
+        
+                if (result.success) {
+                    setVendors((prevVendors) =>
+                        prevVendors.map((b) =>
+                            b._id === vendor._id ? { ...b, status: updatedStatus } : b
+                        )
+                    );
+                    console.log("Vendor status updated successfully!");
+                    toast.success("Vendor status updated successfully");
+                    setIsModalOpenStatusVendor(false);
+                } else {
+                    console.error("Failed to update vendor status:", result.message);
+                }
+            } catch (err) {
+                console.error("Error updating vendor status:", err);
+            }
+        };
         
     return (
         <Card className="h-full w-full ">
@@ -197,7 +197,7 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                     </thead>
                     <tbody>
                         { vendors.length > 0 ? (
-                            vendors.map(({ _id, name, email, status, phone }, index)  => {
+                            vendors.map((vendor, index)  => {
                             const isLast = index === vendors.length - 1;
                             const classes = isLast
                                 ? "p-4"
@@ -205,7 +205,7 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                                 const userIndex = (currentPage - 1) * 10 + index + 1;
             
                             return (
-                                <tr key={_id}>
+                                <tr key={vendor._id}>
                                 <td className="py-3 px-4 text-center">{userIndex}</td>
                                 <td className={classes}>
                                     <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                                             color="blue-gray"
                                             className="font-normal"
                                             >
-                                            {name}
+                                            {vendor.name}
                                             </Typography>
                                         </div>
                                     </div>
@@ -228,7 +228,7 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {email}
+                                            {vendor.email}
                                         </Typography>
                                     </div>
                                 </td>
@@ -237,14 +237,12 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                                         <Chip
                                             variant="ghost"
                                             size="sm"
-                                            value={status}
-                                            color={status === "UNBLOCKED" ? "green" : status === "BLOCKED" ? "red" : "gray"}
-                                            // onClick={() => {
-                                            //     if (name) {
-                                            //         setSelectedUser({ _id, name, email, status, phone });
-                                            //         setIsModalOpenStatusUser(true);
-                                            //     }
-                                            // }}
+                                            value={vendor.status}
+                                            color={vendor.status === "UNBLOCKED" ? "green" : "red"}
+                                            onClick={() => {
+                                                setSelectedVendor(vendor);
+                                                setIsModalOpenStatusVendor(true);
+                                            }}
                                         />
                                     </div>
                                 </td>
@@ -254,14 +252,14 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {phone}
+                                        {vendor.phone}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
                                     <Tooltip content="Delete Vendor">
                                     <IconButton 
                                         onClick={() => {
-                                            setSelectedVendor({ _id, name, email, status, phone });
+                                            setSelectedVendor(vendor);
                                             setIsModalOpenDeleteVendor(true);
                                         }}
                                         variant="text"
@@ -308,12 +306,12 @@ import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApproved
                 vendor={selectedVendor}
             />
 
-            {/* <StatusVendorModal
+            <StatusAprovedVendorModal
                 open={isModalOpenStatusVendor}
                 setOpen={setIsModalOpenStatusVendor}
                 vendor={selectedVendor}
                 handleStatusChange={handleStatusVendor}
-            /> */}
+            />
       </Card>
     );
 }

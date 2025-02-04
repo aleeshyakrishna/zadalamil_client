@@ -37,3 +37,25 @@ export const deleteVendor = async (vendorId) => {
         throw error.response?.data?.message || "Something went wrong while deleting the vendor.";
     }
 };
+
+export const updateVendorStatus = async (vendorId, statusData, ) => {
+    try {
+        const authToken = localStorage.getItem("authToken");
+
+        if(!authToken) {
+            throw new Error("Unauthorized: No token found!");
+        }
+        const response = await api.put(`/api/admin/edit-vendor-status/${vendorId}`, statusData,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`, 
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data; 
+    } catch (error) {
+        console.error("Error updating vendor status:", error);
+        throw error; 
+    }
+};
