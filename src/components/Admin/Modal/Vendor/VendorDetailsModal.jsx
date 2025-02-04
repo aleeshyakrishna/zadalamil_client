@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useEffect, useState } from 'react';
-// import axios from "../../../../Utils/BaseUrl.js";
+import toast from 'react-hot-toast';
 
 export function VendorDetailsModal({ open, setOpen,requestStatusChange, vendorData }) {
     console.log(vendorData, "Vendor Data in Modal");
@@ -20,39 +20,17 @@ export function VendorDetailsModal({ open, setOpen,requestStatusChange, vendorDa
             console.error("Vendor ID not found!");
             return;
         }
+        if(vendorData?.status === "APPROVED" || vendorData?.status === "REJECTED") {
+            toast.error("Status cannot be changed after approval or rejection.");
+            return;
+        }
         requestStatusChange(vendorData._id, status);
-                setOpen(false); // Close modal
-    
-        // try {
-        //     console.log(vendorData._id, "----------------------");
-
-        //     const response = await axios.put(
-        //         `/api/admin/application/update-status/${vendorData._id}`,
-        //         { status }, // Send status in the body
-        //         { headers: { "Content-Type": "application/json" } }
-        //     );
-            
-        //     console.log(response, "++++++++++++++++++");
-            
-    
-        //     // const result = await response.json();
-    
-        //     if (response.status == 200) {
-        //         alert("Status updated successfully!");
-        //         setOpen(false); // Close modal
-        //         saveDetails(vendorData._id, status); // Updates UI in VendorManage
-        //     } else {
-        //         alert("Failed to update status. Please try again.");
-        //     }
-        // } catch (error) {
-        //     console.error("Error updating vendor status:", error);
-        //     alert("Something went wrong. Please try again.");
-        // }
+                setOpen(false); 
     };
     
     useEffect(() => {
         if (vendorData) {
-            setStatus(vendorData.status || "Pending"); // Set status based on vendor data
+            setStatus(vendorData.status || "Pending"); 
         }
     }, [vendorData]);
 
@@ -130,18 +108,23 @@ export function VendorDetailsModal({ open, setOpen,requestStatusChange, vendorDa
                             <p><span className="font-semibold">Owners Name:</span> {vendorData?.ownerName || "N/A"}</p>
 
                            <p>
-    <span className="font-semibold">Status:</span>
-    <select
-        value={status} // Controlled by useState
-        onChange={(e) => setStatus(e.target.value)} 
-        className="ml-2 p-1 border border-gray-300 rounded-md text-sm"
-    >
-        <option value="PENDING">Pending</option>
-        <option value="ONGOING">Ongoing</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-    </select>
-</p>
+                            <span className="font-semibold">Status:</span>
+                            <select
+                                value={status} 
+                                onChange={(e) => setStatus(e.target.value)} 
+                                className={`ml-2 p-1 border border-gray-300 rounded-md text-sm ${
+                                    vendorData?.status === "APPROVED" || vendorData?.status === "REJECTED"
+                                    ? "cursor-not-allowed bg-gray-200"
+                                    : ""
+                                } `}
+                                disabled={ vendorData?.status === "APPROVED" || vendorData?.status === "REJECTED"}
+                            >
+                                <option value="PENDING">Pending</option>
+                                <option value="ONGOING">Ongoing</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                            </select>
+                            </p>
 
                         </div>
                     </div>
@@ -182,7 +165,7 @@ VendorDetailsModal.propTypes = {
     setOpen: PropTypes.func.isRequired,
     saveDetails: PropTypes.func.isRequired,
     requestStatusChange: PropTypes.func.isRequired,
-    vendorData: PropTypes.object, // Fixed type
+    vendorData: PropTypes.object, 
 };
 
 

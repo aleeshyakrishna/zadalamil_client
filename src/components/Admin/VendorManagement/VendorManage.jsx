@@ -58,24 +58,19 @@ const TABLE_HEAD = [
 ];
 
 export function VendorManage() {
-  const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] =
-    useState(false);
-  const [
-    isModalOpenConfirmEditVendorDetails,
-    setIsModalOpenConfirmEditVendorDetails,
-  ] = useState(false);
+  const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
+  const [isModalOpenConfirmEditVendorDetails,setIsModalOpenConfirmEditVendorDetails] = useState(false);
   const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
-
   const [selectedVendor, setSelectedVendor] = useState(null);
-
   const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
+  const [pendingStatusChange, setPendingStatusChange] = useState(null);
+  const navigate = useNavigate();
+
   const handleUpdateDetails = () => {
     setIsModalOpenVendorDetails(false);
     setIsModalOpenConfirmEditVendorDetails(true);
   };
-  const [pendingStatusChange, setPendingStatusChange] = useState(null);
-  const navigate = useNavigate();
-
+  
   const handleDeleteVendor = () => {
     console.log("Vendor deleted");
     setIsModalOpenDeleteVendor(false);
@@ -92,10 +87,9 @@ export function VendorManage() {
 
       try {
         console.log("Fetching seller applications...");
-
         const response = await axios.get("api/admin/applications", {
           headers: {
-            Authorization: `Bearer ${authToken}`, // Include token in the request
+            Authorization: `Bearer ${authToken}`, 
           },
         });
 
@@ -111,8 +105,7 @@ export function VendorManage() {
           toast.error(
             "Unauthorized: Your session has expired. Please log in again."
           );
-          localStorage.removeItem("authToken"); // Optionally clear the token if expired
-          // Redirect user to login page if needed
+          localStorage.removeItem("authToken"); 
           navigate("/admin/admin-login");
         } else {
           toast.error("Failed to load applications. Please try again.");
@@ -124,9 +117,13 @@ export function VendorManage() {
     fetchApplications();
   }, []);
 
-  const requestStatusChange = (vendorId, newStatus) => {
-    setPendingStatusChange({ vendorId, newStatus }); // Store status update request
-    setIsModalOpenConfirmEditVendorDetails(true); // Open confirmation modal
+  const requestStatusChange = (vendorId, newStatus, currentStatus) => {
+    if(currentStatus === "APPROVED" || currentStatus === "REJECTED") {
+      toast.error("Status cannot be changed after approval or rejection.");
+      return;
+    }
+    setPendingStatusChange({ vendorId, newStatus });
+    setIsModalOpenConfirmEditVendorDetails(true);
   };
 
   const confirmStatusUpdate = async () => {
@@ -136,8 +133,7 @@ export function VendorManage() {
     }
 
     const { vendorId, newStatus } = pendingStatusChange;
-    const authToken = localStorage.getItem("authToken"); // Retrieve token from localStorage
-    console.log(authToken, "2222222222222222222222222222222222");
+    const authToken = localStorage.getItem("authToken"); 
     if (!authToken) {
       toast.error("Unauthorized: No token found! Please log in.");
       return;
@@ -152,7 +148,7 @@ export function VendorManage() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`, // Send token in Authorization header
+            Authorization: `Bearer ${authToken}`, 
           },
         }
       );
@@ -174,14 +170,12 @@ export function VendorManage() {
         toast.error(
           "Unauthorized: Your session has expired. Please log in again."
         );
-        localStorage.removeItem("authToken"); // Optionally clear the token if expired
-        // Redirect user to login page (if applicable)
+        localStorage.removeItem("authToken"); 
       } else {
         toast.error("Something went wrong. Please try again.");
       }
     }
 
-    // Close confirmation modal & reset pending request
     setIsModalOpenConfirmEditVendorDetails(false);
     setPendingStatusChange(null);
   };
@@ -312,6 +306,8 @@ export function VendorManage() {
                             ? "blue"
                             : "blue-gray"
                         }
+                        onClick={() => requestStatusChange(data._id, "NEW_STATUS", data.status)}
+                        className={data.status === "APPROVED" || data.status === "REJECTED" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
                       />
                     </div>
                   </td>
@@ -382,6 +378,7 @@ export function VendorManage() {
               setOpen={setIsModalOpenDeleteVendor}
               deleteVendor={handleDeleteVendor}
             />
+            
           </tbody>
         </table>
       </CardBody>
