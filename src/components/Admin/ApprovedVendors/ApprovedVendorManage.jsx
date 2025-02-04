@@ -26,7 +26,8 @@ import Loader from "../../Loader/Loader";
 //import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { fetchVendors } from "../../../Utils/vendorService.js";
+import { deleteVendor, fetchVendors } from "../../../Utils/vendorService.js";
+import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApprovedVendorModal.jsx";
    
   const TABS = [
     {
@@ -47,7 +48,7 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
    
   export function ApprovedVendorTable() {
 
-        //const [isModalOpenDeleteUser, setIsModalOpenDeleteUser] = useState(false);
+        const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
         const [vendors, setVendors] = useState([]);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState("");
@@ -55,7 +56,7 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
         const [currentPage, setCurrentPage] = useState(1);
         const [totalPages, setTotalPages] = useState(1);
         // const [isModalOpenStatusUser, setIsModalOpenStatusUser] = useState(false);
-        // const [selectedUser, setSelectedUser] = useState(null);
+        const [selectedVendor, setSelectedVendor] = useState(null);
         // const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
 
         const navigate = useNavigate();
@@ -65,16 +66,22 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
         useEffect(() => {
             const loadVendors = async () => {
                 setLoading(true);
-    
                 try {
                     const data = await fetchVendors();
-                    setVendors(data);
+                    if(data.length === 0) {
+                        setError("No vendors availbale");
+                    } else{
+                        setVendors(data);
+                    }
+                    setLoading(false);
                 } catch (error) {
                     if (error.message.includes("Unauthorized")) {
                         toast.error(error.message);
+                        setLoading(false);
                         navigate("/admin/admin-login");
                     } else {
                         toast.error("Failed to load vendors. Please try again.");
+                        setLoading(false);
                     }
                 } finally {
                     setLoading(false);
@@ -92,22 +99,22 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
             if (currentPage > 1) setCurrentPage((prev) => prev - 1);
         };
 
-        // const handleDeleteVendor = async (vendor) => {
-        //     if (!vendor || !vendor._id) {
-        //         console.error("Invalid vendor object:", vendor);
-        //         return;
-        //     }
-        //     try {
-        //         await deleteUser(vendor._id);
-        //         setVendors((prevvendors) => prevvendors.filter((u) => u._id !== vendor._id));
-        //         toast.success("Vendor deleted successfully");
-        //     } catch (error) {
-        //         toast.error("Failed to delete vendor");
-        //         console.error(error);
-        //     } finally {
-        //         setIsModalOpenDeleteVendor(false);
-        //     }
-        // };
+        const handleDeleteVendor = async (vendor) => {
+            if (!vendor || !vendor._id) {
+                console.error("Invalid vendor object:", vendor);
+                return;
+            }
+            try {
+                await deleteVendor(vendor._id);
+                setVendors((prevVendors) => prevVendors.filter((u) => u._id !== vendor._id));
+                toast.success("Vendor deleted successfully");
+            } catch (error) {
+                toast.error("Failed to delete vendor");
+                console.error(error);
+            } finally {
+                setIsModalOpenDeleteVendor(false);
+            }
+        };
 
         // const handleStatusVendor = async (vendorId, currentStatus) => {
         //     const newStatus = currentStatus === "UNBLOCKED" ? "blocked" : "unblocked";
@@ -189,7 +196,8 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
                     </tr>
                     </thead>
                     <tbody>
-                        {vendors.map(({ _id, name, email, status, phone }, index)  => {
+                        { vendors.length > 0 ? (
+                            vendors.map(({ _id, name, email, status, phone }, index)  => {
                             const isLast = index === vendors.length - 1;
                             const classes = isLast
                                 ? "p-4"
@@ -250,12 +258,12 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
                                     </Typography>
                                 </td>
                                 <td className={classes}>
-                                    <Tooltip content="Delete User">
+                                    <Tooltip content="Delete Vendor">
                                     <IconButton 
-                                        // onClick={() => {
-                                        //     setSelectedUser({ _id, name, email, status, phone });
-                                        //     setIsModalOpenDeleteUser(true);
-                                        // }}
+                                        onClick={() => {
+                                            setSelectedVendor({ _id, name, email, status, phone });
+                                            setIsModalOpenDeleteVendor(true);
+                                        }}
                                         variant="text"
                                     >
                                         <TrashIcon className="h-4 w-4" />
@@ -264,7 +272,15 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
                                 </td>
                                 </tr>
                             );
-                            },
+                            })
+                        ):(
+                            <tr>
+                                <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                                    <Typography variant="small" color="red" className="font-medium text-md">
+                                        No vendor to display
+                                    </Typography>
+                                </td>
+                            </tr>
                         )}
                     </tbody>
                 </table>
@@ -285,14 +301,14 @@ import { fetchVendors } from "../../../Utils/vendorService.js";
             </>
             )}
 
-            {/* <DeleteVendorModal
+            <DeleteAprovedVendorModal
                 open={isModalOpenDeleteVendor}
                 setOpen={setIsModalOpenDeleteVendor}
                 deleteVendor={() => handleDeleteVendor(selectedVendor)} 
                 vendor={selectedVendor}
             />
 
-            <StatusVendorModal
+            {/* <StatusVendorModal
                 open={isModalOpenStatusVendor}
                 setOpen={setIsModalOpenStatusVendor}
                 vendor={selectedVendor}
