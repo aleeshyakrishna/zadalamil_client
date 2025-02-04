@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { TrashIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
@@ -186,19 +186,11 @@ export function VendorManage() {
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Vendor Management
+              Seller Application Management
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about all vendors
+              See information about all applications
             </Typography>
-          </div>
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined" size="sm">
-              view all
-            </Button>
-            <Button className="flex items-center gap-3" size="sm">
-              <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Vendor
-            </Button>
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -249,27 +241,20 @@ export function VendorManage() {
               return (
                 <tr key={data.name}>
                   <td className="py-3 px-4 text-center">{index + 1}</td>
-                  <td className={classes}>
-                    <div className="flex w-[100px] h-[200px] items-center gap-3 ">
-                      <img src={data.livePhoto} alt={data.name} size="sm" />
+                    <td className={classes}>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={data.livePhoto}
+                        alt={data.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
                       <div className="flex flex-col">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {data.name}
-                        </Typography>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal opacity-70"
-                        >
-                          {data.email}
-                        </Typography>
+                        <p className="text-sm font-medium text-gray-900">{data.name}</p>
+                        <p className="text-xs text-gray-500">{data.email}</p>
                       </div>
                     </div>
                   </td>
+
                   <td className={classes}>
                     <div className="flex flex-col">
                       <Typography
