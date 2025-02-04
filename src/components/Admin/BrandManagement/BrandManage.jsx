@@ -288,8 +288,8 @@ export default function BrandTable() {
                                 <tr key={brand._id}>
                                     <td className="py-3 px-4 text-center">{listingNumber}</td>
                                     <td className={classes}>
-                                        <div className="flex items-center gap-3">
-                                            
+                                        <div className="flex w-[100px] h-[200px] items-center gap-3">
+                                        <img src={brand.logo} alt={brand.name} size="sm" />
                                             <div className="flex flex-col">
                                                 <Typography
                                                 variant="small"
