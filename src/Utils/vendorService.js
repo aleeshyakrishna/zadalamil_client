@@ -1,6 +1,6 @@
 import api from "../Utils/BaseApi.js";
 
-export const fetchVendors = async  () => {
+export const fetchVendors = async  (page=1, limit = 5) => {
     try {
         const authToken = localStorage.getItem("authToken");
 
@@ -8,13 +8,12 @@ export const fetchVendors = async  () => {
             throw new Error("Unauthorized: No token found!");
         }
 
-        const response = await api.get("/api/admin/vendors", {
+        const response = await api.get(`/api/admin/vendors?page=${page}&limit=${limit}`, {
             headers: { Authorization: `Bearer ${authToken}`},
         });
-        return response.data;
+        return await response.data;
     } catch (error) {
-        console.error("error fetching vendors:", error);
-        throw error;
+        throw new Error(error.message);
     }
 };
 

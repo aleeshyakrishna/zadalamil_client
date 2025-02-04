@@ -22,7 +22,6 @@ import {
 import { useEffect, useState } from "react";
 import Loader from "../../Loader/Loader";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { deleteVendor, fetchVendors, updateVendorStatus } from "../../../Utils/vendorService.js";
 import { DeleteAprovedVendorModal } from "../Modal/ApprovedVendor/DeleteApprovedVendorModal.jsx";
 import { StatusAprovedVendorModal } from "../Modal/ApprovedVendor/StatusAproveVendorModal.jsx";
@@ -55,24 +54,21 @@ export function ApprovedVendorTable() {
     const [isModalOpenStatusVendor, setIsModalOpenStatusVendor] = useState(false);
     const [selectedVendor, setSelectedVendor] = useState(null);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         const loadVendors = async () => {
             setLoading(true);
+            setVendors([]);
             try {
-                const data = await fetchVendors();
+                const data = await fetchVendors(currentPage, 5);
                 if(data.length === 0) {
                     setError("No vendors availbale");
                 } else{
-                    setVendors(data);
+                    setVendors(data.vendors);
+                    setTotalPages(data.totalPages);
                 }
-                setLoading(false);
             } catch (error) {
                 if (error.message.includes("Unauthorized")) {
                     toast.error(error.message);
-                    setLoading(false);
-                    navigate("/admin/admin-login");
                 } else {
                     toast.error("Failed to load vendors. Please try again.");
                     setLoading(false);
@@ -81,9 +77,8 @@ export function ApprovedVendorTable() {
                 setLoading(false);
             }
         };
-
         loadVendors();
-    }, []);
+    }, [currentPage]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -209,7 +204,6 @@ export function ApprovedVendorTable() {
                                 <td className="py-3 px-4 text-center">{userIndex}</td>
                                 <td className={classes}>
                                     <div className="flex items-center gap-3">
-                                        {/* <Avatar src={img} alt={name} size="sm" /> */}
                                         <div className="flex flex-col">
                                             <Typography
                                             variant="small"
