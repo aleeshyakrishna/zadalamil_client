@@ -43,6 +43,7 @@ import OrderDetailsVendorPage from './pages/Vendor/OrderDetailsVendorPage.jsx';
 import BrandManagement from './pages/Admin/BrandManage.jsx';
 import Loader from './components/Loader/Loader.jsx';
 import { useSelector } from 'react-redux';
+import ApprovedVendorManagement from './pages/Admin/ApprovedVendor.jsx';
 
 const App = () => {
   const isLoading = useSelector((state) => state.loader.isLoading);
@@ -87,6 +88,7 @@ const App = () => {
         <Route path='/admin/banner-management' element={ <BannerManagement />} />
         <Route path='/admin/vendor-management' element={ <Vendormanagement />} />
         <Route path='/admin/brand-management' element={ <BrandManagement />} />
+        <Route path='/admin/approved-vendors' element={ <ApprovedVendorManagement />} />
 
 
         {/* SELLER */}

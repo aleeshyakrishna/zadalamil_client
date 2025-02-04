@@ -146,7 +146,7 @@ export function SidebarWithBurgerMenu() {
                 </ListItem>
               </Link>
 
-              <Link to='/admin/vendor-management'>
+              <Link to='/admin/approved-vendors'>
                 <ListItem className="p-0" selected={open === 1}>
                   <AccordionHeader
                     onClick={() => handleOpen(1)}
@@ -157,6 +157,22 @@ export function SidebarWithBurgerMenu() {
                     </ListItemPrefix>
                     <Typography color="blue-gray" className="mr-auto font-normal">
                     Vendor Management
+                    </Typography>
+                  </AccordionHeader>
+                </ListItem>
+              </Link>
+
+              <Link to='/admin/vendor-management'>
+                <ListItem className="p-0" selected={open === 1}>
+                  <AccordionHeader
+                    onClick={() => handleOpen(1)}
+                    className="border-b-0 p-3"
+                  >
+                    <ListItemPrefix>
+                      <UserCircleIcon className="h-5 w-5" />
+                    </ListItemPrefix>
+                    <Typography color="blue-gray" className="mr-auto font-normal">
+                    Seller Application Management
                     </Typography>
                   </AccordionHeader>
                 </ListItem>
