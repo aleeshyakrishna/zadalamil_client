@@ -71,10 +71,53 @@ export function VendorManage() {
     setIsModalOpenConfirmEditVendorDetails(true);
   };
   
-  const handleDeleteVendor = () => {
-    console.log("Vendor deleted");
+  const handleDeleteVendor = async () => {
+    if (!selectedVendor) return;
+
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+        toast.error("Unauthorized: No token found! Please log in.");
+        return;
+    }
+
+    try {
+        console.log(`Deleting vendor with ID: ${selectedVendor._id}`);
+
+        const response = await axios.delete(
+            `/api/admin/application/delete-seller/${selectedVendor._id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        if (response.status === 200) {
+            toast.success("Vendor application deleted successfully!");
+
+            // Update the UI by removing the deleted vendor from the table
+            SETTABLE_ROWS((prevRows) =>
+                prevRows.filter((row) => row._id !== selectedVendor._id)
+            );
+        } else {
+            toast.error("Failed to delete vendor. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error deleting vendor:", error);
+
+        if (error.response?.status === 401) {
+            toast.error("Unauthorized: Your session has expired. Please log in again.");
+            localStorage.removeItem("authToken");
+        } else if (error.response?.status === 403) {
+            toast.error("Access denied! Only admins can perform this action.");
+        } else {
+            toast.error("Something went wrong. Please try again.");
+        }
+    }
+
     setIsModalOpenDeleteVendor(false);
-  };
+};
+
   useEffect(() => {
     const fetchApplications = async () => {
       const authToken = localStorage.getItem("authToken");
@@ -330,7 +373,7 @@ export function VendorManage() {
                       View Details
                     </button>
                   </td>
-                  <td className={classes}>
+                  {/* <td className={classes}>
                     <Tooltip content="Delete Vendor">
                       <IconButton variant="text">
                         <TrashIcon
@@ -339,7 +382,21 @@ export function VendorManage() {
                         />
                       </IconButton>
                     </Tooltip>
-                  </td>
+                  </td> */}
+                  <td className={classes}>
+    <Tooltip content="Delete Vendor">
+        <IconButton variant="text">
+            <TrashIcon
+                onClick={() => {
+                    setSelectedVendor(data);
+                    setIsModalOpenDeleteVendor(true);
+                }}
+                className="h-4 w-4 text-red-800"
+            />
+        </IconButton>
+    </Tooltip>
+</td>
+
                 </tr>
               );
             })}
@@ -358,11 +415,17 @@ export function VendorManage() {
               saveDetails={confirmStatusUpdate}
             />
 
-            <DeleteVendorModal
+            {/* <DeleteVendorModal
               open={isModalOpenDeleteVendor}
               setOpen={setIsModalOpenDeleteVendor}
               deleteVendor={handleDeleteVendor}
-            />
+            /> */}
+            <DeleteVendorModal
+    open={isModalOpenDeleteVendor}
+    setOpen={setIsModalOpenDeleteVendor}
+    deleteVendor={handleDeleteVendor}
+/>
+
             
           </tbody>
         </table>

@@ -6,8 +6,10 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
+import axios from "../../../../Utils/BaseUrl"
 export function DeleteVendorModal({ open, setOpen, deleteVendor }) {
+    console.log("hi am at delete fun.......................")
+    
   return (
     <Dialog
         open={open}
