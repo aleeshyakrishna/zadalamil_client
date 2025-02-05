@@ -19,7 +19,6 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
-import Img1 from '../../../assets/images/mob2.png';
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { MdDownload } from "react-icons/md";
 
@@ -28,7 +27,8 @@ import { EditProductVendorModal } from '../Modal/Product/EditProductModalVendor.
 import { ConfirmEditProductVendorModal } from '../Modal/Product/ConfirmEditProductModalVendor.jsx';
 import { DeleteProductVendorModal } from '../Modal/Product/DeleteProductModalVendor.jsx';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getProducts } from "../../../Utils/vendorProductService.js";
 
 const TABS = [
     {
@@ -46,50 +46,27 @@ const TABS = [
 ];
 
 const TABLE_HEAD = ["No", "Product Name", "Stock", "Price", "Status", "Edit", "Delete"];
-
-const TABLE_ROWS = [
-    {
-        img: Img1,
-        productName: "SAMSUNG Galaxy S23 Series AI Phone, Unlocked Android Smartphone, 128GB",
-        stock: "60",
-        price: "5699",
-        status: true,
-    },
-    {
-        img: Img1,
-        productName: "SAMSUNG Galaxy S23 Series AI Phone, Unlocked Android Smartphone, 128GB",
-        stock: "60",
-        price: "5699",
-        status: true,
-    },
-    {
-        img: Img1,
-        productName: "SAMSUNG Galaxy S23 Series AI Phone, Unlocked Android Smartphone, 128GB",
-        stock: "80",
-        price: "5699",
-        status: false,
-    },
-    {
-        img: Img1,
-        productName: "SAMSUNG Galaxy S23 Series AI Phone, Unlocked Android Smartphone, 128GB",
-        stock: "Out of Stock",
-        price: "5699",
-        status: true,
-    },
-    {
-        img: Img1,
-        productName: "SAMSUNG Galaxy S23 Series AI Phone, Unlocked Android Smartphone, 128GB",
-        stock: "60",
-        price: "5699",
-        status: true,
-    },
-];
    
 export function ProductTableVendor() {
     const [isModalOpenAddVendorProduct, setIsModalOpenAddVendorProduct] = useState(false);
     const [isModalOpenEditVendorProduct, setIsModalOpenEditVendorProduct] = useState(false);
     const [isModalOpenConfirmEditVendorProduct, setIsModalOpenConfirmEditVendorProduct] = useState(false);
     const [isModalOpenDeleteVendorProduct, setIsModalOpenDeleteVendorProduct] = useState(false);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await getProducts();
+                console.log("pro::", data);
+                
+                setProducts(data?.data || []);
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            }
+        };
+        fetchProducts();
+    }, [])
 
     const handleSaveVendorProduct = () => {
         console.log("Product saved");
@@ -110,8 +87,6 @@ export function ProductTableVendor() {
         console.log("Product deleted");
         setIsModalOpenDeleteVendorProduct(false); 
     };
-
-
     
     return (
         <Card className="h-full w-full">
@@ -181,26 +156,28 @@ export function ProductTableVendor() {
                     </tr>
                     </thead>
                     <tbody>
-                    {TABLE_ROWS.map(
-                        ({ img, productName, stock, price, status }, index) => {
-                        const isLast = index === TABLE_ROWS.length - 1;
+                        { products.length > 0 ? (
+                            products.map((product, index) => {
+                        const isLast = index === products.length - 1;
                         const classes = isLast
                             ? "p-4"
                             : "p-4 border-b border-blue-gray-50";
         
                         return (
-                            <tr key={productName}>
+                            <tr key={product._id}>
                                 <td className="py-3 px-4 text-center">{index + 1}</td>
                                 <td className={classes}>
-                                    <div className="flex items-center gap-3">
-                                        <Avatar src={img} alt={productName} size="sm" />
+                                    <div className="flex items-center gap-2">
+                                    {product.images?.slice(0, 4).map((image, imgIndex) => (
+                                        <Avatar key={imgIndex} src={image} alt={`Product ${imgIndex}`} size="sm" />
+                                    ))}
                                         <div className="flex flex-col">
                                             <Typography
                                             variant="small"
                                             color="blue-gray"
                                             className="font-normal"
                                             >
-                                            {productName}
+                                            {product.title}
                                             </Typography>
                                             
                                         </div>
@@ -210,10 +187,10 @@ export function ProductTableVendor() {
                                     <div className="flex flex-col">
                                         <Typography
                                         variant="small"
-                                        color={stock === "Out of Stock" ? "red" : "blue-gray"}
+                                        color={product.stock === 0 ? "red" : "blue-gray"}
                                         className="font-normal"
                                         >
-                                        {stock}
+                                        {product.stock > 0 ? product.stock : " Out of Stock"}
                                         </Typography>
                                     </div>
                                 </td>
@@ -225,7 +202,7 @@ export function ProductTableVendor() {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {price}
+                                            {product.price}
                                         </Typography>
                                     </div>
                                 </td>
@@ -235,8 +212,8 @@ export function ProductTableVendor() {
                                             variant="ghost"
                                             className="w-16 items-center justify-center"
                                             size="sm"
-                                            value={status ? "list" : "unlist"}
-                                            color={status ? "green" : "red"}
+                                            value={product.status ? "list" : "unlist"}
+                                            color={product.status ? "green" : "red"}
                                         />
                                     </div>
                                 </td>
@@ -262,7 +239,11 @@ export function ProductTableVendor() {
                                 </td>
                             </tr>
                         );
-                        },
+                        })
+                    ):(
+                        <tr>
+                            <td colSpan="5">No products available</td>
+                        </tr>
                     )}
                     </tbody>
                     
