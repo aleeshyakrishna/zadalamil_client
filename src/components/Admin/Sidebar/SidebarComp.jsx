@@ -27,6 +27,9 @@ import { TruckIcon } from '@heroicons/react/24/outline';
 import { BookmarkIcon } from '@heroicons/react/24/outline';
 import { TagIcon } from '@heroicons/react/24/outline';
 import { Link } from "react-router-dom";
+import { MdOutlineSettingsApplications } from "react-icons/md";
+import { TbUserHexagon } from "react-icons/tb";
+import { LiaBloggerB } from "react-icons/lia";
  
 export function SidebarWithBurgerMenu() {
   const [open, setOpen] = React.useState(0);
@@ -121,7 +124,7 @@ export function SidebarWithBurgerMenu() {
                     className="border-b-0 p-3"
                   >
                     <ListItemPrefix>
-                      <TagIcon className="h-5 w-5" />
+                      <LiaBloggerB className="h-5 w-5" />
                     </ListItemPrefix>
                     <Typography color="blue-gray" className="mr-auto font-normal">
                       Brand Management
@@ -153,7 +156,7 @@ export function SidebarWithBurgerMenu() {
                     className="border-b-0 p-3"
                   >
                     <ListItemPrefix>
-                      <UserCircleIcon className="h-5 w-5" />
+                      <TbUserHexagon className="h-5 w-5" />
                     </ListItemPrefix>
                     <Typography color="blue-gray" className="mr-auto font-normal">
                     Vendor Management
@@ -169,7 +172,7 @@ export function SidebarWithBurgerMenu() {
                     className="border-b-0 p-3"
                   >
                     <ListItemPrefix>
-                      <UserCircleIcon className="h-5 w-5" />
+                      <MdOutlineSettingsApplications className="h-5 w-5" />
                     </ListItemPrefix>
                     <Typography color="blue-gray" className="mr-auto font-normal">
                     Seller Application Management
