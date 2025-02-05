@@ -1,9 +1,9 @@
-import axios  from "axios"
+import axios  from "axios";
+import { BASE_URL } from "./constants";
+
 
 const api = axios.create({
-  // baseURL : "https://storyclub-backend.onrender.com"
-  baseURL : "http://localhost:5001"
-//   baseURL: "https://activelisteners-backend-2.onrender.com/",
+  baseURL : BASE_URL
 });
 
 api.interceptors.request.use(
