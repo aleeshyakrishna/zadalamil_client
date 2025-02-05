@@ -19,8 +19,9 @@ import {
 
 import logo from '../../../assets/images/logo.png';
 import login from "../../../assets/images/login.png";
-import { Link } from "react-router-dom";
- 
+import { Link, useNavigate } from "react-router-dom";
+import { vendorLogout } from "../../../Redux/reducer/authVendorSlice";
+import { useDispatch } from "react-redux";
 
 const profileMenuItems = [
   {
@@ -38,6 +39,13 @@ function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
  
   const closeMenu = () => setIsMenuOpen(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await dispatch(vendorLogout());
+    navigate('/vendor/vendor-login');
+  }
  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -69,7 +77,7 @@ function ProfileMenu() {
             <Link key={label} to={path}>
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={isLastItem ? handleLogout : closeMenu}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
