@@ -20,7 +20,7 @@ export const addCategory = async (categoryData) => {
     }
 };
 
-export const getCategories = async ( page = 1, limit = 10) => {
+export const getCategories = async ( page = 1, limit = 10, status = "all", search = "") => {
     try {
         const authToken = localStorage.getItem("authToken");
         
@@ -28,7 +28,7 @@ export const getCategories = async ( page = 1, limit = 10) => {
                 throw new Error("Unauthorized: No token found!");
             }
 
-        const response = await api.get(`/api/admin/get-categories?page=${page}&limit=${limit}`, {
+        const response = await api.get(`/api/admin/get-categories?page=${page}&limit=${limit}&search=${search}&status=${status}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             },

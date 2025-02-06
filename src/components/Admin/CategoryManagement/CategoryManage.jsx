@@ -24,24 +24,22 @@ import { AddCategoryModal } from '../Modal/Category/AddCategoryModal.jsx';
 import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
-import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory, updateCategoryStatus } from '../../../Utils/categoryService.js';
+import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory, updateCategoryStatus } 
+from '../../../Utils/categoryService.js';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
 import { StatusCategoryModal } from '../Modal/Category/StatusCategoryModal.jsx';
 
+const CATEGORY_STATUS = {
+    ALL: "ALL",
+    LIST: "LIST",
+    UNLIST: "UNLIST",
+};
+
 const TABS = [
-    {
-        label: "All",
-        value: "all",
-    },
-    {
-        label: "List",
-        value: "list",
-    },
-    {
-        label: "Unlist",
-        value: "unlist",
-    },
+    { label: "All", value: CATEGORY_STATUS.ALL },
+    { label: "List", value: CATEGORY_STATUS.LIST },
+    { label: "Unlist", value: CATEGORY_STATUS.UNLIST },
 ];
 
 const TABLE_HEAD = ["No", "Category Image", "Category Name", "Status", "Edit", "Delete"];
@@ -62,12 +60,16 @@ export default function CategoryTable()  {
     const [editingCategory, setEditingCategory] = useState(null);
     const [filteredCategories, setFilteredCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState(CATEGORY_STATUS.ALL);
+    const [searchQuery] = useState("");
 
     useEffect(() => {
         const loadCategories = async () => {
             setLoading(true);
             try {
-                const data = await getCategories(currentPage, 10);
+                const statusFilter = selectedStatus === CATEGORY_STATUS.ALL ? "" : selectedStatus;
+                const data = await getCategories(currentPage, 10, statusFilter, searchQuery);
+
                 setCategories(data.categories); 
                 setTotalPages(data.totalPages);
             } catch (error) {
@@ -77,19 +79,23 @@ export default function CategoryTable()  {
             }
         };
         loadCategories();
-    }, [currentPage]);
+    }, [currentPage, selectedStatus, searchQuery]);
 
     useEffect(() => {
-        if(searchTerm.trim() === "") {
-            setFilteredCategories(categories);
-        } else {
-            setFilteredCategories(
-                categories.filter((category) => 
-                    category.name.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            )
+        let filtered = categories;
+    
+        if (selectedStatus !== CATEGORY_STATUS.ALL) {
+            filtered = categories.filter((category) => category.status === selectedStatus);
         }
-    }, [categories, searchTerm])
+    
+        if (searchTerm.trim() !== "") {
+            filtered = filtered.filter((category) =>
+                category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        setFilteredCategories(filtered);
+    }, [categories, searchTerm, selectedStatus]);
+    
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -175,23 +181,22 @@ export default function CategoryTable()  {
 
     const handleStatusCategory = async (category) => {
         const updatedStatus = category.status === "LIST" ? "UNLIST" : "LIST";
-            try {
-                const result = await updateCategoryStatus(category._id, { status: updatedStatus });
-        
-                if (result.success) {
-                    setCategories((prevCategories) =>
-                        prevCategories.map((b) =>
-                            b._id === category._id ? { ...b, status: updatedStatus } : b
-                        )
-                    );
-                    toast.success("Category status updated successfully");
-                    setIsModalOpenStatusCategory(false);
-                } else {
-                    console.error("Failed to update Category status:", result.message);
-                }
-            } catch (err) {
-                console.error("Error updating Category status:", err);
+        try {
+            const result = await updateCategoryStatus(category._id, { status: updatedStatus });
+    
+            if (result.success) {
+                setCategories((prevCategories) =>
+                    prevCategories.map((b) =>
+                        b._id === category._id ? { ...b, status: updatedStatus } : b
+                    )
+                );
+                toast.success("Category status updated successfully");
+            } else {
+                console.error("Failed to update Category status:", result.message);
             }
+        } catch (err) {
+            console.error("Error updating Category status:", err);
+        }
     };
     
     return (
@@ -219,10 +224,10 @@ export default function CategoryTable()  {
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        <Tabs value="all" className="w-full md:w-max">
+                        <Tabs value={selectedStatus} className="w-full md:w-max">
                         <TabsHeader>
                             {TABS.map(({ label, value }) => (
-                            <Tab key={value} value={value}>
+                            <Tab key={value} value={value} onClick={() => setSelectedStatus(value)}>
                                 &nbsp;&nbsp;{label}&nbsp;&nbsp;
                             </Tab>
                             ))}
