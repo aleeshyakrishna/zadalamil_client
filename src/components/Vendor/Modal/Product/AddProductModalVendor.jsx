@@ -34,8 +34,8 @@ export function AddProductVendorModal({ open, setOpen, saveProduct }) {
             </DialogHeader>
             
             <DialogBody>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                <label className="text-lg font-medium">1. General Info</label>
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center max-h-[400px] overflow-y-auto">
+                <label className="text-sm font-medium">1. General Info</label>
                 <div>
                     <input
                         type="text"
@@ -49,37 +49,51 @@ export function AddProductVendorModal({ open, setOpen, saveProduct }) {
                     ></textarea>
                     </div>
 
-                    <label className="text-lg font-medium">2. Stocking</label>
+                    <label className="text-sm font-medium">2. Stock</label>
                     <input
                     type="text"
                     placeholder="Stock"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
 
-                    <label className="text-lg font-medium">3. Prizing</label>
+                    <label className="text-sm font-medium">3. Prize</label>
                     <input
                     type="text"
                     placeholder="Price"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
 
-                    <label className="text-lg font-medium">4. Category</label>
+                    <label className="text-sm font-medium">4. Category</label>
                     <input
                     type="text"
                     placeholder="Category"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
 
-                    <label className="text-lg font-medium">5. Media</label>
+                    <label className="text-sm font-medium">5. Brand</label>
+                    <input
+                    type="text"
+                    placeholder="Brand"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+
+                    <label className="text-sm font-medium">6. Media</label>
                     <input
                     type="file"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
 
-                    <label className="text-lg font-medium">6. Color</label>
+                    <label className="text-sm font-medium">7. Color</label>
                     <input
                     type="text"
                     placeholder="Color"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+
+                    <label className="text-sm font-medium">8. Model</label>
+                    <input
+                    type="text"
+                    placeholder="Category"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
             </form>
