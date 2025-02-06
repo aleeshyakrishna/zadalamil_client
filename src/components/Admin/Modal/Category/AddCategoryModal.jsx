@@ -13,11 +13,13 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false); 
     const [img, setImg] = useState(null);
+    const [imgPreview, setImgPreview] = useState(null);
 
     useEffect(() => {
         if(open) {
             setErrorMessage("");
             setCategoryName("");
+            setImgPreview(null);
         }
     }, [open])
 
@@ -27,9 +29,11 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
             const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
             if (validImageTypes.includes(file.type)) {
                 setImg(file);
+                setImgPreview(URL.createObjectURL(file));
                 setErrorMessage(""); 
             } else {
                 setImg(null);
+                setImgPreview(null);
                 setErrorMessage("Invalid file type. Only PNG, JPG, and JPEG are allowed.");
             }
         }
@@ -97,6 +101,16 @@ export function AddCategoryModal({ open, setOpen, saveCategory }) {
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
                         </div>
+
+                        { imgPreview && (
+                            <div className='mt-4'>
+                                <img
+                                    src={imgPreview}
+                                    alt="Image Preview"
+                                    className='w-20 rounded-lg'
+                                 />
+                            </div>
+                        )}
 
                     {errorMessage && (
                         <div className='text-red-900 mt-2 text-sm'>
