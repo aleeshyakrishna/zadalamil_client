@@ -277,14 +277,14 @@ export default function CategoryTable()  {
                                             <td className="py-3 px-4 text-center">{rowIndex}</td>
 
                                             <td className={classes}>
-                                                <div className="flex items-center gap-3">
+                                                <div className="flex items-center gap-3 w-10 mt-5">
                                                     
                                                 <img 
-                                            src={category.categoryImg} 
-                                            alt={category.name} 
-                                            size="sm" 
-                                            className="w-[90px] h-[20px] object-cover"
-                                        />
+                                                    src={category.categoryImg} 
+                                                    alt={category.name} 
+                                                    size="sm" 
+                                                    className=" object-cover"
+                                                />
                                                 </div>
                                             </td>
 
