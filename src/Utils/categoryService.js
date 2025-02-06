@@ -67,26 +67,25 @@ export const updateCategory = async (categoryId, categoryData) => {
     try {
         const authToken = localStorage.getItem("authToken");
         
-            if(!authToken) {
-                throw new Error("Unauthorized: No token found!");
-            }
-            const formData = new FormData();
-            formData.append("name", categoryData.name);
-            if (categoryData.categoryImg) {
-                formData.append("logo", categoryData.categoryImg); 
-            }
-        const response = await api.put(`/api/admin/edit-category/${categoryId}`,
-            formData, 
-            {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
+        if (!authToken) {
+            throw new Error("Unauthorized: No token found!");
+        }
+
+        const formData = new FormData();
+        formData.append("name", categoryData.name);
+
+        if (categoryData.categoryImg) {
+            formData.append("categoryImg", categoryData.categoryImg);
+        }
+
+        const response = await api.put(`/api/admin/edit-category/${categoryId}`, formData, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
                 "Content-Type": "multipart/form-data",  
+            },
+        });
 
-                },
-            }
-        );
-
-        return response.data;
+        return response.data; 
     } catch (error) {
         console.error("Error updating category:", error);
         throw error.response?.data?.message || "Something went wrong";
