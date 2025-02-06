@@ -8,10 +8,11 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from 'react';
 
-export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
+export function AddCategoryModal({ open, setOpen, saveCategory }) {
     const [categoryName, setCategoryName] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false); 
+    const [img, setImg] = useState(null);
 
     useEffect(() => {
         if(open) {
@@ -20,24 +21,33 @@ export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
         }
     }, [open])
 
-    const handleSave = () => {
-        if (categoryName.trim()) {
-            const isCategoryExist = categories.some(
-                (cat) => cat.categoryName.toLowerCase() === categoryName.toLocaleLowerCase()
-            );
-            if (isCategoryExist) {
-                setErrorMessage("Category already exists.");
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (validImageTypes.includes(file.type)) {
+                setImg(file);
+                setErrorMessage(""); 
             } else {
-                setErrorMessage("");
-                setLoading(true); 
-                saveCategory(categoryName)
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                setImg(null);
+                setErrorMessage("Invalid file type. Only PNG, JPG, and JPEG are allowed.");
             }
-        } else {
-            setErrorMessage("Category name is required.");
         }
+    };
+
+    const handleSave = () => {
+        if (!categoryName.trim() || !img) {
+            setErrorMessage("Please provide both category name and image.");
+            return;
+        }
+        const formData = new FormData();
+        formData.append("name", categoryName);
+        formData.append("categoryImg", img);
+        setLoading(true); 
+        saveCategory(formData)
+        .finally(() => {
+            setLoading(false);
+        });
     };
 
     return (
@@ -77,6 +87,17 @@ export function AddCategoryModal({ open, setOpen, saveCategory,categories  }) {
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
                     </div>
+
+                    <label className="text-sm font-medium mt-4">Category Image (PNG, JPG, JPEG)</label>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/png, image/jpeg, image/jpg"
+                                onChange={handleFileChange}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            />
+                        </div>
+
                     {errorMessage && (
                         <div className='text-red-900 mt-2 text-sm'>
                             {errorMessage}

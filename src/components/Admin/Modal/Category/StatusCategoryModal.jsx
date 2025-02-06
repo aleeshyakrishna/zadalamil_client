@@ -6,9 +6,21 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useState } from 'react';
 
 export function StatusCategoryModal({ open, setOpen, category, handleStatusChange  }) {
-  return (
+    const [loading, setLoading] = useState(false); 
+
+    const handleStatus = () => {
+        setLoading(true); 
+        handleStatusChange(category)
+        .finally(() => {
+            setLoading(false);
+            setOpen(false); 
+        });
+    };
+
+    return (
     <Dialog
         open={open}
         handler={() => setOpen(false)}
@@ -21,7 +33,7 @@ export function StatusCategoryModal({ open, setOpen, category, handleStatusChang
         <div className='p-6'>
             <DialogHeader>
                 <div className="flex justify-between w-full">
-                    <span className="text-xl font-bold">Update Status for {category?.categoryName}</span>
+                    <span className="text-xl font-bold">Update Status for {category?.name}</span>
                     <Button
                         variant="text"
                         color="black"
@@ -38,7 +50,7 @@ export function StatusCategoryModal({ open, setOpen, category, handleStatusChang
                 </div>
                 <div className="flex justify-between w-full mt-4">
                     <h2>
-                        Current status: <strong className='text-blue-900'>{category?.status ? "LIST" : "UNLIST"}</strong>
+                        Current status: <strong className='text-blue-900'>{category?.status ===  "LIST" ? "LIST" : "UNLIST"}</strong>
                     </h2>
                 </div>
             </DialogBody>
@@ -53,23 +65,26 @@ export function StatusCategoryModal({ open, setOpen, category, handleStatusChang
                 </Button>
                 <Button
                     className='bg-red-900 text-white px-6 py-2'
-                    onClick={() => {
-                        handleStatusChange(category); 
-                    }}
+                    onClick={handleStatus}
+                    disabled={loading}
                 >
-                    <span>CHANGE</span>
+                    {loading ? (
+                        <div className="spinner-border animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
+                        ) : (
+                        <span>CHANGE</span>
+                    )}
                 </Button>
             </DialogFooter>
         </div>
     </Dialog>
-  );
+    );
 }
 
 StatusCategoryModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     category: PropTypes.shape({
-        categoryName: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
         status: PropTypes.bool.isRequired,
         }).isRequired,
     handleStatusChange: PropTypes.func.isRequired,
