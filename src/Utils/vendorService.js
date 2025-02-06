@@ -1,4 +1,4 @@
-import api from "../Utils/BaseApi.js";
+import api from './BaseApi.js';
 
 export const fetchVendors = async  (page=1, limit = 5) => {
     try {
