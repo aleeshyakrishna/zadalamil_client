@@ -1,3 +1,5 @@
+import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { TrashIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 import {
@@ -17,7 +19,8 @@ import {
   Tooltip
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-
+import axios from "../../../Utils/BaseUrl.js";
+import { toast } from "react-hot-toast";
  
 const TABS = [
   {
@@ -26,78 +29,121 @@ const TABS = [
   },
   {
     label: "Approved",
-    value: "approved",
+    value: "APPROVED",
   },
   {
     label: "Rejected",
-    value: "rejected",
+    value: "REJECTED",
   },
   {
     label: "Ongoing",
-    value: "ongoing",
+    value: "ONGOING",
   },
   {
     label: "Pending",
-    value: "pending",
+    value: "PENDING",
   },
 ];
- 
 const TABLE_HEAD = ["No", "Vendor", "Company Name", "Status", "Date","Action", "Details", "Delete"];
- 
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "approved",
-    date: "23/04/18",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "ongoing",
-    date: "23/04/18",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "pending",
-    date: "19/09/17",
-    action: false,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "approved",
-    date: "24/12/08",
-    action: true,
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@huawei.com",
-    companyName: "Huawei",
-    LicenseNumber: "CN-4568798",
-    status: "rejected",
-    date: "04/10/21",
-    action: false,
-  },
-];
- 
+
+// const TABLE_ROWS = [
+    //   {
+        //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
+        //     name: "John Michael",
+        //     email: "john@huawei.com",
+        //     companyName: "Huawei",
+        //     LicenseNumber: "CN-4568798",
+//     status: "approved",
+//     date: "23/04/18",
+//     action: true,
+//   },
+//   {
+    //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
+    //     name: "Alexa Liras",
+    //     email: "alexa@huawei.com",
+//     companyName: "Huawei",
+//     LicenseNumber: "CN-4568798",
+//     status: "ongoing",
+//     date: "23/04/18",
+//     action: true,
+//   },
+//   {
+    //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
+    //     name: "Laurent Perrier",
+    //     email: "laurent@huawei.com",
+    //     companyName: "Huawei",
+//     LicenseNumber: "CN-4568798",
+//     status: "pending",
+//     date: "19/09/17",
+//     action: false,
+//   },
+//   {
+    //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
+    //     name: "Michael Levi",
+    //     email: "michael@huawei.com",
+    //     companyName: "Huawei",
+    //     LicenseNumber: "CN-4568798",
+    //     status: "approved",
+    //     date: "24/12/08",
+    //     action: true,
+    //   },
+    //   {
+        //     img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
+        //     name: "Richard Gran",
+//     email: "richard@huawei.com",
+//     companyName: "Huawei",
+//     LicenseNumber: "CN-4568798",
+//     status: "rejected",
+//     date: "04/10/21",
+//     action: false,
+//   },
+// ];
+
 export function VendorTable() {
+    const navigate = useNavigate()
+    const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
+
+    useEffect(() => {
+        const fetchApplications = async () => {
+          const authToken = localStorage.getItem("authToken");
+    
+          if (!authToken) {
+            toast.error("Unauthorized: No token found! Please log in.");
+            navigate("/admin/admin-login");
+            return;
+          }
+    
+          try {
+            console.log("Fetching seller applications...");
+            const response = await axios.get("api/admin/applications", {
+              headers: {
+                Authorization: `Bearer ${authToken}`, 
+              },
+            });
+    
+            console.log(response, "------------------>>");
+    
+            if (response.status === 200) {
+              SETTABLE_ROWS(response.data);
+            }
+          } catch (error) {
+            console.error("Error fetching applications:", error);
+    
+            if (error.response?.status === 401) {
+              toast.error(
+                "Unauthorized: Your session has expired. Please log in again."
+              );
+              localStorage.removeItem("authToken"); 
+              navigate("/admin/admin-login");
+            } else {
+              toast.error("Failed to load applications. Please try again.");
+              navigate("/admin/admin-login");
+            }
+          }
+        };
+    
+        fetchApplications();
+      }, []);
     return (
         <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -159,7 +205,7 @@ export function VendorTable() {
             </thead>
             <tbody>
                 {TABLE_ROWS.map(
-                ({ img, name, email,companyName, LicenseNumber, status, action, date }, index) => {
+                (data, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                     ? "p-4"
@@ -170,21 +216,21 @@ export function VendorTable() {
                         <td className="py-3 px-4 text-center">{index + 1}</td>
                         <td className={classes}>
                         <div className="flex items-center gap-3">
-                            <Avatar src={img} alt={name} size="sm" />
+                            <Avatar src={data.livePhoto} alt={data.name} size="sm" />
                             <div className="flex flex-col">
                             <Typography
                                 variant="small"
                                 color="blue-gray"
                                 className="font-normal"
                             >
-                                {name}
+                                {data.name}
                             </Typography>
                             <Typography
                                 variant="small"
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                             >
-                                {email}
+                                {data.email}
                             </Typography>
                             </div>
                         </div>
@@ -196,14 +242,14 @@ export function VendorTable() {
                             color="blue-gray"
                             className="font-normal"
                             >
-                            {companyName}
+                            {data.tradeName}
                             </Typography>
                             <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal opacity-70"
                             >
-                            {LicenseNumber}
+                            {data.licenseNumber}
                             </Typography>
                         </div>
                         </td>
@@ -213,15 +259,15 @@ export function VendorTable() {
                                 <Chip
                                 variant="ghost"
                                 size="sm"
-                                value={status}
+                                value={data.status}
                                 color={
-                                    status === "approved"
+                                    data.status === "APPROVED"
                                     ? "green"
-                                    : status === "rejected"
+                                    : data.status === "REJECTED"
                                     ? "red"
-                                    : status === "ongoing"
+                                    : data.status === "ONGOING"
                                     ? "orange"
-                                    : status === "pending"
+                                    : data.status === "PENDING"
                                     ? "blue"
                                     : "blue-gray"
                                 }
@@ -235,7 +281,7 @@ export function VendorTable() {
                             color="blue-gray"
                             className="font-normal"
                         >
-                            {date}
+                            {data.createdAt}
                         </Typography>
                         </td>
 
@@ -244,8 +290,8 @@ export function VendorTable() {
                             <Chip
                             variant="filled"
                             size="md"
-                            value={action ? "block" : "unblock"}
-                            color={action ? "green" : "red"}
+                            value={data.action ? "block" : "unblock"}
+                            color={data.action ? "green" : "red"}
                             className="w-20 items-center justify-center cursor-pointer"
                             />
                         </div>
