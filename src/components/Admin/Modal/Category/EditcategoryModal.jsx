@@ -6,34 +6,37 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useEffect, useState } from 'react';
-import { checkCategoryNacheckCategoryNameExists } from '../../../../Utils/categoryService';
 
-export function EditCategoryModal({ open, setOpen, saveCategory, categoryData, token  }) {
-    const [categoryName, setCategoryName] = useState("");
-    const [validationMessage, setValidationMessage] = useState("");
-
-    useEffect(() => {
-        // console.log("categoryData:", categoryData);
-        if (categoryData) {
-          setCategoryName(categoryData.categoryName || "");
+export function EditCategoryModal({ open, setOpen, saveCategory, category, setEditingCategory, existingCategories=[]  }) {
+    
+    const handleSave = () => {
+        if (!category.name.trim()) {
+            setEditingCategory({
+                ...category,
+                errorMessage: "Category name is required",
+            });
+            return;
         }
-      }, [categoryData]);
-
-    const handleCategoryNameChange = async (e) => {
-        const newName = e.target.value;
-        setCategoryName(newName);
-        setValidationMessage("");
-
-        if (token) {
-            try {
-                const {  message } = await checkCategoryNacheckCategoryNameExists(newName, token);
-                setValidationMessage(message); 
-            } catch (error) {
-                setValidationMessage(error.message); 
-            }
+        const isDuplicate = existingCategories.some(
+            (existingCategory) =>
+                existingCategory.name === category.name && existingCategory._id !== category._id
+        );
+    
+        if (isDuplicate) {
+            setEditingCategory({
+                ...category,
+                errorMessage: "This category name already exists.",
+            });
+            return;
         }
-    };
+    
+        setEditingCategory({
+            ...category,
+            errorMessage: "",
+        });
+    
+        saveCategory(category);
+    };  
 
     return (
         <Dialog
@@ -62,19 +65,41 @@ export function EditCategoryModal({ open, setOpen, saveCategory, categoryData, t
                 
                 <DialogBody>
                 <form className="items-center">
-                    <label className="text-lg font-medium">Category Name</label>
+                    <label className="text-sm font-medium">Category Name</label>
                     <div>
                         <input
                             type="text"
-                            value={categoryName}  
-                            onChange={handleCategoryNameChange} 
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            value={category?.name || ""}
+                                onChange={(e) =>
+                                    setEditingCategory({
+                                        ...category,
+                                        name: e.target.value,
+                                        errorMessage: "",
+                                    })
+                                }
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
                         />
-                        {validationMessage && (
-                            <p className={`text-sm mt-2 ${validationMessage.includes("available") ? "text-green-500" : "text-red-500"}`}>
-                                {validationMessage}
-                            </p>
-                        )}
+
+                            {category?.errorMessage && (
+                                <p className="text-red-500 text-xs mt-1">
+                                    {category.errorMessage}
+                                </p>
+                            )}
+
+                    <label className="text-sm font-medium">Category Image</label>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/png, image/jpeg, image/jpg"
+                                onChange={(e) =>
+                                    setEditingCategory({
+                                        ...category,
+                                        logo: e.target.files[0],
+                                    })
+                                }
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                            />
+                        </div>
                     </div>
                 </form>
                 </DialogBody>
@@ -90,7 +115,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory, categoryData, t
                     </Button>
                     <Button
                         className='bg-green-900 text-white px-6 py-2 rounded-md'
-                        onClick={() => saveCategory(categoryName)}
+                        onClick={handleSave}
                     >
                         <span>UPDATE</span>
                     </Button>
@@ -104,6 +129,7 @@ EditCategoryModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     saveCategory: PropTypes.func.isRequired,
-    categoryData: PropTypes.object.isRequired,
-    token: PropTypes.string.isRequired,
+    category: PropTypes.object.isRequired,
+    setEditingCategory: PropTypes.func.isRequired, 
+    existingCategories: PropTypes.array.isRequired,
 };

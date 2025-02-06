@@ -25,7 +25,6 @@ import { EditCategoryModal } from '../Modal/Category/EditcategoryModal.jsx';
 import { ConfirmEditCategoryModal } from '../Modal/Category/ConfirmEditCategoryModal.jsx';
 import { DeleteCategoryModal } from '../Modal/Category/DeleteCategoryModal.jsx';
 import { addCategory, checkCategoryNacheckCategoryNameExists, deleteCategory, getCategories, updateCategory, updateCategoryStatus } from '../../../Utils/categoryService.js';
-import { useSelector } from 'react-redux';
 import { toast } from "react-hot-toast";
 import Loader from "../../Loader/Loader.jsx";
 import { StatusCategoryModal } from '../Modal/Category/StatusCategoryModal.jsx';
@@ -46,234 +45,132 @@ const TABS = [
 ];
 
 const TABLE_HEAD = ["No", "Category Name", "Status", "Edit", "Delete"];
-
    
 export default function CategoryTable()  {
-    const token = useSelector((state) => state.auth.token);
-
     const [categories, setCategories] = useState([]);
-
     const [isModalOpenAddCategory, setIsModalOpenAddCategory] = useState(false);
     const [isModalOpenEditCategory, setIsModalOpenEditCategory] = useState(false);
     const [isModalOpenConfirmEditCategory, setIsModalOpenConfirmEditCategory] = useState(false);
     const [isModalOpenDeleteCategory, setIsModalOpenDeleteCategory] = useState(false);
     const [isModalOpenStatusCategory, setIsModalOpenStatusCategory] = useState(false);
     const [loading, setLoading] = useState([]);
-    const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalCategories, setTotalCategories] = useState(0);
     const categoriesPerPage = 10;
+    const [totalPages, setTotalPages] = useState(1);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null); 
+    const [editingCategory, setEditingCategory] = useState(null);
 
     useEffect(() => {
-        if (token) {
+        const loadCategories = async () => {
             setLoading(true);
-            const fetchCategories = async () => {
-                try {
-                    const { categories: fetchedCategories, totalCategories: total } = await getCategories(token, currentPage, categoriesPerPage);
-                    const mappedCategories = fetchedCategories.map((cat) => ({
-                        categoryName: cat.name,
-                        categoryId: cat._id,
-                        status: cat.status?.toUpperCase() === "LIST",
-                    }));
-
-                    setCategories(mappedCategories);
-                    setTotalCategories(total); 
-                    setLoading(false);
-                } catch (error) {
-                    toast.error("Failed to fetch categories");
-                    console.error("Error fetching categories:", error);
-                    setLoading(false);
-                }
-            };
-            fetchCategories();
-        }
-    }, [token, currentPage]);
+            try {
+                const data = await getCategories(currentPage, 10);
+                setCategories(data.categories);
+                setTotalPages(data.totalPages);
+                
+            } catch (error) {
+                console.error("Error loading brands:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadCategories();
+    }, [currentPage]);
 
     const handleNextPage = () => {
-        if (currentPage * categoriesPerPage < totalCategories) {
-            setCurrentPage(prev => prev + 1);
-        }
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
     };
 
     const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(prev => prev - 1);
-        }
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
-    
-    const handleUpdateCategory = async (categoryName) => {
-        if (!token) {
-            toast.error("No authentication token found");
-            return;
-        }
-    
-        try {
-            const { exists } = await checkCategoryNacheckCategoryNameExists(categoryName, token);
-            if (exists) {
+
+    const handleEditCategory = (category) => {
+        setEditingCategory(category); 
+        setIsModalOpenEditCategory(true);
+    };
+
+    const handleUpdateCategory = async (category) => {
+        if (category.name !== editingCategory.name) {
+            try {
+                const { exists, message } = await checkCategoryNacheckCategoryNameExists(category.name);
+                if (exists) {
+                    setEditingCategory({ ...category, errorMessage: message }); 
+                    return; 
+                }
+            } catch (error) {
+                console.error("Error validating category name:", error.message);
+                setEditingCategory({ ...category, errorMessage: error.message });
                 return;
             }
-    
-            console.log("Category name is valid for update:", categoryName);
-            setSelectedCategory((prev) => ({
-                ...prev,
-                categoryName,
-            }));
-            setIsModalOpenEditCategory(false);
-            setIsModalOpenConfirmEditCategory(true);
-        } catch (error) {
-            toast.error("Error validating category name");
-            console.error("Error:", error);
         }
+        setEditingCategory(category);
+        setIsModalOpenEditCategory(false);
+        setIsModalOpenConfirmEditCategory(true);
     };
     
-    
-
     const handleConfirmUpdateCategory = async () => {
-        if (!token || !selectedCategory) {
-            toast.error("No authentication token or category selected");
-            return;
-        }
-    
         try {
-            const response = await updateCategory(
-                selectedCategory.categoryId,
-                selectedCategory.categoryName,
-                token
+            const data = await updateCategory(editingCategory._id, editingCategory); 
+            console.log("Category updated:", data);
+            toast.success("Category updated successfully");
+            setCategories((prevCategories) =>
+                prevCategories.map((b) =>
+                    b._id === editingCategory._id ? { ...b, name: editingCategory.name, logo: editingCategory.categoryImg } : b
+                )
             );
-    
-            if (response.success) {
-                const { categories: fetchedCategories, totalCategories: total  } = await getCategories(token, currentPage, categoriesPerPage);
-                setCategories(fetchedCategories);
-                setTotalCategories(total);
-                
-                if (Array.isArray(fetchedCategories)) {
-                    const mappedCategories = fetchedCategories.map((cat) => ({
-                        categoryName: cat.name,
-                        categoryId: cat._id,
-                        status: cat.status?.toUpperCase() === "LIST",
-                    }));
-    
-                    setCategories(mappedCategories);
-                    console.log("Category updated successfully");
-                    toast.success("Category updated successfully");
-                    setIsModalOpenConfirmEditCategory(false);
-                } else {
-                    console.error("Fetched categories are not in an array format:", fetchedCategories);
-                }
-            }
+            setIsModalOpenConfirmEditCategory(false); 
         } catch (error) {
-            toast.error("Failed to update category");
             console.error("Error updating category:", error);
         }
     };
 
-    const openDeleteModal = (categoryId) => {
-        setCategoryIdToDelete(categoryId);
-        setIsModalOpenDeleteCategory(true);
-    };
-
     const handleDeleteCategory = async (categoryId) => {
-        if (!token) {
-            toast.error("No authentication token found");
-            return;
-        }
-        
         try {
-            const response = await deleteCategory(categoryId, token);
-    
-            if (response.success) {
-                setCategories(prevCategories => {
-                    const updatedCategories = prevCategories.filter(cat => cat.categoryId !== categoryId);
-                    
-                    const newTotalCategories = response.totalCategories;
-                    const lastPage = Math.max(1, Math.ceil(newTotalCategories / categoriesPerPage));
-                    
-                    if (updatedCategories.length === 0 && currentPage > 1) {
-                        setCurrentPage(lastPage);
-                    }
-    
-                    return updatedCategories;
-                });
-    
-                setTotalCategories(response.totalCategories);
-                toast.success("Category deleted successfully");
-                setIsModalOpenDeleteCategory(false);
-            }
+            const data = await deleteCategory(categoryId);
+            console.log("Category deleted successfully:", data);
+            toast.success("Category deleted successfully");
+            setIsModalOpenDeleteCategory(false);
+            setCategories((prevCategories) => prevCategories.filter((category) => category._id !== categoryId));
         } catch (error) {
-            toast.error("Failed to delete category");
-            console.error("Error deleting category:", error);
+            console.error("Error deleting Category:", error);
+            toast.error("Error deleting Category");
         }
     };
     
-    
-
-    const handleSaveCategory = async (categoryName) => {
-        if(token) {
-            try {
-                const isCategoryExist = categories.some(cat => cat.categoryName.toLowerCase() === categoryName.toLowerCase());
-                
-                if(isCategoryExist) {
-                    toast.error("Category already exists");
-                    return;
-                }
-
-                const response = await addCategory(categoryName, token);
-                
-                if(response.success) {
-                    const { categories: fetchedCategories, totalCategories: total } = await getCategories(token);
-                    console.log(fetchedCategories);
-                    const mappedCategories = fetchedCategories.map((cat) => ({
-                        categoryName: cat.name, 
-                        categoryId: cat._id,
-                        status: cat.status?.toUpperCase() === "LIST", 
-                    }));
-    
-                    setCategories(mappedCategories);
-                    setTotalCategories(total);
-                    if (currentPage * categoriesPerPage >= total) {
-                        const lastPage = Math.ceil(total / categoriesPerPage);
-                        setCurrentPage(lastPage); 
-                    }
-    
-                    toast.success("Category added successfully")
-                    setIsModalOpenAddCategory(false); 
-                }
-            } catch (error) {
-                console.error("Error adding category", error);
-            }
-
-        } else {
-            console.error("No authentication token");
-            toast.error("No authentication token found");
+    const handleSaveCategory = async (categoryData) => {
+         try {
+            const data = await addCategory(categoryData);
+            console.log("Category created successfully:", data);
+            toast.success("Category added successfully")
+            setIsModalOpenAddCategory(false);
+            setCategories((prevCategories) => [...prevCategories, data.category]);
+        } catch (error) {
+            console.error("Error saving category:", error);
         }
     };
 
     const handleStatusCategory = async (category) => {
-        if (!token) {
-            toast.error("No authentication token found");
-            return;
-        }
-    
-        try {
-            const newStatus = !category.status;
-            const response = await updateCategoryStatus(category.categoryId, { status: newStatus }, token);
-            
-            if (response.success) {
-                setCategories((prev) =>
-                    prev.map((cat) =>
-                        cat.categoryId === category.categoryId ? { ...cat, status: newStatus } : cat
-                    )
-                );
-                toast.success("Category status updated successfully");
-                setIsModalOpenStatusCategory(false);
+        const updatedStatus = category.status === "LIST" ? "UNLIST" : "LIST";
+            try {
+                const result = await updateCategoryStatus(category._id, { status: updatedStatus });
+        
+                if (result.success) {
+                    setCategories((prevCategories) =>
+                        prevCategories.map((b) =>
+                            b._id === category._id ? { ...b, status: updatedStatus } : b
+                        )
+                    );
+                    toast.success("Category status updated successfully");
+                    setIsModalOpenStatusCategory(false);
+                } else {
+                    console.error("Failed to update Category status:", result.message);
+                }
+            } catch (err) {
+                console.error("Error updating Category status:", err);
             }
-        } catch (error) {
-            toast.error("Failed to update category status");
-            console.error("Error updating status:", error);
-        }
     };
-    
     
     return (
         <Card className="h-full w-full">
@@ -343,18 +240,14 @@ export default function CategoryTable()  {
                         <tbody>
                             { categories.length > 0 ? (
                                 categories.map(
-                                    ({ categoryId, categoryName, status }, index) => {
+                                    (category, index) => {
                                         const isLast = index === categories.length - 1;
                                         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
-                            
-                                        const displayStatus = status ? "LIST" : "UNLIST";
-                                        const chipColor = status ? "green" : "red";
-                            
                                         const startIndex = (currentPage - 1) * categoriesPerPage;
                                         const rowIndex = startIndex + index + 1;
                     
                                     return (
-                                        <tr key={categoryName}>
+                                        <tr key={category._id}>
                                             <td className="py-3 px-4 text-center">{rowIndex}</td>
                                             <td className={classes}>
                                                 <div className="flex items-center gap-3">
@@ -365,7 +258,7 @@ export default function CategoryTable()  {
                                                         color="blue-gray"
                                                         className="font-normal"
                                                         >
-                                                        {categoryName}
+                                                        {category.name}
                                                         </Typography>
                                                         
                                                     </div>
@@ -377,10 +270,10 @@ export default function CategoryTable()  {
                                                         variant="ghost"
                                                         className="w-16 items-center justify-center cursor-pointer"
                                                         size="sm"
-                                                        value={displayStatus}
-                                                        color={chipColor}
+                                                        value={category.status}
+                                                        color={category.status === "LIST" ? "green" : "red"}
                                                         onClick={() => {
-                                                            setSelectedCategory({ categoryId, categoryName, status });
+                                                            setSelectedCategory(category);
                                                             setIsModalOpenStatusCategory(true); 
                                                         }}
                                                     />
@@ -391,10 +284,7 @@ export default function CategoryTable()  {
                                                 <Tooltip content="Edit Category">
                                                     <IconButton variant="text">
                                                         <PencilIcon 
-                                                        onClick={() => {
-                                                            setSelectedCategory({ categoryId, categoryName });
-                                                            setIsModalOpenEditCategory(true);
-                                                        }}
+                                                        onClick={() => handleEditCategory(category)}
             
                                                         className="h-4 w-4 text-blue-900" />
                                                     </IconButton>
@@ -405,7 +295,10 @@ export default function CategoryTable()  {
                                                 <Tooltip content="Delete Category">
                                                     <IconButton variant="text">
                                                         <TrashIcon 
-                                                        onClick={() => openDeleteModal(categoryId) }
+                                                        onClick={() => {
+                                                            setSelectedCategoryId(category._id);  
+                                                            setIsModalOpenDeleteCategory(true); 
+                                                        }}
                                                         className="h-4 w-4 text-red-900" />
                                                     </IconButton>
                                                 </Tooltip>
@@ -435,9 +328,10 @@ export default function CategoryTable()  {
                         <EditCategoryModal
                             open={isModalOpenEditCategory}
                             setOpen={setIsModalOpenEditCategory}
-                            saveCategory={handleUpdateCategory}
-                            categoryData={selectedCategory}
-                            token={token}
+                            saveCategory={() => handleUpdateCategory(editingCategory)}
+                            category={editingCategory}
+                            setEditingCategory={setEditingCategory}
+                            existingCategories={categories}
                         />
                     
                         <ConfirmEditCategoryModal
@@ -449,8 +343,8 @@ export default function CategoryTable()  {
                         <DeleteCategoryModal
                             open={isModalOpenDeleteCategory}
                             setOpen={setIsModalOpenDeleteCategory}
-                            deleteCategory={() => handleDeleteCategory(categoryIdToDelete)}
-                            categoryId={categoryIdToDelete}
+                            deleteCategory={() => handleDeleteCategory(selectedCategoryId)}
+                            category={selectedCategory}
                         />
 
                         <StatusCategoryModal
@@ -464,13 +358,13 @@ export default function CategoryTable()  {
                 </CardBody>
                 <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
                         <Typography variant="small" color="blue-gray" className="font-normal">
-                            Page {currentPage} of {Math.ceil(totalCategories / categoriesPerPage)}
+                            Page {currentPage}
                         </Typography>
                         <div className="flex gap-2">
                             <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
                                 Previous
                             </Button>
-                            <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage * categoriesPerPage >= totalCategories}>
+                            <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
                                 Next
                             </Button>
                         </div>

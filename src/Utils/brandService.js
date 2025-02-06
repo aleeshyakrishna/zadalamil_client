@@ -1,36 +1,17 @@
-import api from './BaseUrl.js';
-
-const isTokenValid = (token) => {
-    try {
-        const decoded = JSON.parse(atob(token.split('.')[1])); 
-        return decoded.exp * 1000 > Date.now(); 
-    } catch (error) {
-        console.error("Invalid token format:", error);
-        return false;
-    }
-};
+import api from './BaseApi.js';
 
 export const fetchBrands = async (page = 1, limit = 10) => {
-    const token = localStorage.getItem("authToken");
-
-    console.log("Token in localStorage:", token);
-
-    if (!token) {
-        console.error("No authentication token found.");
-        throw new Error("No authentication token found.");
-    }
-
-    if (!isTokenValid(token)) {
-        console.error("Authentication token is invalid or expired.");
-        localStorage.removeItem("authToken");
-        throw new Error("Authentication token is invalid or expired.");
-    }
-
     try {
-        console.log("Fetching brands with token:", token);
+        const authToken = localStorage.getItem("authToken");
+    
+        if(!authToken) {
+            throw new Error("Unauthorized: No token found!");
+        }
+
+        console.log("Fetching brands with token:", authToken);
         const response = await api.get(`/api/admin/get-brands?page=${page}&limit=${limit}`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${authToken}`,
             },
         });
 
@@ -50,23 +31,15 @@ export const fetchBrands = async (page = 1, limit = 10) => {
 
 
 export const createBrand = async (brandData) => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-        console.error("No authentication token found.");
-        throw new Error("No authentication token found.");
-    }
-
-    if (!isTokenValid(token)) {
-        console.error("Authentication token is invalid or expired.");
-        localStorage.removeItem("authToken");
-        throw new Error("Authentication token is invalid or expired.");
-    }
-
     try {
+        const authToken = localStorage.getItem("authToken");
+        
+            if(!authToken) {
+                throw new Error("Unauthorized: No token found!");
+            }
         const response = await api.post("/api/admin/create-brand", brandData, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${authToken}`,
                 "Content-Type": "multipart/form-data",
             },
         });
@@ -79,23 +52,15 @@ export const createBrand = async (brandData) => {
 };
 
 export const deleteBrand = async (brandId) => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-        console.error("No authentication token found.");
-        throw new Error("No authentication token found.");
-    }
-
-    if (!isTokenValid(token)) {
-        console.error("Authentication token is invalid or expired.");
-        localStorage.removeItem("authToken");
-        throw new Error("Authentication token is invalid or expired.");
-    }
-
     try {
+        const authToken = localStorage.getItem("authToken");
+        
+            if(!authToken) {
+                throw new Error("Unauthorized: No token found!");
+            }
         const response = await api.delete(`/api/admin/delete-brand/${brandId}`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${authToken}`,
             },
         });
 
@@ -106,12 +71,17 @@ export const deleteBrand = async (brandId) => {
     }
 };
 
-export const updateBrandStatus = async (brandId, statusData, token) => {
+export const updateBrandStatus = async (brandId, statusData) => {
     try {
+        const authToken = localStorage.getItem("authToken");
+        
+            if(!authToken) {
+                throw new Error("Unauthorized: No token found!");
+            }
         const response = await api.put(`/api/admin/edit-brand-status/${brandId}`, statusData,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`, 
+                    Authorization: `Bearer ${authToken}`, 
                     "Content-Type": "application/json",
                 },
             }
@@ -124,20 +94,12 @@ export const updateBrandStatus = async (brandId, statusData, token) => {
 };
 
 export const updateBrand = async (brandId, brandData) => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-        console.error("No authentication token found.");
-        throw new Error("No authentication token found.");
-    }
-
-    if (!isTokenValid(token)) {
-        console.error("Authentication token is invalid or expired.");
-        localStorage.removeItem("authToken");
-        throw new Error("Authentication token is invalid or expired.");
-    }
-
     try {
+        const authToken = localStorage.getItem("authToken");
+        
+            if(!authToken) {
+                throw new Error("Unauthorized: No token found!");
+            }
         const formData = new FormData();
         formData.append("name", brandData.name);
         if (brandData.logo) {
@@ -146,7 +108,7 @@ export const updateBrand = async (brandId, brandData) => {
 
         const response = await api.put(`/api/admin/update-brand/${brandId}`, formData, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${authToken}`,
                 "Content-Type": "multipart/form-data",  
             },
         });
@@ -158,15 +120,16 @@ export const updateBrand = async (brandId, brandData) => {
     }
 };
 
-export const checkBrandNameExists = async (brandName, token) => {
-    if (!token) {
-        throw new Error("No authentication token found");
-    }
-
+export const checkBrandNameExists = async (brandName) => {
     try {
+        const authToken = localStorage.getItem("authToken");
+        
+            if(!authToken) {
+                throw new Error("Unauthorized: No token found!");
+            }
         const response = await api.get(`/api/admin/check-brand-name/${brandName}`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${authToken}`,
             },
         });
 
