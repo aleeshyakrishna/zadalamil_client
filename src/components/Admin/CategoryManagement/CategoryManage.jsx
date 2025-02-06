@@ -60,6 +60,8 @@ export default function CategoryTable()  {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null); 
     const [editingCategory, setEditingCategory] = useState(null);
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -76,6 +78,22 @@ export default function CategoryTable()  {
         };
         loadCategories();
     }, [currentPage]);
+
+    useEffect(() => {
+        if(searchTerm.trim() === "") {
+            setFilteredCategories(categories);
+        } else {
+            setFilteredCategories(
+                categories.filter((category) => 
+                    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            )
+        }
+    }, [categories, searchTerm])
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -210,11 +228,15 @@ export default function CategoryTable()  {
                             ))}
                         </TabsHeader>
                         </Tabs>
-                        <div className="w-full md:w-72">
-                            <Input
-                                label="Search"
-                                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                            />
+                        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                            <div className="w-full md:w-72">
+                                <Input
+                                    label="Search"
+                                    value={searchTerm} 
+                                    onChange={handleSearchChange} 
+                                    icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                                />
+                            </div>
                         </div>
                     </div>
                 </CardHeader>
@@ -242,8 +264,8 @@ export default function CategoryTable()  {
                         </tr>
                         </thead>
                         <tbody>
-                            { categories.length > 0 ? (
-                                categories.map(
+                            { filteredCategories.length > 0 ? (
+                                filteredCategories.map(
                                     (category, index) => {
                                         const isLast = index === categories.length - 1;
                                         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
@@ -374,18 +396,18 @@ export default function CategoryTable()  {
                     </table>
                 </CardBody>
                 <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                            Page {currentPage}
-                        </Typography>
-                        <div className="flex gap-2">
-                            <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
-                                Previous
-                            </Button>
-                            <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                                Next
-                            </Button>
-                        </div>
-                    </CardFooter>
+                    <Typography variant="small" color="blue-gray" className="font-normal">
+                        Page {currentPage}
+                    </Typography>
+                    <div className="flex gap-2">
+                        <Button variant="outlined" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                            Previous
+                        </Button>
+                        <Button variant="outlined" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                            Next
+                        </Button>
+                    </div>
+                </CardFooter>
             </>
             )}
         </Card>
