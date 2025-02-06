@@ -44,7 +44,7 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["No", "Category Name", "Status", "Edit", "Delete"];
+const TABLE_HEAD = ["No", "Category Image", "Category Name", "Status", "Edit", "Delete"];
    
 export default function CategoryTable()  {
     const [categories, setCategories] = useState([]);
@@ -249,6 +249,19 @@ export default function CategoryTable()  {
                                     return (
                                         <tr key={category._id}>
                                             <td className="py-3 px-4 text-center">{rowIndex}</td>
+
+                                            <td className={classes}>
+                                                <div className="flex items-center gap-3">
+                                                    
+                                                <img 
+                                            src={category.categoryImg} 
+                                            alt={category.name} 
+                                            size="sm" 
+                                            className="w-[90px] h-[20px] object-cover"
+                                        />
+                                                </div>
+                                            </td>
+
                                             <td className={classes}>
                                                 <div className="flex items-center gap-3">
                                                     
