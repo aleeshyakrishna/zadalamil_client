@@ -17,6 +17,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory, category, setEd
             });
             return;
         }
+        
         const isDuplicate = existingCategories.some(
             (existingCategory) =>
                 existingCategory.name === category.name && existingCategory._id !== category._id
@@ -36,8 +37,19 @@ export function EditCategoryModal({ open, setOpen, saveCategory, category, setEd
         });
     
         saveCategory(category);
-    };  
-
+    };
+    
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setEditingCategory({
+                ...category,
+                categoryImg: imageUrl,
+            });
+        }
+    };
+    
     return (
         <Dialog
             open={open}
@@ -86,25 +98,29 @@ export function EditCategoryModal({ open, setOpen, saveCategory, category, setEd
                                 </p>
                             )}
 
-                    <label className="text-sm font-medium">Category Image</label>
-                        <div>
-                            <input
-                                type="file"
-                                accept="image/png, image/jpeg, image/jpg"
-                                onChange={(e) =>
-                                    setEditingCategory({
-                                        ...category,
-                                        logo: e.target.files[0],
-                                    })
-                                }
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                            />
+                        <label className="text-sm font-medium">Category Image</label>
+                            <div>
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg, image/jpg"
+                                    onChange={(e) => handleImageChange(e)}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                                />
+                                {category?.categoryImg && (
+                                    <div className="mt-8 w-[200px] ">
+                                        <img
+                                            src={category.categoryImg}
+                                            alt="Category"
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </form>
                 </DialogBody>
 
-                <DialogFooter className='mt-5 flex justify-between'>
+                <DialogFooter className=' flex justify-between'>
                     <Button
                         variant="text"
                         color="black"

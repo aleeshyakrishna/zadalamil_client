@@ -66,11 +66,10 @@ export default function CategoryTable()  {
             setLoading(true);
             try {
                 const data = await getCategories(currentPage, 10);
-                setCategories(data.categories);
+                setCategories(data.categories); 
                 setTotalPages(data.totalPages);
-                
             } catch (error) {
-                console.error("Error loading brands:", error.message);
+                console.error("Error loading categories:", error.message);
             } finally {
                 setLoading(false);
             }
@@ -105,6 +104,7 @@ export default function CategoryTable()  {
                 return;
             }
         }
+    
         setEditingCategory(category);
         setIsModalOpenEditCategory(false);
         setIsModalOpenConfirmEditCategory(true);
@@ -114,12 +114,16 @@ export default function CategoryTable()  {
         try {
             const data = await updateCategory(editingCategory._id, editingCategory); 
             console.log("Category updated:", data);
-            toast.success("Category updated successfully");
+    
             setCategories((prevCategories) =>
                 prevCategories.map((b) =>
-                    b._id === editingCategory._id ? { ...b, name: editingCategory.name, logo: editingCategory.categoryImg } : b
+                    b._id === editingCategory._id 
+                    ? { ...b, name: editingCategory.name, categoryImg: editingCategory.categoryImg }
+                    : b
                 )
             );
+    
+            toast.success("Category updated successfully");
             setIsModalOpenConfirmEditCategory(false); 
         } catch (error) {
             console.error("Error updating category:", error);
