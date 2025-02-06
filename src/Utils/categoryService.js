@@ -1,4 +1,4 @@
-import api from './BaseUrl.js';
+import api from './BaseApi.js';
 
 export const addCategory = async (name, token) => {
     if(!token) {
