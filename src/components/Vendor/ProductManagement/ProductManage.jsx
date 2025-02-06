@@ -28,7 +28,7 @@ import { ConfirmEditProductVendorModal } from '../Modal/Product/ConfirmEditProdu
 import { DeleteProductVendorModal } from '../Modal/Product/DeleteProductModalVendor.jsx';
 
 import { useEffect, useState } from "react";
-import { getProducts } from "../../../Utils/vendorProductService.js";
+import { addProduct, getProducts } from "../../../Utils/vendorProductService.js";
 
 const TABS = [
     {
@@ -68,9 +68,18 @@ export function ProductTableVendor() {
         fetchProducts();
     }, [])
 
-    const handleSaveVendorProduct = () => {
-        console.log("Product saved");
-        setIsModalOpenAddVendorProduct(false); 
+    const handleSaveVendorProduct = async(productData) => {
+        try {
+            const response = await addProduct(productData);
+            if(response?.success) {
+                setProducts([...products, response.data]);
+                setIsModalOpenAddVendorProduct(false); 
+            } else {
+                console.error("Failed to add product:", response?.message);
+            }
+        } catch (error) {
+            console.error("Error adding product:", error);
+        }
     };
 
     const handleUpdateVendorProduct = () => {
