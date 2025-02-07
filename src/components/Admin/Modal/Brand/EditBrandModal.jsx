@@ -35,7 +35,18 @@ export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBran
         });
     
         saveBrand(brand);
-    };      
+    };     
+    
+    const handleLogoChange = (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            const imgUrl = URL.createObjectURL(file);
+            setEditingBrand({
+                ...brand,
+                logo: imgUrl,
+            })
+        }
+    }
 
     return (
         <Dialog
@@ -90,14 +101,19 @@ export function EditBrandModal({ open, setOpen, saveBrand, brand, setEditingBran
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg, image/jpg"
-                                onChange={(e) =>
-                                    setEditingBrand({
-                                        ...brand,
-                                        logo: e.target.files[0],
-                                    })
-                                }
+                                onChange={(e) => handleLogoChange(e)}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
+                            {brand?.logo && (
+                                <div className='mt-8 w-[100px]'>
+                                    <img
+                                        src={brand.logo}
+                                        alt='Brand'
+                                        className='object-cover'
+                                    />
+
+                                </div>
+                            )}
                             
                         </div>
                 </form>
