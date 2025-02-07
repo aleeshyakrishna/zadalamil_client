@@ -109,7 +109,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory, category, setEd
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                                 />
                                 {category?.categoryImg && (
-                                    <div className="mt-8 w-[200px] ">
+                                    <div className="mt-8 w-[100px]">
                                         <img
                                             src={category.categoryImg}
                                             alt="Category"
