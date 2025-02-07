@@ -9,8 +9,7 @@ import {
 
 export function EditCategoryModal({ open, setOpen, saveCategory, category, setEditingCategory, existingCategories=[]  }) {
     console.log("category::", category);
-    
-    
+
     const handleSave = () => {
         if (!category.name.trim()) {
             setEditingCategory({

@@ -45,7 +45,7 @@ const TABS = [
     },
 ];
 
-const TABLE_HEAD = ["No", "Brand Name", "Status", "Edit", "Delete"];
+const TABLE_HEAD = ["No", "Brand Logo","Brand Name", "Status", "Edit", "Delete"];
 
 export default function BrandTable() {
     const token = useSelector((state) => state.auth.token);
@@ -287,6 +287,7 @@ export default function BrandTable() {
                             return (
                                 <tr key={brand._id}>
                                     <td className="py-3 px-4 text-center">{listingNumber}</td>
+
                                     <td className={classes}>
                                         <div className="flex  items-center gap-3">
                                         <img 
@@ -295,6 +296,12 @@ export default function BrandTable() {
                                             size="sm" 
                                             className="w-[90px] h-[20px] object-cover"
                                         />
+                                        </div>
+                                    </td>
+
+                                    <td className={classes}>
+                                        <div className="flex  items-center gap-3">
+                                        
                                             <div className="flex flex-col">
                                                 <Typography
                                                 variant="small"
@@ -307,6 +314,7 @@ export default function BrandTable() {
                                             </div>
                                         </div>
                                     </td>
+                                    
                                     <td className={classes}>
                                         <div className="w-max">
                                             <Chip
