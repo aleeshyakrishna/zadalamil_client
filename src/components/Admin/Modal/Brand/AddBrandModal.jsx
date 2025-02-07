@@ -13,11 +13,12 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
     const [logo, setLogo] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false); 
+    const [logoPreview, setLogoPreview] = useState(null);
 
     useEffect(() => {
         if (open) {
             setBrandName(""); 
-            setLogo(null);
+            setLogoPreview(null);
             setError("");
         }
     }, [open]);
@@ -28,9 +29,11 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
             const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
             if (validImageTypes.includes(file.type)) {
                 setLogo(file);
+                setLogoPreview(URL.createObjectURL(file));
                 setError(""); 
             } else {
                 setLogo(null);
+                setLogoPreview(null);
                 setError("Invalid file type. Only PNG, JPG, and JPEG are allowed.");
             }
         }
@@ -98,6 +101,17 @@ export function AddBrandModal({ open, setOpen, saveBrand }) {
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                             />
                         </div>
+
+                        { logoPreview && (
+                            <div className='mt-4'>
+                                <img
+                                    src={logoPreview}
+                                    alt='Logo Preview'
+                                    className='w-20 rounded-lg'
+                                />
+
+                            </div>
+                        )}
 
                         {error && (
                             <p className='text-red-900 text-xs mt-2'>{error}</p>
