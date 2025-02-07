@@ -1,6 +1,6 @@
 import api from './BaseApi.js';
 
-export const fetchBrands = async (page = 1, limit = 10) => {
+export const fetchBrands = async (page = 1, limit = 10, status = 'all', search = "") => {
     try {
         const authToken = localStorage.getItem("authToken");
     
@@ -9,14 +9,13 @@ export const fetchBrands = async (page = 1, limit = 10) => {
         }
 
         console.log("Fetching brands with token:", authToken);
-        const response = await api.get(`/api/admin/get-brands?page=${page}&limit=${limit}`, {
+        const response = await api.get(`/api/admin/get-brands?page=${page}&limit=${limit}&search=${search}&status=${status}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             },
         });
 
         console.log("Fetched brands data:", response.data);
-        
 
         return {
             brands: response.data.brands,

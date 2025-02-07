@@ -30,20 +30,17 @@ import { toast } from "react-hot-toast";
 import { StatusBrandModal } from "../Modal/Brand/StatusBrandModal.jsx";
 import { useSelector } from "react-redux";
 
+const BRAND_STATUS = {
+    ALL: "ALL",
+    LIST: "LIST",
+    UNLIST: "UNLIST"
+};
+
 const TABS = [
-    {
-        label: "All",
-        value: "all",
-    },
-    {
-        label: "List",
-        value: "list",
-    },
-    {
-        label: "Unlist",
-        value: "unlist",
-    },
-];
+    { label: "All", value: BRAND_STATUS.ALL},
+    { label: "List", value: BRAND_STATUS.LIST},
+    { label: "Unlist", value: BRAND_STATUS.UNLIST},
+]
 
 const TABLE_HEAD = ["No", "Brand Logo","Brand Name", "Status", "Edit", "Delete"];
 
@@ -61,13 +58,18 @@ export default function BrandTable() {
     const [isModalOpenStatusBrand, setIsModalOpenStatusBrand] = useState(false);
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [editingBrand, setEditingBrand] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState(BRAND_STATUS.ALL);
+    const [searchQuery] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredBrands, setFilteredBrands] = useState([]);
 
 
     useEffect(() => {
         const loadBrands = async () => {
             setLoading(true);
             try {
-                const data = await fetchBrands(currentPage, 10);
+                const statusFilter = selectedStatus === BRAND_STATUS.ALL ? "" : selectedStatus;
+                const data = await fetchBrands(currentPage, 10, statusFilter, searchQuery);
                 setBrands(data.brands);
                 setTotalPages(data.totalPages);
                 
@@ -79,7 +81,26 @@ export default function BrandTable() {
         };
 
         loadBrands();
-    }, [currentPage]);
+    }, [currentPage, selectedStatus, searchQuery]);
+
+    useEffect (() => {
+        let filtered = brands;
+
+        if(selectedStatus !== BRAND_STATUS.ALL) {
+            filtered = brands.filter((brand) => brand.status === selectedStatus);
+        }
+
+        if(searchTerm.trim() !== "") {
+            filtered = filtered.filter((brand) => 
+                brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        setFilteredBrands(filtered);
+    }, [brands, searchTerm, selectedStatus]);
+
+    const handleSearchChnage = (e) => {
+        setSearchTerm(e.target.value);
+    }
 
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -236,10 +257,10 @@ export default function BrandTable() {
                     </div>
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                    <Tabs value="all" className="w-full md:w-max">
+                    <Tabs value={selectedStatus} className="w-full md:w-max">
                     <TabsHeader>
                         {TABS.map(({ label, value }) => (
-                        <Tab key={value} value={value}>
+                        <Tab key={value} value={value} onClick={() => setSelectedStatus(value)}>
                             &nbsp;&nbsp;{label}&nbsp;&nbsp;
                         </Tab>
                         ))}
@@ -248,6 +269,8 @@ export default function BrandTable() {
                     <div className="w-full md:w-72">
                         <Input
                             label="Search"
+                            value={searchTerm}
+                            onChange={handleSearchChnage}
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                         />
                     </div>
@@ -277,8 +300,8 @@ export default function BrandTable() {
                     </tr>
                     </thead>
                     <tbody>
-                        { brands.length > 0 ? (
-                            brands.map(
+                        { filteredBrands.length > 0 ? (
+                            filteredBrands.map(
                             (brand, index) => {
                                 const listingNumber = (currentPage - 1) * 10 + index + 1;
                                 const isLast = index === brands.length - 1;
