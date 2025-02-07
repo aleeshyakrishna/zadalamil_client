@@ -92,7 +92,7 @@ export function VendorManage() {
             }
         );
 
-        if (response.status === 200) {
+        if (response.status === 201) {
             toast.success("Vendor application deleted successfully!");
 
             // Update the UI by removing the deleted vendor from the table

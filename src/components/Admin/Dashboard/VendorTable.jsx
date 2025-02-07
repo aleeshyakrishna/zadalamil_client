@@ -317,8 +317,13 @@ export function VendorTable() {
             </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Link to='/admin/vendor-management'><h4 className="text-red-900">View All &gt; </h4></Link>
-        </CardFooter>
+    <Link 
+        to="/admin/vendor-management" 
+        className="text-red-900 hover:text-red-700 transition-colors"
+    >
+        View All &gt;
+    </Link>
+</CardFooter>
         </Card>
     );
 }
