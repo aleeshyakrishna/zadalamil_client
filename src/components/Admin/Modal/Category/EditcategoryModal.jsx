@@ -8,6 +8,8 @@ import {
 } from "@material-tailwind/react";
 
 export function EditCategoryModal({ open, setOpen, saveCategory, category, setEditingCategory, existingCategories=[]  }) {
+    console.log("category::", category);
+    
     
     const handleSave = () => {
         if (!category.name.trim()) {
@@ -20,7 +22,7 @@ export function EditCategoryModal({ open, setOpen, saveCategory, category, setEd
         
         const isDuplicate = existingCategories.some(
             (existingCategory) =>
-                existingCategory.name === category.name && existingCategory._id !== category._id
+                existingCategory.name.toLowerCase() === category.name.toLowerCase() && existingCategory._id !== category._id
         );
     
         if (isDuplicate) {
