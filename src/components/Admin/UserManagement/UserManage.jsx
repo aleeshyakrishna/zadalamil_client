@@ -10,7 +10,7 @@ import {
     Typography,
     Button,
     CardBody,
-    Chip,
+    
     CardFooter,
     Tabs,
     TabsHeader,
@@ -22,7 +22,7 @@ import {
 
 import { DeleteUserModal } from "../Modal/User/DeleteUserModal";
 import { useEffect, useState } from "react";
-import { deleteUser, getUsers, updateUserStatus } from "../../../Utils/adminUsersService";
+import { deleteUser, getUsers } from "../../../Utils/adminUsersService";
 import Loader from "../../Loader/Loader";
 import { StatusUserModal } from '../Modal/User/StatusUserModal.jsx';
 import { toast } from "react-hot-toast";
@@ -32,17 +32,17 @@ import { toast } from "react-hot-toast";
       label: "All",
       value: "all",
     },
-    {
-      label: "Blocked",
-      value: "blocked",
-    },
-    {
-      label: "Unblocked",
-      value: "unblocked",
-    },
+    // {
+    //   label: "Blocked",
+    //   value: "blocked",
+    // },
+    // {
+    //   label: "Unblocked",
+    //   value: "unblocked",
+    // },
   ];
    
-  const TABLE_HEAD = ["No", "Customer", "Email", "Status", "Phone Number", "Delete"];
+  const TABLE_HEAD = ["No", "Customer", "Email", "Phone Number", "Delete"];
    
   export function UserTable() {
 
@@ -101,22 +101,22 @@ import { toast } from "react-hot-toast";
             }
         };
 
-        const handleStatusUser = async (userId, currentStatus) => {
-            const newStatus = currentStatus === "UNBLOCKED" ? "blocked" : "unblocked";
+        // const handleStatusUser = async (userId, currentStatus) => {
+        //     // const newStatus = currentStatus === "UNBLOCKED" ? "blocked" : "unblocked";
         
-            try {
-                const response = await updateUserStatus(userId, newStatus);
-                setUsers((prevUsers) =>
-                    prevUsers.map((user) =>
-                        user._id === userId ? { ...user, status: response.status } : user
-                    )
-                );
-                toast.success("User status updated successfully");
-                setIsModalOpenStatusUser(false);
-            } catch (error) {
-                console.error("Failed to update user status:", error);
-            }
-        };
+        //     try {
+        //         const response = await updateUserStatus(userId, newStatus);
+        //         setUsers((prevUsers) =>
+        //             prevUsers.map((user) =>
+        //                 user._id === userId ? { ...user, status: response.status } : user
+        //             )
+        //         );
+        //         toast.success("User status updated successfully");
+        //         setIsModalOpenStatusUser(false);
+        //     } catch (error) {
+        //         console.error("Failed to update user status:", error);
+        //     }
+        // };
         
     return (
         <Card className="h-full w-full ">
@@ -181,7 +181,7 @@ import { toast } from "react-hot-toast";
                     </tr>
                     </thead>
                     <tbody>
-                        {users.map(({ _id, name, email, status, phone }, index)  => {
+                        {users.map(({ _id, name, email, phone }, index)  => {
                             const isLast = index === users.length - 1;
                             const classes = isLast
                                 ? "p-4"
@@ -216,7 +216,7 @@ import { toast } from "react-hot-toast";
                                         </Typography>
                                     </div>
                                 </td>
-                                <td className={classes}>
+                                {/* <td className={classes}>
                                     <div className="w-max">
                                         <Chip
                                             variant="ghost"
@@ -231,7 +231,7 @@ import { toast } from "react-hot-toast";
                                             }}
                                         />
                                     </div>
-                                </td>
+                                </td> */}
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
@@ -245,7 +245,7 @@ import { toast } from "react-hot-toast";
                                     <Tooltip content="Delete User">
                                     <IconButton 
                                         onClick={() => {
-                                            setSelectedUser({ _id, name, email, status, phone });
+                                            setSelectedUser({ _id, name, email, phone });
                                             setIsModalOpenDeleteUser(true);
                                         }}
                                         variant="text"
@@ -288,7 +288,7 @@ import { toast } from "react-hot-toast";
                 open={isModalOpenStatusUser}
                 setOpen={setIsModalOpenStatusUser}
                 user={selectedUser}
-                handleStatusChange={handleStatusUser}
+                // handleStatusChange={handleStatusUser}
             />
       </Card>
     );

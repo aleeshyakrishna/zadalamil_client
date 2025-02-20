@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../Utils/BaseUrl.js";
 import { toast } from "react-hot-toast";
-
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 const SellerForm = () => {
     const navigate = useNavigate();
     const videoRef = useRef(null);
@@ -69,7 +70,7 @@ const SellerForm = () => {
         }
     };
 
-    const validateForm = () => {
+ const validateForm = () => {
         const errors = {};
         let isValid = true;
     
@@ -77,6 +78,14 @@ const SellerForm = () => {
         Object.keys(formData).forEach((key) => {
             if (!formData[key] && key !== "licenseDocument" && key !== "idDocument" && key !== "livePhoto") {
                 errors[key] = `${key.replace(/([A-Z])/g, ' $1').toUpperCase()} is required.`;
+                isValid = false;
+            }
+        });
+    
+        // Validate name, ownerName, and tradeName (only letters and spaces allowed)
+        ["name", "ownerName", "tradeName"].forEach((key) => {
+            if (formData[key] && !/^[a-zA-Z\s]+$/.test(formData[key])) {
+                errors[key] = `${key.replace(/([A-Z])/g, ' $1')} should only contain letters and spaces.`;
                 isValid = false;
             }
         });
@@ -102,49 +111,52 @@ const SellerForm = () => {
             const currentDate = new Date();
     
             if (issuedDate > currentDate) {
-                errors.issuedDate = "Issued date should not be in Future.";
+                errors.issuedDate = "Issued date should not be in the future.";
                 isValid = false;
             }
+            
             if (expiryDate < issuedDate) {
                 errors.expiryDate = "Expiry date should not be before the issued date.";
                 isValid = false;
             }
 
-            if(expiryDate < currentDate){
-                errors.expiryDate = "Expired license/passport";
+            if (expiryDate < currentDate) {
+                errors.expiryDate = "Expired license/passport.";
                 isValid = false;
             }
         }
     
-        // Validate license number (assuming it should be numeric)
-        if (formData.licenseNumber && !/^\d+$/.test(formData.licenseNumber)) {
-            errors.licenseNumber = "License number must be numeric.";
+        // Allow license number and ID number to be any alphanumeric value (no restrictions)
+        if (formData.licenseNumber && !/^[a-zA-Z0-9\s ]+$/.test(formData.licenseNumber)) {
+            errors.licenseNumber = "License number must contain only letters, numbers.";
+            isValid = false;
+        }
+        if (formData.idNumber && !/^[a-zA-Z0-9\s]+$/.test(formData.idNumber)) {
+            errors.idNumber = "ID number must contain only letters, numbers, and spaces.";
             isValid = false;
         }
     
-        // Validate ID number (assuming it should be numeric)
-        if (formData.idNumber && !/^\d+$/.test(formData.idNumber)) {
-            errors.idNumber = "ID number must be numeric.";
-            isValid = false;
-        }
-    
-        // Validate mobile number (assuming it should be exactly 10 digits)
+        // Validate mobile number (must be exactly 10 digits)
         if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
             errors.phone = "Phone number must be 10 digits.";
             isValid = false;
         }
-
-     // Validate email format with stricter validation
-     if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|int|co|io|[a-zA-Z]{2,})$/.test(formData.email)) {
-        errors.email = "Please enter a valid email address.";
-        isValid = false;
-    }
-        if(!isValid){
-            toast.error("try again!!")
+    
+        // Validate email format with stricter validation
+        if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|int|co|io|[a-zA-Z]{2,})$/.test(formData.email)) {
+            errors.email = "Please enter a valid email address.";
+            isValid = false;
         }
+    
+        if (!isValid) {
+            toast.error("Try again!");
+        }
+    
         setFormErrors(errors);
         return isValid;
     };
+    
+    
     
 
     const handleSubmit = async (e) => {

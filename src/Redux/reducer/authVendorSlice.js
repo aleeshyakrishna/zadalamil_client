@@ -33,6 +33,35 @@ export const vendorLogout = createAsyncThunk(
     }
 );
 
+export const updateVendorPassword = createAsyncThunk(
+    'auth/updateVendorPassword',
+    async ({ currentPassword, newPassword, vendorId }, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem('vendorToken');
+            if (!token) {
+                return rejectWithValue({ message: 'Authentication token not found' });
+            }
+            
+            const response = await axios.put(
+                `${BASE_URL}/api/vendor/update_password/${vendorId}`,
+                {
+                    currentPassword,
+                    newPassword
+                },
+                { 
+                    headers: { Authorization: `Bearer ${token}` } 
+                }
+            );
+            
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data || { message: 'Failed to update password' }
+            );
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -40,8 +69,14 @@ const authSlice = createSlice({
         token: localStorage.getItem('vendorToken') || null,
         loading: false,
         error: null,
+        passwordUpdateSuccess: false,
     },
-    reducers: {},
+    reducers: {
+        resetPasswordUpdateStatus: (state) => {
+            state.passwordUpdateSuccess = false;
+            state.error = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(vendorLogin.pending, (state) => {
@@ -62,8 +97,24 @@ const authSlice = createSlice({
                 state.token = null;
                 state.loading = false;
                 state.error = null;
+            })
+            .addCase(updateVendorPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.passwordUpdateSuccess = false;
+            })
+            .addCase(updateVendorPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+                state.passwordUpdateSuccess = true;
+            })
+            .addCase(updateVendorPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Password update failed';
+                state.passwordUpdateSuccess = false;
             });
     },
 });
 
+export const { resetPasswordUpdateStatus } = authSlice.actions;
 export default authSlice.reducer;

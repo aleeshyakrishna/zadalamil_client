@@ -58,65 +58,76 @@ const TABLE_HEAD = [
 ];
 
 export function VendorManage() {
-  const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] = useState(false);
-  const [isModalOpenConfirmEditVendorDetails,setIsModalOpenConfirmEditVendorDetails] = useState(false);
+  const [isModalOpenVendorDetails, setIsModalOpenVendorDetails] =
+    useState(false);
+  const [
+    isModalOpenConfirmEditVendorDetails,
+    setIsModalOpenConfirmEditVendorDetails,
+  ] = useState(false);
   const [isModalOpenDeleteVendor, setIsModalOpenDeleteVendor] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [TABLE_ROWS, SETTABLE_ROWS] = useState([]);
   const [pendingStatusChange, setPendingStatusChange] = useState(null);
   const navigate = useNavigate();
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const filteredRows =
+    selectedStatus === "all"
+      ? TABLE_ROWS
+      : TABLE_ROWS.filter((row) => row.status === selectedStatus);
 
   const handleUpdateDetails = () => {
     setIsModalOpenVendorDetails(false);
     setIsModalOpenConfirmEditVendorDetails(true);
   };
-  
+
   const handleDeleteVendor = async () => {
     if (!selectedVendor) return;
 
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-        toast.error("Unauthorized: No token found! Please log in.");
-        return;
+      toast.error("Unauthorized: No token found! Please log in.");
+      return;
     }
 
     try {
-        console.log(`Deleting vendor with ID: ${selectedVendor._id}`);
+      console.log(`Deleting vendor with ID: ${selectedVendor._id}`);
 
-        const response = await axios.delete(
-            `/api/admin/application/delete-seller/${selectedVendor._id}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            }
+      const response = await axios.delete(
+        `/api/admin/application/delete-seller/${selectedVendor._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success("Vendor application deleted successfully!");
+
+        // Update the UI by removing the deleted vendor from the table
+        SETTABLE_ROWS((prevRows) =>
+          prevRows.filter((row) => row._id !== selectedVendor._id)
         );
-
-        if (response.status === 201) {
-            toast.success("Vendor application deleted successfully!");
-
-            // Update the UI by removing the deleted vendor from the table
-            SETTABLE_ROWS((prevRows) =>
-                prevRows.filter((row) => row._id !== selectedVendor._id)
-            );
-        } else {
-            toast.error("Failed to delete vendor. Please try again.");
-        }
+      } else {
+        toast.error("Failed to delete vendor. Please try again.");
+      }
     } catch (error) {
-        console.error("Error deleting vendor:", error);
+      console.error("Error deleting vendor:", error);
 
-        if (error.response?.status === 401) {
-            toast.error("Unauthorized: Your session has expired. Please log in again.");
-            localStorage.removeItem("authToken");
-        } else if (error.response?.status === 403) {
-            toast.error("Access denied! Only admins can perform this action.");
-        } else {
-            toast.error("Something went wrong. Please try again.");
-        }
+      if (error.response?.status === 401) {
+        toast.error(
+          "Unauthorized: Your session has expired. Please log in again."
+        );
+        localStorage.removeItem("authToken");
+      } else if (error.response?.status === 403) {
+        toast.error("Access denied! Only admins can perform this action.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
 
     setIsModalOpenDeleteVendor(false);
-};
+  };
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -132,7 +143,7 @@ export function VendorManage() {
         console.log("Fetching seller applications...");
         const response = await axios.get("api/admin/applications", {
           headers: {
-            Authorization: `Bearer ${authToken}`, 
+            Authorization: `Bearer ${authToken}`,
           },
         });
 
@@ -148,7 +159,7 @@ export function VendorManage() {
           toast.error(
             "Unauthorized: Your session has expired. Please log in again."
           );
-          localStorage.removeItem("authToken"); 
+          localStorage.removeItem("authToken");
           navigate("/admin/admin-login");
         } else {
           toast.error("Failed to load applications. Please try again.");
@@ -161,7 +172,7 @@ export function VendorManage() {
   }, []);
 
   const requestStatusChange = (vendorId, newStatus, currentStatus) => {
-    if(currentStatus === "APPROVED" || currentStatus === "REJECTED") {
+    if (currentStatus === "APPROVED" || currentStatus === "REJECTED") {
       toast.error("Status cannot be changed after approval or rejection.");
       return;
     }
@@ -176,7 +187,7 @@ export function VendorManage() {
     }
 
     const { vendorId, newStatus } = pendingStatusChange;
-    const authToken = localStorage.getItem("authToken"); 
+    const authToken = localStorage.getItem("authToken");
     if (!authToken) {
       toast.error("Unauthorized: No token found! Please log in.");
       return;
@@ -191,7 +202,7 @@ export function VendorManage() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`, 
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -213,7 +224,7 @@ export function VendorManage() {
         toast.error(
           "Unauthorized: Your session has expired. Please log in again."
         );
-        localStorage.removeItem("authToken"); 
+        localStorage.removeItem("authToken");
       } else {
         toast.error("Something went wrong. Please try again.");
       }
@@ -237,7 +248,7 @@ export function VendorManage() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="w-full md:w-max">
+          {/* <Tabs value="all" className="w-full md:w-max">
             <TabsHeader>
               {TABS.map(({ label, value }) => (
                 <Tab key={value} value={value}>
@@ -245,7 +256,21 @@ export function VendorManage() {
                 </Tab>
               ))}
             </TabsHeader>
+          </Tabs> */}
+          <Tabs value={selectedStatus} className="w-full md:w-max">
+            <TabsHeader>
+              {TABS.map(({ label, value }) => (
+                <Tab
+                  key={value}
+                  value={value}
+                  onClick={() => setSelectedStatus(value)}
+                >
+                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                </Tab>
+              ))}
+            </TabsHeader>
           </Tabs>
+
           <div className="w-full md:w-72">
             <Input
               label="Search"
@@ -275,7 +300,7 @@ export function VendorManage() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map((data, index) => {
+            {filteredRows.map((data, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
               const classes = isLast
                 ? "p-4"
@@ -284,7 +309,7 @@ export function VendorManage() {
               return (
                 <tr key={data.name}>
                   <td className="py-3 px-4 text-center">{index + 1}</td>
-                    <td className={classes}>
+                  <td className={classes}>
                     <div className="flex items-center gap-3">
                       <img
                         src={data.livePhoto}
@@ -292,7 +317,9 @@ export function VendorManage() {
                         className="w-10 h-10 rounded-full object-cover"
                       />
                       <div className="flex flex-col">
-                        <p className="text-sm font-medium text-gray-900">{data.name}</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {data.name}
+                        </p>
                         <p className="text-xs text-gray-500">{data.email}</p>
                       </div>
                     </div>
@@ -334,8 +361,19 @@ export function VendorManage() {
                             ? "blue"
                             : "blue-gray"
                         }
-                        onClick={() => requestStatusChange(data._id, "NEW_STATUS", data.status)}
-                        className={data.status === "APPROVED" || data.status === "REJECTED" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                        onClick={() =>
+                          requestStatusChange(
+                            data._id,
+                            "NEW_STATUS",
+                            data.status
+                          )
+                        }
+                        className={
+                          data.status === "APPROVED" ||
+                          data.status === "REJECTED"
+                            ? "cursor-not-allowed opacity-50"
+                            : "cursor-pointer"
+                        }
                       />
                     </div>
                   </td>
@@ -384,19 +422,18 @@ export function VendorManage() {
                     </Tooltip>
                   </td> */}
                   <td className={classes}>
-    <Tooltip content="Delete Vendor">
-        <IconButton variant="text">
-            <TrashIcon
-                onClick={() => {
-                    setSelectedVendor(data);
-                    setIsModalOpenDeleteVendor(true);
-                }}
-                className="h-4 w-4 text-red-800"
-            />
-        </IconButton>
-    </Tooltip>
-</td>
-
+                    <Tooltip content="Delete Vendor">
+                      <IconButton variant="text">
+                        <TrashIcon
+                          onClick={() => {
+                            setSelectedVendor(data);
+                            setIsModalOpenDeleteVendor(true);
+                          }}
+                          className="h-4 w-4 text-red-800"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  </td>
                 </tr>
               );
             })}
@@ -406,7 +443,7 @@ export function VendorManage() {
               setOpen={setIsModalOpenVendorDetails}
               saveDetails={handleUpdateDetails}
               requestStatusChange={requestStatusChange}
-              vendorData={selectedVendor} 
+              vendorData={selectedVendor}
             />
 
             <ConfirmEditVendorDetailsModal
@@ -421,12 +458,10 @@ export function VendorManage() {
               deleteVendor={handleDeleteVendor}
             /> */}
             <DeleteVendorModal
-    open={isModalOpenDeleteVendor}
-    setOpen={setIsModalOpenDeleteVendor}
-    deleteVendor={handleDeleteVendor}
-/>
-
-            
+              open={isModalOpenDeleteVendor}
+              setOpen={setIsModalOpenDeleteVendor}
+              deleteVendor={handleDeleteVendor}
+            />
           </tbody>
         </table>
       </CardBody>
